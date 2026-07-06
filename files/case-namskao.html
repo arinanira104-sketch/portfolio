@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namskao — Casual Mobile Games | Arina Karpova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#07060e;--ink2:#0e0a1a;
+  --violet3:#9a80d0;
+  --pink:#c06080;--pink2:#d88098;--pink3:#f0b0c0;
+  --gold:#b89040;--gold2:#d4b060;--gold3:#e8d090;
+  --bone:#e0d8f0;--bone2:#b0a8c8;
+  --border:rgba(200,170,240,0.2);--border2:rgba(200,170,240,0.45);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+#cursor-outer{position:fixed;width:32px;height:32px;border:1px solid var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s,background .3s;}
+#cursor-inner{position:fixed;width:5px;height:5px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);}
+#cursor-outer.hover{width:50px;height:50px;border-color:var(--gold3);background:rgba(180,140,80,.06);}
+.noise-overlay{position:fixed;inset:0;z-index:998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");mix-blend-mode:overlay;}
+.scene-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 40%,rgba(160,60,90,.18) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 25%,rgba(80,40,140,.28) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 55% 85%,rgba(180,90,110,.1) 0%,transparent 55%);animation:bs 16s ease-in-out infinite;}
+@keyframes bs{0%,100%{opacity:.75;}50%{opacity:1;}}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--pink),var(--gold2));z-index:9999;width:0%;pointer-events:none;transition:width .08s linear;}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;padding:.9rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(7,6,14,.95) 0%,transparent 100%);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);transition:background .3s,border-color .3s;}
+.navbar.solid{background:rgba(7,6,14,.96);border-color:var(--border2);}
+.nb-logo{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;letter-spacing:.18em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:12px;}
+.nb-gem{width:18px;height:18px;border:1px solid var(--gold);transform:rotate(45deg);display:grid;place-items:center;flex-shrink:0;}
+.nb-gem::before{content:'';width:6px;height:6px;background:var(--gold);opacity:.7;transform:rotate(45deg);}
+.nb-right{display:flex;align-items:center;gap:1.4rem;}
+.nb-back{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:8px;cursor:none;}
+.nb-back:hover{color:var(--gold2);}
+.lang-sw{display:flex;align-items:center;gap:3px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;}
+.lang-sw button{background:none;border:none;color:var(--bone2);cursor:none;padding:.2rem .45rem;transition:color .2s;line-height:1;}
+.lang-sw button.active{color:var(--gold2);}
+.lang-sw span{color:rgba(200,170,240,.3);font-size:.5rem;}
+
+/* HERO */
+.page-hero{position:relative;z-index:2;padding:9rem 4rem 4rem;max-width:1400px;margin:0 auto;}
+.hero-breadcrumb{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);opacity:.55;margin-bottom:1rem;display:flex;align-items:center;gap:.7rem;}
+.hero-breadcrumb a{color:inherit;text-decoration:none;transition:opacity .2s;cursor:none;}
+.hero-breadcrumb a:hover{opacity:1;}
+.hero-breadcrumb .sep{opacity:.4;}
+.hero-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--pink2);opacity:.9;margin-bottom:.9rem;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--pink2);animation:p 2.2s ease-in-out infinite;}
+@keyframes p{0%,100%{opacity:1;}50%{opacity:.1;}}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;line-height:.9;letter-spacing:.04em;color:var(--bone);margin-bottom:.8rem;}
+.hero-title em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.38em;color:var(--violet3);letter-spacing:.06em;margin-top:.35em;}
+.hero-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--pink),transparent);margin:1.6rem 0;}
+.hero-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone2);line-height:1.85;max-width:620px;font-weight:300;}
+.hero-desc strong{color:var(--gold2);}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem;}
+.hero-tag{padding:.22rem .75rem;font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);color:var(--bone2);}
+.hero-tag.pink{border-color:rgba(192,96,128,.45);color:var(--pink2);}
+.hero-tag.gold{border-color:rgba(180,140,80,.45);color:var(--gold2);}
+.hero-tag.live{border-color:rgba(120,200,120,.4);color:#80c880;}
+
+/* OVERVIEW STRIP */
+.ov-strip{border:1px solid var(--border);border-left:2px solid var(--pink);background:rgba(14,10,26,.55);margin:0 4rem 3rem;max-width:calc(1400px - 8rem);}
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.ov-cell{padding:1.6rem 2rem;border-right:1px solid var(--border);}
+.ov-cell:last-child{border-right:none;}
+.ov-lbl{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.24em;text-transform:uppercase;color:var(--pink);opacity:.75;margin-bottom:.4rem;}
+.ov-val{font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.05em;color:var(--bone);margin-bottom:.2rem;}
+.ov-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bone2);line-height:1.5;}
+
+/* SEC LABEL */
+.sec-label{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 4rem;margin-bottom:3rem;}
+.sec-num{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);opacity:.55;margin-bottom:.4rem;}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(1.6rem,2.5vw,2.4rem);font-weight:700;letter-spacing:.05em;color:var(--bone);display:flex;align-items:center;gap:18px;}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+.sec-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--bone2);margin-top:.4rem;}
+
+/* BODY */
+.page-body{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 4rem 6rem;}
+
+/* GAME FEATURE CARD */
+.game-feature{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-bottom:6rem;padding:3.5rem;border:1px solid var(--border);background:rgba(14,10,26,.45);position:relative;overflow:hidden;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.game-feature.in{opacity:1;transform:none;}
+.game-feature::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--pink),transparent);opacity:.45;}
+.game-feature.reverse{direction:rtl;}
+.game-feature.reverse>*{direction:ltr;}
+.game-feature-num{position:absolute;top:2rem;right:2.5rem;font-family:'Cinzel',serif;font-size:7rem;font-weight:900;color:var(--pink);opacity:.04;line-height:1;pointer-events:none;user-select:none;}
+
+/* IMAGE SIDE */
+.gf-img-wrap{position:relative;overflow:hidden;border:1px solid rgba(192,96,128,.18);}
+.gf-img-wrap img{width:100%;display:block;transition:transform .6s cubic-bezier(.2,.8,.3,1);}
+.gf-img-wrap:hover img{transform:scale(1.03);}
+.gf-img-badge{position:absolute;top:1rem;left:1rem;font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2);background:rgba(7,6,14,.88);border:1px solid rgba(180,140,80,.3);padding:.25rem .65rem;}
+
+/* FAIRY GALLERY */
+.gf-gallery{display:grid;grid-template-columns:1fr;gap:.8rem;}
+.gf-gallery img{width:100%;display:block;border:1px solid var(--border);transition:transform .5s ease,border-color .3s;}
+.gf-gallery-extra{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem;}
+.gf-gallery-extra img{width:100%;display:block;border:1px solid var(--border);transition:transform .5s ease,border-color .3s;}
+.gf-gallery img:hover{transform:scale(1.02);border-color:rgba(192,96,128,.4);}
+
+
+/* TEXT SIDE */
+.gf-num{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.3em;color:var(--pink);opacity:.7;margin-bottom:.5rem;}
+.gf-name{font-family:'Cinzel',serif;font-size:clamp(1.6rem,2.8vw,2.6rem);font-weight:700;letter-spacing:.05em;color:var(--bone);line-height:1.05;margin-bottom:.5rem;}
+.gf-genre{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet3);opacity:.8;margin-bottom:1.4rem;}
+.gf-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.9;font-weight:300;margin-bottom:.8rem;}
+.gf-desc strong{color:var(--bone);font-weight:600;}
+.gf-divider{width:40px;height:1px;background:linear-gradient(90deg,var(--pink),transparent);margin:1.6rem 0;}
+.gf-meta{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 2rem;margin-bottom:2rem;}
+.gf-meta-row{display:flex;flex-direction:column;gap:.15rem;}
+.gf-meta-lbl{font-family:'Share Tech Mono',monospace;font-size:.43rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.6;}
+.gf-meta-val{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.04em;color:var(--bone);}
+
+/* NAILS MINI GRID */
+.nails-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:6rem;opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.nails-grid.in{opacity:1;transform:none;}
+.nails-card{border:1px solid var(--border);background:rgba(14,10,26,.55);overflow:hidden;position:relative;transition:border-color .3s;}
+.nails-card:hover{border-color:rgba(192,96,128,.4);}
+.nails-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--pink2),transparent);opacity:.3;}
+.nails-card-img{overflow:hidden;}
+.nails-card-img img{width:100%;display:block;transition:transform .55s ease;}
+.nails-card:hover .nails-card-img img{transform:scale(1.03);}
+.nails-card-body{padding:1.4rem 1.6rem;}
+.nails-card-num{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.28em;color:var(--pink);opacity:.65;margin-bottom:.3rem;}
+.nails-card-name{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;letter-spacing:.04em;color:var(--bone);margin-bottom:.3rem;}
+.nails-card-genre{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.18em;text-transform:uppercase;color:var(--violet3);opacity:.75;margin-bottom:.8rem;}
+.nails-card-desc{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--bone2);line-height:1.75;font-weight:300;}
+.nails-card-desc strong{color:var(--bone);}
+.nails-store-btn{display:inline-flex;align-items:center;gap:8px;margin-top:1rem;font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(180,140,80,.3);padding-bottom:.13rem;transition:color .2s,border-color .2s;cursor:none;}
+.nails-store-btn:hover{color:var(--gold3);border-color:var(--gold3);}
+
+/* STORE BUTTON */
+.store-btn{display:inline-flex;align-items:center;gap:12px;padding:.85rem 2rem;font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone);text-decoration:none;border:1px solid rgba(192,96,128,.45);background:rgba(150,60,80,.08);transition:all .35s;cursor:none;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.store-btn:hover{background:rgba(192,96,128,.15);border-color:rgba(230,130,160,.9);box-shadow:0 0 30px rgba(192,96,128,.12);}
+
+/* DESIGN NOTE */
+.design-note{margin-top:1.8rem;padding:1.2rem 1.5rem;border-left:2px solid rgba(180,140,80,.35);background:rgba(180,140,80,.04);}
+.design-note-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.4rem;}
+.design-note-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--bone2);line-height:1.8;}
+
+/* DIVIDER */
+.sec-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 0 5rem;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.4rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(7,6,14,.98);position:relative;z-index:2;}
+.ft-logo{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.18em;font-weight:700;color:var(--bone);text-decoration:none;cursor:none;}
+.ft-copy{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.1em;color:var(--bone2);opacity:.35;}
+.back-btn{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:300;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bone2);background:rgba(7,6,14,.9);border:1px solid var(--border);padding:.6rem 1.5rem;cursor:none;text-decoration:none;display:inline-block;transition:all .2s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+@media(max-width:960px){
+  .game-feature{grid-template-columns:1fr;gap:2.5rem;padding:2.5rem;}
+  .game-feature.reverse{direction:ltr;}
+  .nails-grid{grid-template-columns:1fr;}
+  .ov-strip{margin:0 1.5rem 2rem;}
+  .ov-grid{grid-template-columns:1fr 1fr;}
+  .ov-cell{border-right:none;border-bottom:1px solid var(--border);}
+}
+@media(max-width:640px){
+  .page-hero,.page-body,.sec-label{padding-left:1.5rem;padding-right:1.5rem;}
+  .navbar{padding:.9rem 1.5rem;}
+  .game-feature{padding:1.8rem;}
+  footer{padding:1.4rem 1.5rem;}
+  .gf-gallery{grid-template-columns:1fr;}
+  .gf-gallery img:first-child{grid-column:1;}
+}
+
+/* NAILS SCREENS TICKER */
+.nails-ticker{overflow:hidden;margin:2.5rem -3.5rem 0;mask-image:linear-gradient(90deg,transparent 0%,#000 6%,#000 94%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 6%,#000 94%,transparent 100%);}
+.ticker-track{display:flex;gap:.6rem;width:max-content;animation:ticker-scroll 40s linear infinite;}
+.ticker-track:hover{animation-play-state:paused;}
+.ticker-track img{height:200px;width:auto;display:block;border:1px solid var(--border);flex-shrink:0;object-fit:cover;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ИТОГ */
+.brief-tag{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;color:var(--pink);opacity:.75;margin-bottom:.8rem;display:block;}
+.outcome-block{padding:3rem 4rem;border:1px solid var(--border);border-left:2px solid var(--pink);background:rgba(14,8,22,.55);}
+.ch-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.9;font-weight:300;}
+
+/* PROJECT BRIEF */
+.brief-block{display:grid;grid-template-columns:1fr 1fr;gap:5rem;padding:3.5rem 4rem;border:1px solid var(--border);border-left:2px solid var(--pink);background:rgba(14,8,22,.55);}
+.brief-heading{font-family:'Cinzel',serif;font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:700;line-height:1.15;letter-spacing:.03em;color:var(--bone);margin-bottom:2rem;}
+.brief-meta{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.8rem;}
+.brief-meta-row{display:flex;gap:1.2rem;align-items:baseline;}
+.brief-meta-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);opacity:.7;flex-shrink:0;min-width:90px;}
+.brief-meta-val{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone);opacity:.85;line-height:1.5;}
+.brief-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bone2);opacity:.65;line-height:1.7;border-left:1px solid rgba(200,100,120,.3);padding-left:1.1rem;}
+.brief-done{padding-top:2.6rem;}
+.brief-list{list-style:none;display:flex;flex-direction:column;gap:1rem;}
+.brief-list li{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone);opacity:.85;line-height:1.6;padding-left:1.4rem;position:relative;}
+.brief-list li::before{content:'—';position:absolute;left:0;color:var(--pink);opacity:.7;font-family:'Share Tech Mono',monospace;font-size:.7rem;}
+@media(max-width:900px){.brief-block{grid-template-columns:1fr;gap:2.5rem;padding:2.5rem 2rem;}.brief-done{padding-top:0;}}
+
+
+</style>
+</head>
+<body>
+
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
+<div class="noise-overlay"></div>
+<div class="scene-bg"></div>
+<div id="progress"></div>
+
+<nav class="navbar" id="navbar">
+  <a href="portfolio_arina.html" class="nb-logo"><div class="nb-gem"></div>ARINA KARPOVA</a>
+  <div class="nb-right">
+    <a href="portfolio_arina.html?section=projects" class="nb-back">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9 3 L4 7 L9 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="nav_back">Projects</span>
+    </a>
+    <div class="lang-sw"><button id="btnEn" data-lang="en" onclick="switchLang('en')">EN</button><span>|</span><button id="btnRu" data-lang="ru" onclick="switchLang('ru')">RU</button></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="page-hero">
+  <div class="hero-breadcrumb">
+    <a href="portfolio_arina.html">Arina Karpova</a>
+    <span class="sep">/</span>
+    <span>Namskao</span>
+  </div>
+  <div class="hero-eyebrow" data-i18n="hero_eyebrow">Case Study · Casual Mobile Games · 2022–2023</div>
+  <h1 class="hero-title">
+    NAMSKAO
+    <em data-i18n="hero_sub">Casual Games Collection</em>
+  </h1>
+  <div class="hero-divider"></div>
+  <p class="hero-desc" data-i18n="hero_desc">
+    6 published casual mobile games produced for Namskao studio — match-3 puzzlers and beauty simulators. Full-cycle production: UI/UX design, 2D character art, game icons, store assets and gameplay animations.
+  </p>
+  <div class="hero-tags">
+    <span class="hero-tag pink">UI / UX</span>
+    <span class="hero-tag pink">2D Art</span>
+    <span class="hero-tag">Casual · Match-3 · Simulator</span>
+    <span class="hero-tag">iOS · Android · Amazon</span>
+    <span class="hero-tag live">6 Published Games</span>
+    <span class="hero-tag gold">2022 — 2023</span>
+  </div>
+</header>
+
+<!-- OVERVIEW STRIP -->
+<div class="ov-strip">
+  <div class="ov-grid">
+    <div class="ov-cell">
+      <div class="ov-lbl" data-i18n="label_studio">Studio</div>
+      <div class="ov-val">Namskao</div>
+      <div class="ov-desc" data-i18n="ov_studio_desc">Casual mobile game studio</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl" data-i18n="label_role">Role</div>
+      <div class="ov-val" data-i18n="ov_role_val">UI/UX · 2D Art</div>
+      <div class="ov-desc" data-i18n="ov_role_desc">From concept to production assets</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl" data-i18n="label_period">Period</div>
+      <div class="ov-val">2022 — 2023</div>
+      <div class="ov-desc" data-i18n="ov_period_desc">Amazon Appstore · iOS · Android</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-lbl" data-i18n="label_games">Games</div>
+      <div class="ov-val">6</div>
+      <div class="ov-desc" data-i18n="ov_games_desc">Match-3 + Beauty Simulators</div>
+    </div>
+  </div>
+</div>
+
+<main class="page-body">
+
+  
+<!-- ─── OPENING ─── -->
+<section style="padding:0 4.5rem 6rem;max-width:1400px;margin:0 auto;">
+  <div class="brief-block rev" style="margin-top:0;">
+    <div class="brief-intro">
+      <p class="brief-tag" data-i18n="brief_tag">// Описание проекта</p>
+      <h2 class="brief-heading" data-i18n="brief_heading">6 игр подряд.<br>Весь визуальный стиль — на мне.</h2>
+      <div class="brief-meta">
+        <div class="brief-meta-row">
+          <span class="brief-meta-label" data-i18n="label_role">Роль</span>
+          <span class="brief-meta-val" data-i18n="brief_meta_role">UI/UX-дизайнер · 2D-художник</span>
+        </div>
+        <div class="brief-meta-row">
+          <span class="brief-meta-label" data-i18n="label_studio">Студия</span>
+          <span class="brief-meta-val">Namskao — молодая студия казуальных игр</span>
+        </div>
+        <div class="brief-meta-row">
+          <span class="brief-meta-label" data-i18n="label_period">Период</span>
+          <span class="brief-meta-val">2022 — 2023</span>
+        </div>
+      </div>
+      <p class="brief-note" data-i18n="brief_note">Казуальные мобильные игры для Amazon, iOS и Android. Работала последовательно — каждая игра в своём визуальном мире, каждый раз с нуля.</p>
+    </div>
+    <div class="brief-done">
+      <p class="brief-tag" data-i18n="done_tag">// Сделала</p>
+      <ul class="brief-list" data-i18n="brief_list">
+        <li>Весь визуальный стиль каждой игры — от концепции до финальных ассетов</li>
+        <li>UI/UX: экраны, HUD, попапы, карты уровней, навигация</li>
+        <li>2D-арт: персонажи, иконки, стор-ассеты, геймплейные анимации</li>
+        <li>Производственные нарезки и передача в разработку</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SEC 01: FAIRY KINGDOM ─── -->
+  <div class="sec-label game-feature" style="display:block;padding:0;border:none;background:none;margin-bottom:2rem;opacity:1;transform:none;">
+    <div class="sec-num">// 01</div>
+    <div class="sec-title" data-i18n="s1_title">Fairy Kingdom</div>
+    <div class="sec-sub" data-i18n="s1_sub">Match-3 Puzzler · Full UI/UX + 2D Art Production</div>
+  </div>
+
+  <div class="game-feature">
+    <div class="game-feature-num">01</div>
+    <div class="gf-gallery">
+      <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-ui-kit.jpg" alt="Fairy Kingdom UI Kit" loading="lazy">
+    </div>
+    <div class="gf-body">
+      <div class="gf-num">// 01</div>
+      <h2 class="gf-name" data-i18n="s1_title">Fairy Kingdom</h2>
+      <div class="gf-genre" data-i18n="fk_genre">Match-3 Puzzler · Casual · Fantasy</div>
+      <p class="gf-desc"><span data-i18n="fk_desc">A magical match-3 puzzler set in a fairy kingdom world. Full-cycle visual production — UI kit, in-game screens, popup system, level map, game icons and promotional materials. Designed for a casual female audience with warm pastel tones and storybook aesthetics.</span></p>
+      <div class="gf-divider"></div>
+      <div class="gf-meta">
+        <div class="gf-meta-row">
+          <span class="gf-meta-lbl" data-i18n="label_platform">Platform</span>
+          <span class="gf-meta-val">Amazon · iOS · Android</span>
+        </div>
+        <div class="gf-meta-row">
+          <span class="gf-meta-lbl" data-i18n="label_role">Role</span>
+          <span class="gf-meta-val" data-i18n="meta_role_2d">2D Artist · UI Designer</span>
+        </div>
+      </div>
+      <div class="design-note">
+        <div class="design-note-label" data-i18n="note_label">// Design Note</div>
+        <p class="design-note-text" data-i18n="fk_note">"The challenge was maintaining visual consistency across a large icon set while keeping each piece recognisable at small sizes. Every element — from popups to the level map — had to feel like it belonged to the same fairy-tale world."</p>
+      </div>
+      <a href="https://www.amazon.com/Fairy-Princess-Kingdom-Match-Puzzle/dp/B0BTHY6HCS/" target="_blank" class="nails-store-btn" style="display:inline-flex;margin-top:1.2rem;">View on Amazon ↗</a>
+    </div>
+  </div>
+
+  <div class="gf-gallery-extra">
+    <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-screens.jpg" alt="Game Screens" loading="lazy">
+    <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-popups.jpg" alt="Popups" loading="lazy">
+    <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-map.jpg" alt="Level Map" loading="lazy">
+    <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-icons.jpg" alt="Icons" loading="lazy">
+    <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-extras.jpg" alt="Extra Assets" loading="lazy">
+  </div>
+
+  <div class="sec-divider"></div>
+
+  <!-- ─── SEC 02: NAILS SALON SERIES ─── -->
+  <div class="sec-label" style="margin-bottom:2.5rem;">
+    <div class="sec-num">// 02</div>
+    <div class="sec-title" data-i18n="s2_title">Nails Salon Series</div>
+    <div class="sec-sub" data-i18n="s2_sub">4 Beauty Simulator Games · UI/UX + 2D Character Art</div>
+  </div>
+
+  <div class="nails-grid">
+    <!-- Card 01 -->
+    <div class="nails-card">
+      <div class="nails-card-img"><a href="https://www.amazon.com/Princess-Nails-Salon-Beauty-Games/dp/B0CBVMSG5F/" target="_blank"><img src="../images/sonakai/Nails/Magic_main.png" alt="Nails Salon Magic Princess" loading="lazy"></a></div>
+      <div class="nails-card-body">
+        <div class="nails-card-num">// 01</div>
+        <div class="nails-card-name">Nails Salon Magic Princess</div>
+        <div class="nails-card-genre" data-i18n="g1_genre">Simulator · Beauty · Princess</div>
+        <p class="nails-card-desc"><span data-i18n="g1_desc">A princess-themed manicure salon with a pastel-royal palette, hand-crafted character art and frame-by-frame gameplay animations.</span></p>
+        <a href="https://www.amazon.com/Princess-Nails-Salon-Beauty-Games/dp/B0CBVMSG5F/" target="_blank" class="nails-store-btn">View on Amazon ↗</a>
+      </div>
+    </div>
+    <!-- Card 02 -->
+    <div class="nails-card">
+      <div class="nails-card-img"><a href="https://www.amazon.com/TopHopStudio-Kawaii-Nails-Manicure-Salon/dp/B0C6KW2VNK/" target="_blank"><img src="../images/sonakai/Nails/Kawaii_main.png" alt="Kawaii Nails" loading="lazy"></a></div>
+      <div class="nails-card-body">
+        <div class="nails-card-num">// 02</div>
+        <div class="nails-card-name">Kawaii Nails</div>
+        <div class="nails-card-genre" data-i18n="g2_genre">Simulator · Manicure · Kawaii</div>
+        <p class="nails-card-desc"><span data-i18n="g2_desc">Kawaii-style nail salon with a bright, playful aesthetic — cute characters and satisfying salon interactions. UI, art direction and all 2D assets.</span></p>
+        <a href="https://www.amazon.com/TopHopStudio-Kawaii-Nails-Manicure-Salon/dp/B0C6KW2VNK/" target="_blank" class="nails-store-btn">View on Amazon ↗</a>
+      </div>
+    </div>
+    <!-- Card 03 -->
+    <div class="nails-card">
+      <div class="nails-card-img"><a href="https://www.amazon.com/TopHopStudio-Unicorns-Nail-Beauty-Salon/dp/B0BYZQ52B1/" target="_blank"><img src="../images/sonakai/Nails/Unicorns Nail Beauty Salon.png" alt="Unicorns Nail Beauty Salon" loading="lazy"></a></div>
+      <div class="nails-card-body">
+        <div class="nails-card-num">// 03</div>
+        <div class="nails-card-name">Unicorns Nail Beauty Salon</div>
+        <div class="nails-card-genre" data-i18n="g3_genre">Simulator · Beauty · Fantasy</div>
+        <p class="nails-card-desc"><span data-i18n="g3_desc">A fantasy nail salon in a magical unicorn world — vibrant colours and whimsical characters. Full UI/UX and 2D art production.</span></p>
+        <a href="https://www.amazon.com/TopHopStudio-Unicorns-Nail-Beauty-Salon/dp/B0BYZQ52B1/" target="_blank" class="nails-store-btn">View on Amazon ↗</a>
+      </div>
+    </div>
+    <!-- Card 04 -->
+    <div class="nails-card">
+      <div class="nails-card-img"><a href="https://www.amazon.com/TopHopStudio-Pretty-Kitty-Nails-Salon/dp/B0C3DHMH5J/" target="_blank"><img src="../images/sonakai/Nails/Pretty Kitty Nails Salon.png" alt="Pretty Kitty Nails Salon" loading="lazy"></a></div>
+      <div class="nails-card-body">
+        <div class="nails-card-num">// 04</div>
+        <div class="nails-card-name">Pretty Kitty Nails Salon</div>
+        <div class="nails-card-genre" data-i18n="g4_genre">Simulator · Beauty · Cute</div>
+        <p class="nails-card-desc"><span data-i18n="g4_desc">Cat-themed nail salon with a soft pastel aesthetic — playful kitty characters and cosy atmosphere. Complete UI and 2D art.</span></p>
+        <a href="https://www.amazon.com/TopHopStudio-Pretty-Kitty-Nails-Salon/dp/B0C3DHMH5J/" target="_blank" class="nails-store-btn">View on Amazon ↗</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- NAILS DESIGN NOTE + TICKER LABEL -->
+  <div class="design-note rev" style="margin:2.5rem 3.5rem 0;">
+    <div class="design-note-label" data-i18n="nails_note_label">// Design Note</div>
+    <p class="design-note-text" data-i18n="nails_note">"Four games, four visual worlds — but one production standard. The challenge was switching aesthetic modes completely between projects while keeping UI logic consistent: the same interaction patterns, the same handoff discipline, different skins every time."</p>
+  </div>
+  <div style="margin:1.8rem 3.5rem .6rem;font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);opacity:.5;" data-i18n="nails_screens_label">// Gameplay screens — Kawaii Nails · Magic Princess · Unicorns · Pretty Kitty</div>
+
+  <!-- NAILS SCREENS TICKER -->
+  <div class="nails-ticker">
+    <div class="ticker-track">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1JTzc2oZmL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1NQAuiZKeL%20%281%29.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1PxDf2nrXL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1qDH5uJ-KL%20%281%29.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1tcNeY9xTL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1x54E2oziL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_1.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_2.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_3.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_4.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_5.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_6.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1JTzc2oZmL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1NQAuiZKeL%20%281%29.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1PxDf2nrXL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1qDH5uJ-KL%20%281%29.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1tcNeY9xTL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/B1x54E2oziL.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_1.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_2.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_3.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_4.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_5.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/Kawaii_6.png" alt="" loading="lazy">
+      <img src="../images/sonakai/Nails/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%8B/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" alt="" loading="lazy">
+    </div>
+  </div>
+
+  <div class="sec-divider"></div>
+
+  <!-- ─── SEC 03: FUNNY CANDY LAND ─── -->
+  <div class="sec-label" style="margin-bottom:2.5rem;">
+    <div class="sec-num">// 03</div>
+    <div class="sec-title" data-i18n="s3_title">Funny Candy Land</div>
+    <div class="sec-sub" data-i18n="s3_sub">Match-3 Puzzler · UI/UX + 2D Art</div>
+  </div>
+
+  <div class="game-feature reverse">
+    <div class="game-feature-num">03</div>
+    <div>
+      <div class="gf-img-wrap" style="margin-bottom:.8rem;">
+        <img src="../images/sonakai/candy/candy-land-cover.jpg" alt="Funny Candy Land" loading="lazy">
+        <span class="gf-img-badge">// 03 — Published</span>
+      </div>
+      <div class="gf-img-wrap">
+        <img src="../images/sonakai/candy/rina-k-2%20(1).jpg" alt="Candy Land Icons" loading="lazy">
+      </div>
+    </div>
+    <div class="gf-body">
+      <div class="gf-num">// 03</div>
+      <h2 class="gf-name" data-i18n="s3_title">Funny Candy Land</h2>
+      <div class="gf-genre" data-i18n="cl_genre">Match-3 Puzzler · Casual · Sweet</div>
+      <p class="gf-desc"><span data-i18n="cl_desc">A vibrant match-3 puzzle game set in a world of sweets and candy. Colourful UI, game icons, HUD elements and promotional store assets — delivered for a complete production pipeline targeting Amazon Appstore.</span></p>
+      <div class="gf-divider"></div>
+      <div class="gf-meta">
+        <div class="gf-meta-row">
+          <span class="gf-meta-lbl" data-i18n="label_platform">Platform</span>
+          <span class="gf-meta-val">Amazon Appstore</span>
+        </div>
+        <div class="gf-meta-row">
+          <span class="gf-meta-lbl" data-i18n="label_role">Role</span>
+          <span class="gf-meta-val" data-i18n="meta_role_2d">2D Artist · UI Designer</span>
+        </div>
+      </div>
+      <div class="design-note" style="margin-top:1.5rem;">
+        <div class="design-note-label" data-i18n="cl_note_label">// Design Note</div>
+        <p class="design-note-text" data-i18n="cl_note">"A fully saturated candy world — the challenge was keeping the palette vibrant without losing readability. Match-3 games live or die by how fast players read the board, so every icon and HUD element needed clear visual hierarchy beneath all that sweetness."</p>
+      </div>
+    </div>
+  </div>
+
+<!-- ─── ИТОГ ─── -->
+<section style="padding:2rem 4.5rem 5rem;max-width:1400px;margin:0 auto;">
+  <div class="outcome-block rev">
+    <p class="brief-tag" data-i18n="itog_tag">// Итог</p>
+    <p class="ch-desc" style="margin-top:1.2rem;" data-i18n="itog_text">Six games in a row — not just a large volume of work. Each time: a new visual language, a new audience, a new style. Fairy Kingdom and Candy Land — fantasy match-3 with illustrations; Beauty Simulators — different aesthetics, different interaction patterns, characters built around different themes. Learned to step into a new visual world quickly and keep it coherent from the first screen to the store icon. All 6 games published on Amazon, iOS and Android.</p>
+  </div>
+</section>
+
+</main>
+
+
+<footer>
+  <a href="portfolio_arina.html" class="ft-logo">// ARINA KARPOVA</a>
+  <span class="ft-copy">© 2026 — All rights reserved</span>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.12em;color:var(--gold);opacity:.4;">UI · UX · 2D · GAMEDEV</span>
+</footer>
+
+<a href="portfolio_arina.html?section=projects" class="back-btn" data-i18n="back_btn">← Return to Projects</a>
+
+<script>
+const co=document.getElementById('cursor-outer'),ci=document.getElementById('cursor-inner');
+let mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;ci.style.left=mx+'px';ci.style.top=my+'px';});
+(function anim(){ox+=(mx-ox)*.1;oy+=(my-oy)*.1;co.style.left=ox+'px';co.style.top=oy+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>co.classList.add('hover'));el.addEventListener('mouseleave',()=>co.classList.remove('hover'));});
+const prog=document.getElementById('progress'),nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;prog.style.width=p+'%';nav.classList.toggle('solid',window.scrollY>60);},{passive:true});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.game-feature,.nails-grid').forEach(el=>obs.observe(el));
+setTimeout(()=>{document.querySelectorAll('.game-feature,.nails-grid').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('in');});},80);
+const CASE_T={
+en:{
+nav_back:'Projects',back_btn:'← Return to Projects',
+label_studio:'Studio',label_role:'Role',label_period:'Period',label_games:'Games',label_platform:'Platform',
+hero_eyebrow:'Case Study · Casual Mobile Games · 2022–2023',
+hero_sub:'Casual Games Collection',
+hero_desc:'6 published casual mobile games produced for Namskao studio — match-3 puzzlers and beauty simulators. Full-cycle production: UI/UX design, 2D character art, game icons, store assets and gameplay animations.',
+ov_studio_desc:'Casual mobile game studio',
+ov_role_val:'UI/UX · 2D Art',ov_role_desc:'From concept to production assets',
+ov_period_desc:'Amazon Appstore · iOS · Android',
+ov_games_desc:'Match-3 + Beauty Simulators',
+s1_title:'Fairy Kingdom',s1_sub:'Match-3 Puzzler · Full UI/UX + 2D Art Production',
+s2_title:'Nails Salon Series',s2_sub:'4 Beauty Simulator Games · UI/UX + 2D Character Art',
+s3_title:'Funny Candy Land',s3_sub:'Match-3 Puzzler · UI/UX + 2D Art',
+brief_tag:'// Project Brief',done_tag:'// Deliverables',brief_heading:'6 games in a row.<br>The entire visual style — on me.',brief_meta_role:'UI/UX Designer · 2D Artist',brief_note:'Casual mobile games for Amazon, iOS and Android. Each game built sequentially, each in its own visual world — from scratch.',brief_list:'<li>Full visual style for each game — from concept to final assets</li><li>UI/UX: screens, HUD, popups, level maps, navigation</li><li>2D art: characters, icons, store assets, gameplay animations</li><li>Production slicing and handoff to development</li>',itog_tag:'// Takeaway',itog_text:'Six games in a row — not just a large volume of work. Each time: a new visual language, a new audience, a new style. Fairy Kingdom and Candy Land — fantasy match-3 with illustrations; Beauty Simulators — different aesthetics, different interaction patterns, characters built around different themes. Learned to step into a new visual world quickly and keep it coherent from the first screen to the store icon. All 6 games published on Amazon, iOS and Android. Six different worlds, six times from zero — that\'s the kind of range no single project can give you.',
+fk_genre:'Match-3 Puzzler · Casual · Fantasy',
+fk_desc:'A magical match-3 puzzler set in a fairy kingdom world. Full-cycle visual production — UI kit, in-game screens, popup system, level map, game icons and promotional materials. Designed for a casual female audience with warm pastel tones and storybook aesthetics.',
+fk_note:'"The challenge was maintaining visual consistency across a large icon set while keeping each piece recognisable at small sizes. Every element — from popups to the level map — had to feel like it belonged to the same fairy-tale world."',
+note_label:'// Design Note',
+g1_genre:'Simulator · Beauty · Princess',g1_desc:'A princess-themed manicure salon with a pastel-royal palette, hand-crafted character art and frame-by-frame gameplay animations.',
+g2_genre:'Simulator · Manicure · Kawaii',g2_desc:'Kawaii-style nail salon with a bright, playful aesthetic — cute characters and satisfying salon interactions. UI, art direction and all 2D assets.',
+g3_genre:'Simulator · Beauty · Fantasy',g3_desc:'A fantasy nail salon in a magical unicorn world — vibrant colours and whimsical characters. Full UI/UX and 2D art production.',
+g4_genre:'Simulator · Beauty · Cute',g4_desc:'Cat-themed nail salon with a soft pastel aesthetic — playful kitty characters and cosy atmosphere. Complete UI and 2D art.',
+cl_genre:'Match-3 Puzzler · Casual · Sweet',
+cl_desc:'A vibrant match-3 puzzle game set in a world of sweets and candy. Colourful UI, game icons, HUD elements and promotional store assets — delivered for a complete production pipeline targeting Amazon Appstore.',
+meta_role_2d:'2D Artist · UI Designer',
+nails_note_label:'// Design Note',
+nails_note:'"Four games, four visual worlds — but one production standard. The challenge was switching aesthetic modes completely between projects while keeping UI logic consistent: the same interaction patterns, the same handoff discipline, different skins every time."',
+nails_screens_label:'// Gameplay screens — Kawaii Nails · Magic Princess · Unicorns · Pretty Kitty',
+cl_note_label:'// Design Note',
+cl_note:'"A fully saturated candy world — the challenge was keeping the palette vibrant without losing readability. Match-3 games live or die by how fast players read the board, so every icon and HUD element needed clear visual hierarchy beneath all that sweetness."'
+},
+ru:{
+nav_back:'Проекты',back_btn:'← К проектам',
+label_studio:'Студия',label_role:'Роль',label_period:'Период',label_games:'Игр',label_platform:'Платформа',
+hero_eyebrow:'Кейс · Казуальные мобильные игры · 2022–2023',
+hero_sub:'Коллекция казуальных игр',
+hero_desc:'6 опубликованных казуальных мобильных игр для студии Namskao — матч-3 пазлы и симуляторы красоты. Полный цикл: UI/UX дизайн, 2D-арт персонажей, игровые иконки, ассеты для магазина и игровые анимации.',
+ov_studio_desc:'Студия казуальных мобильных игр',
+ov_role_val:'UI/UX · 2D-арт',ov_role_desc:'От концепта до производственных ассетов',
+ov_period_desc:'Amazon Appstore · iOS · Android',
+ov_games_desc:'Match-3 + симуляторы красоты',
+s1_title:'Fairy Kingdom',s1_sub:'Match-3 пазл · Полный цикл UI/UX + 2D-арт',
+s2_title:'Серия Nails Salon',s2_sub:'4 симулятора красоты · UI/UX + 2D-арт персонажей',
+s3_title:'Funny Candy Land',s3_sub:'Match-3 пазл · UI/UX + 2D-арт',
+brief_tag:'// Описание проекта',done_tag:'// Сделала',brief_heading:'6 игр подряд.<br>Весь визуальный стиль — на мне.',brief_meta_role:'UI/UX-дизайнер · 2D-художник',brief_note:'Казуальные мобильные игры для Amazon, iOS и Android. Работала последовательно — каждая игра в своём визуальном мире, каждый раз с нуля.',brief_list:'<li>Весь визуальный стиль каждой игры — от концепции до финальных ассетов</li><li>UI/UX: экраны, HUD, попапы, карты уровней, навигация</li><li>2D-арт: персонажи, иконки, стор-ассеты, геймплейные анимации</li><li>Производственные нарезки и передача в разработку</li>',itog_tag:'// Итог',itog_text:'6 игр подряд — это не просто большой объём. Каждый раз заново: новый визуальный язык, новая аудитория, новый стиль. Fairy Kingdom и Candy Land — фантазийный match-3 с иллюстрациями; Beauty Simulators — другая эстетика, другой тип взаимодействия, персонажи под разные темы. Научилась быстро входить в новый визуальный мир и держать в нём цельность — от первого экрана до иконки стора. Все 6 игр опубликованы на Amazon, iOS и Android. Шесть разных миров, шесть раз с нуля — такой диапазон не даёт ни один отдельный проект.',
+fk_genre:'Match-3 пазл · Казуальный · Фэнтези',
+fk_desc:'Волшебный матч-3 пазл в мире сказочного королевства. Полный цикл визуального производства — UI-кит, игровые экраны, система попапов, карта уровней, иконки и промо-материалы. Тёплые пастельные тона и сказочная эстетика.',
+fk_note:'"Главный вызов — сохранить визуальную целостность большого набора иконок, при этом каждый элемент должен читаться при малых размерах. Всё — от попапов до карты уровней — должно ощущаться частью одного сказочного мира."',
+note_label:'// Заметка дизайнера',
+g1_genre:'Симулятор · Красота · Принцесса',g1_desc:'Маникюрный салон в теме принцессы с пастельно-королевской палитрой, ручным арт-дизайном персонажей и покадровыми анимациями.',
+g2_genre:'Симулятор · Маникюр · Кавай',g2_desc:'Кавай-салон с яркой, игривой эстетикой — милые персонажи и приятные взаимодействия. UI, арт-директинг и все 2D-ассеты.',
+g3_genre:'Симулятор · Красота · Фэнтези',g3_desc:'Маникюрный салон в магическом мире единорогов — яркие цвета и причудливые персонажи. Полный цикл UI/UX и 2D-арт.',
+g4_genre:'Симулятор · Красота · Милота',g4_desc:'Кошачий маникюрный салон с нежной пастельной эстетикой — персонажи-котята и уютная атмосфера. Полные UI и 2D-арт.',
+cl_genre:'Match-3 пазл · Казуальный · Сладкий',
+cl_desc:'Яркий матч-3 пазл в мире сладостей. Цветной UI, игровые иконки, HUD-элементы и промо-ассеты для магазина — полный производственный цикл под Amazon Appstore.',
+meta_role_2d:'2D-художник · UI-дизайнер',
+nails_note_label:'// Заметка дизайнера',
+nails_note:'"Четыре игры, четыре визуальных мира — но один производственный стандарт. Задача — полностью переключать эстетический режим между проектами, сохраняя логику UI: те же паттерны взаимодействия, та же дисциплина хэндоффа, каждый раз другой визуальный язык."',
+nails_screens_label:'// Экраны геймплея — Kawaii Nails · Magic Princess · Unicorns · Pretty Kitty',
+cl_note_label:'// Заметка дизайнера',
+cl_note:'"Максимально насыщенный мир конфет — задача: сохранить яркость палитры, не теряя читаемости. Match-3 живёт только если игрок мгновенно считывает поле. Каждая иконка и HUD-элемент должны были выстраивать чёткую иерархию под всей этой сладостью."'
+}};
+window.switchLang=function(lang){if(lang!=='en'&&lang!=='ru')lang='ru';try{localStorage.setItem('lang',lang);}catch(e){}var t=CASE_T[lang];document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(t&&t[k]!==undefined)el.innerHTML=t[k];});document.querySelectorAll('[data-lang]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});};(function(){var s='ru';try{s=localStorage.getItem('lang')||'ru';}catch(e){}switchLang(s==='en'?'en':'ru');})();
+</script>
+</body>
+</html>
