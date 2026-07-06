@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sonakai — Casual Mobile Games | Arina Karpova</title>
+<meta name="description" content="Sonakai — UI/UX case study by Arina Karpova.">
+<meta property="og:title" content="Sonakai Case Study — Arina Karpova">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#07060e;--ink2:#0d0b18;--ink3:#14122a;
+  --violet:#2a1a5e;--violet2:#5a40a0;--violet3:#9a80d0;
+  --gold:#b89040;--gold2:#d4b060;--gold3:#e8d090;
+  --silver:#9090b8;--bone:#e0d8f0;--bone2:#b0a8c8;
+  --border:rgba(200,170,240,0.2);--border2:rgba(200,170,240,0.45);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cursor-outer{position:fixed;width:32px;height:32px;border:1px solid var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s,background .3s;}
+#cursor-inner{position:fixed;width:5px;height:5px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:transform .08s;}
+#cursor-outer.hover{width:50px;height:50px;border-color:var(--gold3);background:rgba(180,140,80,0.06);}
+
+.noise-overlay{position:fixed;inset:0;z-index:998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");mix-blend-mode:overlay;}
+
+.scene-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 15% 50%,rgba(60,30,120,.4) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 85% 30%,rgba(80,40,140,.35) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 50% 90%,rgba(180,100,80,.1) 0%,transparent 60%),radial-gradient(ellipse 55% 45% at 70% 60%,rgba(40,20,90,.3) 0%,transparent 65%);animation:bs 15s ease-in-out infinite;}
+@keyframes bs{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;padding:.9rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(7,6,14,.95) 0%,transparent 100%);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);}
+.nb-logo{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;letter-spacing:.18em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:12px;}
+.nb-gem{width:18px;height:18px;border:1px solid var(--gold);transform:rotate(45deg);display:grid;place-items:center;flex-shrink:0;}
+.nb-gem::before{content:'';width:6px;height:6px;background:var(--gold);opacity:.7;transform:rotate(45deg);}
+.nb-back{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:8px;}
+.nb-back:hover{color:var(--gold2);}
+
+/* HERO */
+.case-hero{position:relative;z-index:2;padding:8rem 4rem 3rem;max-width:1400px;margin:0 auto;}
+.hero-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:1rem;display:flex;align-items:center;gap:14px;}
+.hero-meta-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;line-height:.95;letter-spacing:.04em;color:var(--bone);margin-bottom:.6rem;}
+.hero-title em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.4em;color:var(--violet3);letter-spacing:.06em;margin-top:.3em;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.4rem 0 0;}
+.hero-tag{padding:.25rem .8rem;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);color:var(--bone2);}
+.hero-tag.live{border-color:rgba(120,200,120,.4);color:#80c880;}
+.hero-tag.gold{border-color:rgba(180,140,80,.45);color:var(--gold2);}
+
+/* CONTENT */
+.case-body{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 4rem 6rem;}
+
+/* SECTIONS */
+.case-section{margin-bottom:5rem;opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+.case-section.in{opacity:1;transform:none;}
+.case-section-num{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.25em;color:var(--gold);opacity:.6;margin-bottom:.5rem;}
+.case-section-title{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:600;letter-spacing:.08em;color:var(--bone);margin-bottom:1.5rem;display:flex;align-items:center;gap:14px;}
+.case-section-title svg{flex-shrink:0;}
+
+/* OVERVIEW META GRID */
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2rem;}
+.meta-cell{background:rgba(13,11,24,.7);padding:1.2rem 1.3rem;}
+.meta-cell-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.4rem;}
+.meta-cell-val{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.04em;color:var(--bone);}
+
+.overview-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone2);line-height:1.85;font-weight:300;margin-bottom:1rem;}
+.overview-text strong{color:var(--gold2);font-weight:600;}
+
+/* GAME SUBSECTION */
+.game-card{margin-bottom:4rem;border:1px solid var(--border);background:rgba(13,11,24,.4);backdrop-filter:blur(4px);position:relative;overflow:hidden;}
+.game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4;}
+.game-header{padding:1.8rem 2rem 1.4rem;border-bottom:1px solid var(--border);position:relative;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;}
+.game-num{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.22em;color:var(--gold);opacity:.55;margin-bottom:.3rem;}
+.game-name{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;letter-spacing:.06em;color:var(--bone);margin-bottom:.3rem;}
+.game-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--violet3);}
+.game-link{display:inline-flex;align-items:center;gap:.6rem;padding:.55rem 1.1rem;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(180,140,80,.4);background:rgba(180,140,80,.05);text-decoration:none;transition:all .25s;cursor:none;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.game-link:hover{border-color:var(--gold2);color:var(--gold3);background:rgba(180,140,80,.12);}
+
+.game-body{padding:2rem;}
+.game-body p{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.85;font-weight:300;margin-bottom:1rem;}
+
+/* IMAGE BLOCKS */
+.img-block{margin:2rem 0;}
+.img-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.8rem;}
+.img-single{width:100%;border:1px solid var(--border);background:rgba(7,6,14,.5);position:relative;overflow:hidden;}
+.img-single img{width:100%;height:auto;display:block;}
+.img-caption{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--bone2);opacity:.7;margin-top:.6rem;text-align:center;}
+
+.img-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.img-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+
+/* DELIVERABLES LIST */
+.deliv-list{list-style:none;padding:0;margin:1rem 0;display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem 2rem;}
+.deliv-list li{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone2);line-height:1.6;padding-left:1.4rem;position:relative;font-weight:300;}
+.deliv-list li::before{content:'';position:absolute;left:0;top:.6rem;width:8px;height:1px;background:var(--gold);opacity:.6;}
+
+/* INSIGHT BLOCK */
+.insight{margin:2rem 0;padding:1.5rem 1.8rem;border-left:2px solid var(--gold);background:linear-gradient(90deg,rgba(180,140,80,.06),transparent);}
+.insight-label{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.5rem;}
+.insight-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--bone);line-height:1.65;}
+
+/* OUTCOME */
+.outcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:1.5rem;}
+.outcome-cell{background:rgba(13,11,24,.7);padding:1.5rem 1.4rem;text-align:center;}
+.outcome-num{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;color:var(--gold2);margin-bottom:.4rem;letter-spacing:.04em;}
+.outcome-label{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone2);}
+
+/* NAV NEXT */
+.case-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem 4rem;border-top:1px solid var(--border);margin-top:4rem;max-width:1100px;margin-left:auto;margin-right:auto;}
+.nav-link{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.12em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:12px;transition:color .25s;cursor:none;}
+.nav-link:hover{color:var(--gold2);}
+.nav-link-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.2em;color:var(--gold);opacity:.6;display:block;margin-bottom:.3rem;}
+
+/* FOOTER */
+footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:1.5rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(7,6,14,.95);}
+.ft-logo{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.18em;font-weight:700;color:var(--bone);text-decoration:none;}
+.ft-copy{font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.1em;color:var(--bone2);opacity:.4;}
+
+@media(max-width:900px){
+  .case-hero,.case-body,.case-nav{padding-left:1.5rem;padding-right:1.5rem;}
+  .navbar{padding:.9rem 1.5rem;}
+  .meta-grid{grid-template-columns:1fr 1fr;}
+  .deliv-list{grid-template-columns:1fr;}
+  .img-grid-2,.img-grid-3{grid-template-columns:1fr;}
+  .outcome-grid{grid-template-columns:1fr;}
+  .game-header{flex-direction:column;align-items:flex-start;}
+}
+
+@media(max-width:640px){
+  #cursor-outer,#cursor-inner{display:none;}
+  body{cursor:auto;}
+  a,button{cursor:pointer;}
+  .case-hero,.case-body,.case-nav{padding-left:1.2rem;padding-right:1.2rem;}
+  .meta-grid{grid-template-columns:1fr;}
+  .img-grid-2,.img-grid-3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
+<div class="noise-overlay"></div>
+<div class="scene-bg"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="portfolio_arina.html" class="nb-logo"><div class="nb-gem"></div>ARINA KARPOVA</a>
+  <a href="portfolio_arina.html" class="nb-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3 L4 7 L9 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Return to Archive
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="case-hero">
+  <div class="hero-meta">
+    <span>// CASE STUDY · 01</span>
+    <span class="hero-meta-dot"></span>
+    <span>CASUAL MOBILE GAMES</span>
+    <span class="hero-meta-dot"></span>
+    <span>2022–2023</span>
+  </div>
+  <h1 class="hero-title">
+    SONAKAI
+    <em>Three Worlds, One Studio</em>
+  </h1>
+  <div class="hero-tags">
+    <span class="hero-tag live">● 3 Titles Shipped</span>
+    <span class="hero-tag gold">Live on Amazon Appstore</span>
+    <span class="hero-tag">Match-3</span>
+    <span class="hero-tag">Nail Salon</span>
+    <span class="hero-tag">2D Art</span>
+    <span class="hero-tag">UI/UX</span>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="case-body">
+
+  <!-- 01 · OVERVIEW -->
+  <section class="case-section">
+    <p class="case-section-num">// 01 — CONTEXT</p>
+    <h2 class="case-section-title">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="1" x2="9" y2="17" stroke="var(--gold)" stroke-width="1"/><line x1="1" y1="9" x2="17" y2="9" stroke="var(--gold)" stroke-width="1"/><circle cx="9" cy="9" r="2.5" fill="var(--gold2)"/></svg>
+      The Origin
+    </h2>
+    <div class="meta-grid">
+      <div class="meta-cell"><p class="meta-cell-label">Role</p><p class="meta-cell-val">2D Artist · UI Designer</p></div>
+      <div class="meta-cell"><p class="meta-cell-label">Period</p><p class="meta-cell-val">Jan 2022 — Nov 2023</p></div>
+      <div class="meta-cell"><p class="meta-cell-label">Platform</p><p class="meta-cell-val">Amazon Appstore</p></div>
+      <div class="meta-cell"><p class="meta-cell-label">Titles</p><p class="meta-cell-val">3 Published</p></div>
+    </div>
+    <p class="overview-text">
+      Full-cycle work on a series of casual mobile games at <strong>Sonakai studio</strong> — from wireframes and UX flows to final UI, illustrations, and animations. Designed and shipped three published titles available on Amazon Appstore today: two match-3 puzzlers and a nail salon simulator.
+    </p>
+    <p class="overview-text">
+      Each game required a complete visual language — UI kit, screens, popups, icons, promo materials — and consistent execution across them. Worked alongside game designers and developers, contributing to usability testing and iterating UX patterns based on player feedback.
+    </p>
+  </section>
+
+  <!-- ───────────────────────────────────────── -->
+  <!-- GAME 1 · FAIRY KINGDOM PRINCESS         -->
+  <!-- ───────────────────────────────────────── -->
+  <section class="case-section">
+    <div class="game-card">
+      <div class="game-header">
+        <div>
+          <p class="game-num">// TITLE · 01</p>
+          <h3 class="game-name">Fairy Kingdom Princess</h3>
+          <p class="game-tagline">Match-3 Fairytale · Full UI/UX & Art Production</p>
+        </div>
+        <a href="https://www.amazon.com/Fairy-Princess-Kingdom-Match-Puzzle/dp/B0BTHY6HCS/" target="_blank" class="game-link">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          View on Amazon
+        </a>
+      </div>
+
+      <div class="game-body">
+        <p>
+          A casual match-3 game set in a magical fairy kingdom. Designed the complete visual language — from the UI kit and component system to game screens, popups, monetisation flows, and promotional materials. Every popup follows a consistent structure (header ribbon, corner close, bottom CTA) so players navigate without friction across the game.
+        </p>
+
+        <!-- UI KIT -->
+        <div class="img-block">
+          <p class="img-label">— UI Kit & Foundation —</p>
+          <div class="img-single"><img src="../images/sonakai/fairy-kingdom-ui-kit.jpg" alt="Fairy Kingdom UI Kit"></div>
+          <p class="img-caption">Buttons, progress bars, ribbons, currency icons, avatar frame, coin stacks — a reusable component system.</p>
+        </div>
+
+        <!-- SCREENS -->
+        <div class="img-block">
+          <p class="img-label">— Core Game Screens —</p>
+          <div class="img-single"><img src="../images/sonakai/fairy-kingdom-screens.jpg" alt="Fairy Kingdom screens"></div>
+          <p class="img-caption">Main menu, level map across three visual themes, gameplay HUD, and shop with three tab states.</p>
+        </div>
+
+        <!-- POPUPS -->
+        <div class="img-block">
+          <p class="img-label">— Popups & Monetisation —</p>
+          <div class="img-single"><img src="../images/sonakai/fairy-kingdom-popups.jpg" alt="Fairy Kingdom popups"></div>
+          <p class="img-caption">Lucky Spin, Golden Ticket / Battle Pass, Settings, Out of Moves, Exit confirmation. Designed for clarity and conversion.</p>
+        </div>
+
+        <!-- ICONS & EXTRAS -->
+        <div class="img-block">
+          <p class="img-label">— Icons, Props & Extras —</p>
+          <div class="img-grid-2">
+            <div class="img-single"><img src="../images/sonakai/fairy-kingdom-icons.jpg" alt="Fairy Kingdom icons"></div>
+            <div class="img-single"><img src="../images/sonakai/fairy-kingdom-extras.jpg" alt="Fairy Kingdom extras"></div>
+          </div>
+          <p class="img-caption">Daily Tasks, Free Gift, rewarded ad placements, 15+ candy/gem icons in multiple states, and chest animations.</p>
+        </div>
+
+        <!-- WHAT I DESIGNED -->
+        <p class="img-label" style="margin-top:2rem;">— Deliverables —</p>
+        <ul class="deliv-list">
+          <li>UI kit: buttons, ribbons, currency icons, frames, coin stacks</li>
+          <li>Main menu, gameplay HUD, level map (3 themes)</li>
+          <li>Shop with three tab states</li>
+          <li>Lucky Spin, Golden Ticket / Battle Pass popups</li>
+          <li>Daily Tasks, Free Gift, Settings, Out of Moves</li>
+          <li>15+ game piece icons with multiple states</li>
+          <li>Chest open / closed animation states</li>
+          <li>3 unique level map environments</li>
+          <li>Rewarded ad placements integrated into environment</li>
+          <li>Store banners and promotional materials</li>
+        </ul>
+
+        <div class="insight">
+          <p class="insight-label">— Design Decision —</p>
+          <p class="insight-text">"The visual language balances readability during fast-paced gameplay with a whimsical fairy-tale aesthetic. All popups follow one component structure — same ribbon, same close, same CTA — so players never have to relearn the interface."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────────────────── -->
+  <!-- GAME 2 · FUNNY CANDY LAND              -->
+  <!-- ───────────────────────────────────────── -->
+  <section class="case-section">
+    <div class="game-card">
+      <div class="game-header">
+        <div>
+          <p class="game-num">// TITLE · 02</p>
+          <h3 class="game-name">Funny Candy Land</h3>
+          <p class="game-tagline">Match-3 Confectionery · UI & 2D Art</p>
+        </div>
+        <a href="https://www.amazon.com/TopHopStudio-Kawaii-Nails-Manicure-Salon/dp/B0C6KW2VNK/" target="_blank" class="game-link">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          View on Amazon
+        </a>
+      </div>
+
+      <div class="game-body">
+        <p>
+          Designed the visual style and game assets for a casual mobile match-3 in a confectionery aesthetic. The challenge was building a coherent visual world from candy elements while keeping the game pieces instantly readable during fast play.
+        </p>
+
+        <div class="img-block">
+          <p class="img-label">— Promo Cover —</p>
+          <div class="img-grid-2">
+            <div class="img-single"><img src="../images/sonakai/candy-land-cover.jpg" alt="Funny Candy Land cover"></div>
+            <div class="img-single"><img src="../images/sonakai/candy-land-promo.jpg" alt="Funny Candy Land promo"></div>
+          </div>
+          <p class="img-caption">Store promotional visuals: gameplay preview in a device mockup and vertical promo composition.</p>
+        </div>
+
+        <div class="img-block">
+          <p class="img-label">— Game Piece Icon Set —</p>
+          <div class="img-single"><img src="../images/sonakai/candy-land-icons.jpg" alt="Funny Candy Land icons"></div>
+          <p class="img-caption">15 unique candy elements: orange slice, jelly, donut, cookie, chocolate, lollipop and more. Chocolate chest in closed and open states.</p>
+        </div>
+
+        <p class="img-label" style="margin-top:2rem;">— Deliverables —</p>
+        <ul class="deliv-list">
+          <li>Store promotional visual with device mockup</li>
+          <li>Vertical promo composition for Amazon listing</li>
+          <li>Gameplay HUD: moves counter, collection progress, lives system</li>
+          <li>Match-3 grid with candy-themed game pieces</li>
+          <li>15 unique candy element icons</li>
+          <li>Chocolate chest: closed & open animation states</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────────────────── -->
+  <!-- GAME 3 · NAIL SALON SERIES               -->
+  <!-- ───────────────────────────────────────── -->
+  <section class="case-section">
+    <div class="game-card">
+      <div class="game-header">
+        <div>
+          <p class="game-num">// TITLE · 03</p>
+          <h3 class="game-name">Princess Nails Salon · Kawaii Manicure</h3>
+          <p class="game-tagline">Nail Salon Simulator · UI & Character Art</p>
+        </div>
+        <a href="https://www.amazon.com/Princess-Nails-Salon-Beauty-Games/dp/B0CBVMSG5F/" target="_blank" class="game-link">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          View on Amazon
+        </a>
+      </div>
+
+      <div class="game-body">
+        <p>
+          A casual nail salon simulator for the younger casual mobile audience. Designed character illustrations, environments, interfaces and frame-by-frame animations for the gameplay loop. Contributed to interface testing and iterated on UX patterns based on player feedback.
+        </p>
+
+        <p class="img-label" style="margin-top:1rem;">— Deliverables —</p>
+        <ul class="deliv-list">
+          <li>UI/UX from wireframes to final design</li>
+          <li>Character illustrations</li>
+          <li>Environment art</li>
+          <li>Frame-by-frame gameplay animations</li>
+          <li>Store screens and promotional graphics</li>
+          <li>Banner design for store listings</li>
+        </ul>
+
+        <div class="insight" style="margin-top:1.5rem;">
+          <p class="insight-label">— Note —</p>
+          <p class="insight-text">"Production assets for this title are under NDA — available on request. Game live on Amazon Appstore."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · OUTCOME -->
+  <section class="case-section">
+    <p class="case-section-num">// 03 — OUTCOME</p>
+    <h2 class="case-section-title">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="var(--gold)" stroke-width="1" fill="none"/><circle cx="9" cy="9" r="2.5" fill="var(--gold2)"/></svg>
+      Three Worlds, Shipped
+    </h2>
+    <div class="outcome-grid">
+      <div class="outcome-cell">
+        <p class="outcome-num">3</p>
+        <p class="outcome-label">Titles Published</p>
+      </div>
+      <div class="outcome-cell">
+        <p class="outcome-num">2 yrs</p>
+        <p class="outcome-label">Full Production Cycle</p>
+      </div>
+      <div class="outcome-cell">
+        <p class="outcome-num">Live</p>
+        <p class="outcome-label">On Amazon Appstore</p>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:2.5rem;">
+      <p class="insight-label">— Lessons from the Forge —</p>
+      <p class="insight-text">"Working full-cycle across three different genres taught me to recognise the shared DNA of casual UI — clear hierarchy, generous tap targets, and consistent state communication — regardless of theme. The visual world changes; the underlying patterns don't."</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- CASE NAV -->
+<div class="case-nav">
+  <a href="portfolio_arina.html" class="nav-link">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3 L5 8 L10 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>
+      <span class="nav-link-label">// RETURN</span>
+      All Projects
+    </span>
+  </a>
+  <a href="case-avataria.html" class="nav-link">
+    <span style="text-align:right;">
+      <span class="nav-link-label">// NEXT CASE</span>
+      Avataria (101XP)
+    </span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3 L11 8 L6 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+<footer>
+  <a href="portfolio_arina.html" class="ft-logo">// ARINA KARPOVA</a>
+  <span class="ft-copy">© 2026 — All rights reserved</span>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.12em;color:var(--gold);opacity:.4;">UI · UX · 2D · GAMEDEV</span>
+</footer>
+
+<script>
+// Cursor
+const co=document.getElementById('cursor-outer'),ci=document.getElementById('cursor-inner');
+let mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function animC(){ox+=(mx-ox)*.12;oy+=(my-oy)*.12;co.style.left=ox+'px';co.style.top=oy+'px';ci.style.left=mx+'px';ci.style.top=my+'px';requestAnimationFrame(animC);})();
+document.querySelectorAll('a,button,.game-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>co.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>co.classList.remove('hover'));
+});
+
+// Reveal sections on scroll
+const sections=document.querySelectorAll('.case-section');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.12,rootMargin:'0px 0px -50px 0px'});
+sections.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

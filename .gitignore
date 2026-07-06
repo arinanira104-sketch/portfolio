@@ -1,0 +1,10 @@
+# Backup files
+*~
+*.~
+
+# Unused dirs
+_unused_files/
+
+# Windows
+desktop.ini
+Thumbs.db

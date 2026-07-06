@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Life — Arina Karpova</title>
+<meta name="description" content="Avataria — case study by Arina Karpova. UI/UX design for a mobile social game: items, furniture, store, and 2D art.">
+<meta property="og:title" content="Avataria Case Study — Arina Karpova">
+<meta property="og:description" content="UI/UX design for Avataria mobile game — items, furniture, store, and 2D art illustrations.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--ink:#07060e;--violet3:#9a80d0;--gold:#b89040;--gold2:#d4b060;--gold3:#e8d090;--bone:#e0d8f0;--bone2:#b0a8c8;--border:rgba(200,170,240,0.2);--border2:rgba(200,170,240,0.45);}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+#cursor-outer{position:fixed;left:0;top:0;width:32px;height:32px;border:1px solid var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;will-change:transform;transition:width .3s,height .3s,border-color .3s,background .3s;}
+#cursor-inner{position:fixed;left:0;top:0;width:5px;height:5px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;will-change:transform;}
+#cursor-outer.hover{width:50px;height:50px;border-color:var(--gold3);background:rgba(180,140,80,0.06);}
+.noise-overlay{position:fixed;inset:0;z-index:998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");mix-blend-mode:overlay;}
+.scene-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 15% 50%,rgba(60,30,120,.4) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 85% 30%,rgba(80,40,140,.35) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 50% 90%,rgba(180,100,80,.1) 0%,transparent 60%);animation:bs 15s ease-in-out infinite;}
+@keyframes bs{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;padding:.9rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(7,6,14,.95) 0%,transparent 100%);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);}
+.nb-logo{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;letter-spacing:.18em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:12px;}
+.nb-gem{width:18px;height:18px;border:1px solid var(--gold);transform:rotate(45deg);display:grid;place-items:center;flex-shrink:0;}
+.nb-gem::before{content:'';width:6px;height:6px;background:var(--gold);opacity:.7;transform:rotate(45deg);}
+.nb-back{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:8px;cursor:none;}
+.nb-back:hover{color:var(--gold2);}
+.back-btn{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:300;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--bone2);background:rgba(7,6,14,.9);border:1px solid var(--border);padding:.6rem 1.5rem;cursor:none;text-decoration:none;display:inline-block;transition:all .2s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO */
+.case-hero{position:relative;z-index:2;padding:8rem 4rem 3rem;max-width:1400px;margin:0 auto;}
+.hero-breadcrumb{font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
+.hero-breadcrumb span{opacity:.4;}
+.hero-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:1rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.hero-meta-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:700;line-height:.95;letter-spacing:.04em;color:var(--bone);margin-bottom:.6rem;}
+.hero-title em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.42em;color:var(--violet3);letter-spacing:.06em;margin-top:.3em;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.4rem 0 0;}
+.hero-tag{padding:.25rem .8rem;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);color:var(--bone2);}
+.hero-tag.gold{border-color:rgba(180,140,80,.45);color:var(--gold2);}
+
+/* BODY */
+.case-body{position:relative;z-index:2;max-width:1600px;margin:0 auto;padding:0 4rem 8rem;}
+.case-section{margin-bottom:6rem;opacity:0;transition:opacity .65s ease;position:relative;}
+.case-section.in{opacity:1;animation:sectionIn .65s ease forwards;}
+@keyframes sectionIn{from{transform:translateY(20px)}to{transform:translateY(0)}}
+
+
+/* META GRID */
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem;}
+.meta-cell{background:rgba(13,11,24,.7);padding:1.2rem 1.3rem;}
+.meta-cell-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.4rem;}
+.meta-cell-val{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.04em;color:var(--bone);}
+
+/* CHAPTER HEADER */
+.chapter{margin-bottom:3rem;}
+.chapter-num{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.55;margin-bottom:.4rem;}
+.chapter-title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:600;letter-spacing:.06em;color:var(--bone);display:flex;align-items:center;gap:16px;}
+.chapter-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+.chapter-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.8;font-weight:300;margin-top:.8rem;}
+
+/* GALLERY — horizontal/square images */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+.gallery-grid.cols1{grid-template-columns:1fr;}
+.gallery-grid.cols2{grid-template-columns:repeat(2,1fr);}
+.gallery-grid.cols3{grid-template-columns:repeat(3,1fr);}
+.gallery-grid.cols4{grid-template-columns:repeat(4,1fr);}
+.gallery-item{display:flex;flex-direction:column;gap:.5rem;}
+.gallery-item.wide{grid-column:span 2;}
+.img-wrap{width:100%;overflow:hidden;border:1px solid var(--border);background:rgba(10,8,20,.95);display:flex;align-items:center;justify-content:center;}
+.img-wrap.screen{aspect-ratio:16/9;}
+.img-wrap.square{aspect-ratio:1/1;}
+.img-wrap.auto{aspect-ratio:auto;}
+.img-wrap.natural{height:auto;}
+.img-wrap img{width:100%;height:100%;object-fit:contain;display:block;}
+.img-wrap.natural img{height:auto;}
+.gallery-label{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.55;}
+
+/* PROJECT BRIEF */
+.brief-block{display:grid;grid-template-columns:1fr 1fr;gap:5rem;padding:3.5rem 4rem;border:1px solid var(--border);border-left:2px solid var(--gold2);background:rgba(14,10,6,.55);margin-bottom:3rem;}
+.brief-tag{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);opacity:.75;margin-bottom:1.2rem;}
+.brief-heading{font-family:'Cinzel',serif;font-size:clamp(1.3rem,2.2vw,2rem);font-weight:700;line-height:1.15;letter-spacing:.03em;color:var(--bone);margin-bottom:2rem;}
+.brief-meta{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.8rem;}
+.brief-meta-row{display:flex;gap:1.2rem;align-items:baseline;}
+.brief-meta-label{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7;flex-shrink:0;min-width:90px;}
+.brief-meta-val{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone);opacity:.85;line-height:1.5;}
+.brief-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bone2);opacity:.65;line-height:1.7;border-left:1px solid rgba(180,140,60,.3);padding-left:1.1rem;}
+.brief-blocks{display:flex;flex-direction:column;gap:1.4rem;padding-top:.2rem;}
+.brief-bitem{display:flex;gap:1rem;align-items:flex-start;}
+.brief-bnum{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.16em;color:var(--gold);opacity:.6;flex-shrink:0;padding-top:.3rem;min-width:2rem;}
+.brief-btext{}
+.brief-btitle{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.06em;color:var(--bone);margin-bottom:.3rem;}
+.brief-bdesc{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--bone2);opacity:.8;line-height:1.6;}
+@media(max-width:900px){.brief-block{grid-template-columns:1fr;gap:2.5rem;padding:2.5rem 2rem;}}
+
+/* PLACEHOLDER */
+.placeholder{border:1px dashed rgba(180,140,80,.25);padding:3rem 2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;min-height:200px;}
+.placeholder-icon{width:32px;height:32px;border:1px solid rgba(180,140,80,.3);transform:rotate(45deg);display:grid;place-items:center;}
+.placeholder-icon::before{content:'';width:10px;height:10px;background:rgba(180,140,80,.2);transform:rotate(45deg);}
+.placeholder-text{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.35;text-align:center;}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:5rem 0;}
+
+footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:1.5rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(7,6,14,.95);}
+.ft-logo{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.18em;font-weight:700;color:var(--bone);text-decoration:none;cursor:none;}
+.ft-copy{font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.1em;color:var(--bone2);opacity:.4;}
+.lang-sw{display:flex;align-items:center;gap:3px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;}
+.lang-sw button{background:none;border:none;color:var(--bone2);cursor:none;padding:.2rem .45rem;transition:color .2s;line-height:1;}
+.lang-sw button.active{color:var(--gold2);}
+.lang-sw span{color:rgba(200,170,240,.3);font-size:.5rem;}
+#zoom-overlay{position:fixed;inset:0;z-index:9999;background:rgba(4,3,9,.88);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(6px);}
+#zoom-overlay.open{opacity:1;pointer-events:all;}
+#zoom-img{max-width:85vw;max-height:82vh;object-fit:contain;border:1px solid rgba(200,170,240,0.2);transform:scale(.95);transition:transform .3s cubic-bezier(.2,.8,.3,1);}
+#zoom-overlay.open #zoom-img{transform:scale(1);}
+.img-wrap img{cursor:zoom-in;}
+
+@media(max-width:900px){.gallery-grid.cols3,.gallery-grid.cols4{grid-template-columns:repeat(2,1fr);}.gallery-item.wide{grid-column:span 2;}}
+@media(max-width:600px){.case-hero,.case-body{padding-left:1.5rem;padding-right:1.5rem;}.navbar{padding:.9rem 1.5rem;}.meta-grid{grid-template-columns:1fr 1fr;}.gallery-grid,.gallery-grid.cols3,.gallery-grid.cols4{grid-template-columns:1fr;}.gallery-item.wide{grid-column:span 1;}}
+
+.case-cover{width:100%;max-width:1200px;margin:0 auto 0;padding:0 4rem 3rem;}
+.case-cover img{width:100%;border-radius:20px;display:block;object-fit:cover;max-height:600px;}
+/* STATUS BADGES */
+.status-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;padding:.18rem .65rem;border:1px solid;margin-left:.9rem;vertical-align:middle;position:relative;top:-2px;}
+.status-badge.shipped{border-color:rgba(180,140,80,.5);color:var(--gold2);}
+.status-badge.shipped::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold2);flex-shrink:0;}
+.status-badge.indev{border-color:rgba(154,128,208,.4);color:var(--violet3);}
+.status-badge.indev::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--violet3);flex-shrink:0;}
+/* STAT BAR */
+.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:0 0 4.5rem;}
+.stat-cell{background:rgba(10,8,20,.9);padding:1.8rem 1.5rem;text-align:center;}
+.stat-num{font-family:'Cinzel',serif;font-size:2.4rem;font-weight:700;color:var(--gold2);display:block;line-height:1;margin-bottom:.5rem;}
+.stat-label{font-family:'Share Tech Mono',monospace;font-size:.47rem;letter-spacing:.14em;text-transform:uppercase;color:var(--bone2);opacity:.65;line-height:1.55;}
+@media(max-width:600px){.stat-bar{grid-template-columns:repeat(2,1fr);}}
+/* DECISION NOTE */
+.decision-note{border-left:2px solid rgba(180,140,80,.4);padding:.9rem 1.3rem;margin:1.6rem 0 2rem;background:rgba(180,140,60,.035);}
+.decision-note-tag{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.4rem;}
+.decision-note p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.96rem;color:var(--bone2);opacity:.82;line-height:1.75;}
+
+
+/* OUTCOMES SECTION */
+.outcomes-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;}
+.outcomes-col-title{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.outcomes-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+.outcomes-list li{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--bone2);line-height:1.6;padding-left:1rem;position:relative;}
+.outcomes-list li::before{content:'—';position:absolute;left:0;color:var(--gold);opacity:.6;}
+.feedback-block{margin-top:2rem;padding:1.5rem 2rem;border-left:2px solid var(--gold2);background:rgba(184,144,64,.06);}
+.feedback-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.8;font-style:italic;}
+.feedback-source{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.15em;color:var(--gold);opacity:.6;margin-top:.6rem;text-transform:uppercase;}
+
+
+/* БЫЛО / СТАЛО comparison */
+.comp-row{display:grid;gap:1.5rem;margin:1.5rem 0 2rem;align-items:start;}
+.comp-row.two{grid-template-columns:1fr 1fr;}
+.comp-row.one-three{grid-template-columns:1fr 2fr;}
+.comp-col{display:flex;flex-direction:column;gap:.6rem;}
+.comp-pill{display:inline-flex;align-items:center;gap:.45rem;font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;padding:.22rem .7rem;border:1px solid;width:fit-content;margin-bottom:.4rem;}
+.comp-pill.before{border-color:rgba(200,170,240,.3);color:var(--bone2);opacity:.7;}
+.comp-pill.after{border-color:rgba(180,140,80,.5);color:var(--gold2);}
+.comp-pill.after::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold2);}
+/* Section subheadings */
+.sub-heading{font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;letter-spacing:.08em;color:var(--bone);margin:2rem 0 1rem;}
+.sub-heading.first{margin-top:0;}
+
+/* NDA NOTE */
+.nda-note{display:flex;gap:1rem;align-items:flex-start;padding:.9rem 1.3rem;border:1px solid rgba(154,128,208,.25);border-left:2px solid var(--violet3);background:rgba(154,128,208,.04);margin:1.5rem 0;}
+.nda-tag{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet3);opacity:.8;flex-shrink:0;padding-top:.15rem;}
+.nda-note p{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--bone2);opacity:.75;line-height:1.65;font-style:italic;}
+
+
+@media(max-width:480px){
+  .gallery-grid{grid-template-columns:1fr!important;}
+  .gallery-grid.cols3{grid-template-columns:1fr!important;}
+  .meta-grid{grid-template-columns:1fr!important;}
+  .stat-bar{grid-template-columns:1fr!important;}
+  .hero-title{font-size:1.7rem;}
+  div[style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr 1fr!important;}
+  div[style*="grid-template-columns:repeat(6"]{grid-template-columns:repeat(2,1fr)!important;}
+}
+
+/* ===== MOBILE ADAPTATION ===== */
+@media(max-width:768px){
+  #cursor-outer,#cursor-inner{display:none;}
+  body{cursor:auto;}
+  a,button{cursor:pointer;}
+
+  /* Navbar */
+  .navbar{padding:.75rem 1.2rem;}
+  .nb-logo{font-size:.75rem;letter-spacing:.12em;}
+
+  /* Hero */
+  .case-hero{padding:5.5rem 1.4rem 2rem;}
+  .hero-title{font-size:clamp(1.7rem,6vw,2.4rem);}
+  .hero-tags{gap:.35rem;}
+
+  /* Body */
+  .case-body{padding:0 1.2rem 4rem;}
+
+  /* Meta grid */
+  .meta-grid{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Brief */
+  .brief-block{grid-template-columns:1fr!important;gap:2rem;padding:1.8rem 1.4rem;}
+
+  /* Stat bar */
+  .stat-bar{grid-template-columns:1fr 1fr!important;}
+
+  /* Chapter */
+  .chapter-title{font-size:1.25rem;flex-wrap:wrap;}
+  .chapter-title::after{display:none;}
+  .chapter-desc{font-size:.92rem;}
+
+  /* Galleries */
+  .gallery-grid.cols3{grid-template-columns:repeat(2,1fr)!important;}
+  .gallery-grid.cols4{grid-template-columns:repeat(2,1fr)!important;}
+  .gallery-grid.cols5{grid-template-columns:repeat(2,1fr)!important;}
+  .gallery-item.wide{grid-column:span 1!important;}
+
+  /* HUD comparison */
+  .comp-row{grid-template-columns:1fr!important;}
+  .comp-row.one-three{grid-template-columns:1fr!important;}
+
+  /* Inline grids */
+  div[style*="grid-template-columns:repeat(3"]{grid-template-columns:repeat(2,1fr)!important;}
+  div[style*="grid-template-columns:repeat(4"]{grid-template-columns:repeat(2,1fr)!important;}
+  div[style*="grid-template-columns:repeat(5"]{grid-template-columns:repeat(2,1fr)!important;}
+  div[style*="grid-template-columns:repeat(6"]{grid-template-columns:repeat(3,1fr)!important;}
+  div[style*="grid-template-columns:1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;}
+
+  /* Process images row */
+  .process-row{flex-direction:column!important;gap:1rem;}
+
+  /* Cover image */
+  .case-cover{padding:0 1.2rem 2rem;}
+  .case-cover img{border-radius:12px;max-height:none;}
+
+  /* Back button */
+  .back-btn{font-size:.44rem;padding:.5rem 1.2rem;bottom:1.2rem;}
+
+  /* Divider */
+  .divider{margin:3rem 0;}
+}
+@media(max-width:480px){
+  .case-hero{padding:5rem 1rem 1.5rem;}
+  .case-body{padding:0 1rem 3rem;}
+  .meta-grid{grid-template-columns:1fr 1fr!important;}
+  .gallery-grid.cols3{grid-template-columns:1fr!important;}
+  .stat-bar{grid-template-columns:1fr!important;}
+  div[style*="grid-template-columns:repeat(6"]{grid-template-columns:repeat(2,1fr)!important;}
+}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div><div id="cursor-inner"></div>
+<div class="noise-overlay"></div><div class="scene-bg"></div>
+
+<nav class="navbar">
+  <a href="portfolio_arina.html" class="nb-logo"><div class="nb-gem"></div>ARINA KARPOVA</a>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <a href="portfolio_arina.html?section=projects" class="nb-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3 L4 7 L9 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="nav_back">Projects</span>
+    </a>
+    <div class="lang-sw"><button id="btnEn" data-lang="en" onclick="switchLang('en')">EN</button><span>|</span><button id="btnRu" data-lang="ru" onclick="switchLang('ru')">RU</button></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="case-hero">
+  <div class="hero-breadcrumb">
+    <span data-i18n="nav_back">Projects</span>
+    <span>›</span>
+    <span style="opacity:1;color:var(--bone);">Avataria Mobile</span>
+  </div>
+  <div class="hero-meta">
+    <span>// CASE STUDY · 02</span><span class="hero-meta-dot"></span>
+    <span>SOCIAL MOBILE GAME</span><span class="hero-meta-dot"></span>
+    <span>2023–2025</span>
+  </div>
+  <h1 class="hero-title">AVATAR LIFE<em>UI Design · 2D Art · Game Systems</em></h1>
+  <div class="hero-tags">
+    <span class="hero-tag">UI / UX</span>
+    <span class="hero-tag">2D Art</span>
+    <span class="hero-tag">Game Design</span>
+    <span class="hero-tag gold">Mobile</span>
+  </div>
+</section>
+
+<!-- COVER -->
+<div class="case-cover rev">
+  <img src="../images/avataria/t1UXxkcrW3M.jpg" alt="Avatar Life">
+</div>
+
+<!-- BODY -->
+<div class="case-body">
+
+  <!-- META -->
+  <div class="case-section">
+    <div class="meta-grid">
+      <div class="meta-cell"><div class="meta-cell-label" data-i18n="label_role">Role</div><div class="meta-cell-val" data-i18n="meta_role_val">UI Designer · 2D Artist</div></div>
+      <div class="meta-cell"><div class="meta-cell-label" data-i18n="label_platform">Platform</div><div class="meta-cell-val">iOS · Android</div></div>
+      <div class="meta-cell"><div class="meta-cell-label" data-i18n="label_period">Period</div><div class="meta-cell-val">2023–2025</div></div>
+      <div class="meta-cell"><div class="meta-cell-label" data-i18n="label_type">Type</div><div class="meta-cell-val" data-i18n="meta_type_val">Social Avatar Game</div></div>
+    </div>
+  </div>
+
+  <!-- PROJECT BRIEF -->
+  <div class="case-section">
+    <div class="brief-block">
+      <div class="brief-intro">
+        <p class="brief-tag" data-i18n="brief_tag">// Описание проекта</p>
+        <h2 class="brief-heading" data-i18n="brief_heading">Мобильная Аватария —<br>редизайн UI и событийные<br>интерфейсы</h2>
+        <div class="brief-meta">
+          <div class="brief-meta-row">
+            <span class="brief-meta-label" data-i18n="label_role">Роль</span>
+            <span class="brief-meta-val" data-i18n="brief_meta_role">UI-дизайнер — новые экраны, гайдлайны, доработка существующих</span>
+          </div>
+          <div class="brief-meta-row">
+            <span class="brief-meta-label" data-i18n="label_goal">Цель</span>
+            <span class="brief-meta-val" data-i18n="brief_meta_goal">Улучшение и систематизация UI в живом продуктовом проекте</span>
+          </div>
+          <div class="brief-meta-row">
+            <span class="brief-meta-label" data-i18n="label_period">Период</span>
+            <span class="brief-meta-val">2023 — 2025</span>
+          </div>
+          <div class="brief-meta-row">
+            <span class="brief-meta-label" data-i18n="label_platform">Платформа</span>
+            <span class="brief-meta-val" data-i18n="brief_meta_platform">Мобильная — горизонталь 2730×1536 + адаптация под вертикаль 1440×2560</span>
+          </div>
+        </div>
+        <p class="brief-note" data-i18n="brief_note">Пришла в живой продукт с аудиторией 10M+ и Figma без системы — всё делалось в спешке, единого визуального кода не было. Задача: быстро встроиться и двигать новые фичи не ломая то, что уже работает. Работала на стыке UI и 2D-арта — придумывала логику экранов для новых фич, рисовала иконки и ивентовое оформление, иногда полностью закрывала задачи арт-отдела совместно с арт-лидом.</p>
+      </div>
+      <div>
+        <p class="brief-tag" data-i18n="work_tag">// Блоки работы</p>
+        <div class="brief-blocks">
+          <div class="brief-bitem">
+            <span class="brief-bnum">01 —</span>
+            <div class="brief-btext">
+              <p class="brief-btitle" data-i18n="block1_title">UI-гайд и компоненты <span class="nda-tag" style="font-size:.38rem;vertical-align:middle;opacity:.6;">// NDA</span></p>
+              <p class="brief-bdesc" data-i18n="block1_desc">Визуальный фундамент для всего нового UI: единая библиотека компонентов, авто-лейаут, 4px сетка, единые радиусы и тени. Ивентовые варианты. Dev handoff.</p>
+            </div>
+          </div>
+          <div class="brief-bitem">
+            <span class="brief-bnum">02 —</span>
+            <div class="brief-btext">
+              <p class="brief-btitle" data-i18n="block2_title">Модальные окна и окна оценки <span class="nda-tag" style="font-size:.38rem;vertical-align:middle;opacity:.6;">// NDA</span></p>
+              <p class="brief-bdesc" data-i18n="block2_desc">4 паттерна: инфо, подтверждение, наградное, с таймером. Фон — градиент бело-голубого, скругление 32px, декоративное свечение. Типографика: заголовок от 52pt, основной текст от 44pt. Поведение в горизонтали и вертикали, скролл для длинного контента.</p>
+            </div>
+          </div>
+          <div class="brief-bitem">
+            <span class="brief-bnum">03 —</span>
+            <div class="brief-btext">
+              <p class="brief-btitle" data-i18n="block3_title">Переделка HUD <span class="nda-tag" style="font-size:.38rem;vertical-align:middle;opacity:.6;">// partial</span></p>
+              <p class="brief-bdesc" data-i18n="block3_desc">Интерфейс выглядел устаревше и не имел адаптации под вертикаль. Главное ограничение: функционал и расположение кнопок менять нельзя — 10M+ пользователей уже привыкли к раскладке. Задача: обновить визуал, не меняя логику управления.</p>
+            </div>
+          </div>
+          <div class="brief-bitem">
+            <span class="brief-bnum">04 —</span>
+            <div class="brief-btext">
+              <p class="brief-btitle" data-i18n="block4_title">Клановая мини-игра «Дракон»</p>
+              <p class="brief-bdesc" data-i18n="block4_desc">6 экранов полного цикла: туториал, лобби, крафт, игра, итоги, краш/ошибка соединения. Рескин под ивенты — замена босса и цветовой палитры без изменения структуры UI. Прогресс-бары, таймеры, поп-апы наград.</p>
+            </div>
+          </div>
+          <div class="brief-bitem">
+            <span class="brief-bnum">05 —</span>
+            <div class="brief-btext">
+              <p class="brief-btitle" data-i18n="block5_title">Адвент-календари</p>
+              <p class="brief-bdesc" data-i18n="block5_desc">Сетки 14 и 21 ячейка, 3 состояния (заблокирована, доступна, получена). Инфо-окна, список наград со скроллом. Адаптация: горизонталь — 3–4 ряда по 5–7 ячеек; вертикаль — вертикальный стек. Две темы: Пасха и Новый год.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- STAT BAR -->
+  <div class="case-section" style="padding:0;">
+    <div class="stat-bar" style="grid-template-columns:1fr 1fr;">
+      <div class="stat-cell">
+        <span class="stat-num">10M+</span>
+        <div class="stat-label" data-i18n="stat1_label">Users on<br>live product</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">30+</span>
+        <div class="stat-label" data-i18n="stat2_label">Screens<br>designed</div>
+      </div>
+    </div>
+  </div>
+  <!-- CLAN DRAGON -->
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 01</div>
+      <div class="chapter-title"><span data-i18n="ch04_title">Clan Dragon</span> <span style="font-size:.65em;font-family:'Share Tech Mono',monospace;letter-spacing:.12em;color:var(--violet3);font-weight:400;" data-i18n="ch04_sub">mini game</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch04_desc1">«Укрощение дракона» — клановая мини-игра на 60 секунд для повышения социальной вовлечённости и удержания в Avataria. Игроки объединяются в клан и соревнуются в реальном времени: выбирают подарки и угощения чтобы «задобрить» общего дракона. Каждое действие влияет одновременно на личный рейтинг и общий прогресс клана — простая механика превращается в напряжённое командное соревнование. Дракон работает как эмоциональная система обратной связи: 6 состояний настроения визуально отражают результат команды и масштабируют награды в зависимости от коллективного успеха. С точки зрения UX задача была — связать личные действия с ощутимым результатом для группы, усилить идентичность клана и стимулировать ежедневный возврат через чёткий фидбек и соревновательность.</p>
+    </div>
+
+    <!-- Video -->
+    <div style="margin-bottom:2rem;max-width:900px;overflow:hidden;border:1px solid var(--border);">
+      <video id="avatariaVideo" muted playsinline loop style="width:106%;margin-left:-6%;display:block;background:#000;">
+        <source src="../images/avataria/DEOA4656_web.mp4" type="video/mp4">
+      </video>
+      <script>
+        const av = document.getElementById('avatariaVideo');
+        // Stop hard at 43s
+        av.addEventListener('timeupdate', () => {
+          if (av.currentTime >= 43) {
+            av.pause();
+            av.currentTime = 43;
+          }
+        });
+        // Autoplay when scrolled into view
+        const avObserver = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              av.currentTime = 0;
+              av.play().catch(() => {});
+            } else {
+              av.pause();
+            }
+          });
+        }, { threshold: 0.4 });
+        avObserver.observe(av);
+      </script>
+    </div>
+
+    <!-- Group 1: main screens -->
+    <div class="gallery-grid cols2" style="margin-bottom:1.5rem;">
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Frame%20110211981.png" alt="Dragon Frame" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft.png" alt="Dragon Craft" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft11.jpg" alt="Dragon Craft 11" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft2.png" alt="Dragon Craft 2" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft_empty.jpg" alt="Dragon Craft Empty" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_end_of_the_game.png" alt="End of Game" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/POPUP_clan_dragon_rating1.png" alt="Rating Popup" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/POP_UP_crash.png" alt="Crash Popup" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/UD_clan_dragon_lobby_2.png" alt="Lobby" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/complete.jpg" alt="Complete" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/stan.jpg" alt="Stan" loading="lazy"></div></div>
+    </div>
+
+    <!-- Group 2: cat screens -->
+    <div style="margin:2rem 0 1.2rem;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.7;display:flex;align-items:center;gap:12px;" data-i18n="cat_reskin_label">Ресин под ивент — Кот</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--bone2);opacity:.7;line-height:1.7;margin-top:.5rem;font-style:italic;" data-i18n="cat_reskin_desc">Та же структура UI — замена босса и цветовой палитры под сезонный ивент. Вёрстка не меняется.</p>
+    </div>
+    <div class="gallery-grid cols2" style="margin-bottom:3rem;">
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft1_cat.png" alt="Craft Cat 1" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft2_cat.jpg" alt="Craft Cat 2" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_craft_pinyata_cat.jpg" alt="Pinyata Cat" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_end_of_the_game_cat.jpg" alt="End Game Cat" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/HUD_clan_dragon_lobby_cat.png" alt="Lobby Cat" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/POPUP_clan_dragon_rating_cat.jpg" alt="Rating Cat" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/POP_UP_crash_cat.jpg" alt="Crash Cat" loading="lazy"></div></div>
+    </div>
+
+    <!-- Group 3: Адаптация -->
+    <div style="margin-bottom:1.2rem;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.7;display:flex;align-items:center;gap:12px;">Адаптация <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(180,140,80,.3),transparent);display:block;"></span></div>
+    </div>
+    <div class="gallery-grid cols3" style="margin-bottom:3rem;">
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive1.jpg" alt="Adaptive 1" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive2.jpg" alt="Adaptive 2" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive3.jpg" alt="Adaptive 3" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive4.jpg" alt="Adaptive 4" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive5.jpg" alt="Adaptive 5" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive6.jpg" alt="Adaptive 6" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive7.png" alt="Adaptive 7" loading="lazy"></div></div>
+      <div class="gallery-item"><div class="img-wrap screen"><img src="../images/avataria/Clan%20dragon/Adaptive8.jpg" alt="Adaptive 8" loading="lazy"></div></div>
+    </div>
+
+    <!-- Group 4: process -->
+    <div style="margin-bottom:1.2rem;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.7;display:flex;align-items:center;gap:12px;">Процесс <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(180,140,80,.3),transparent);display:block;"></span></div>
+    </div>
+    <div class="gallery-grid cols3">
+      <div class="gallery-item"><div class="img-wrap natural"><img src="../images/avataria/Clan%20dragon/process1.png" alt="Process 1"></div></div>
+      <div class="gallery-item"><div class="img-wrap natural"><img src="../images/avataria/Clan%20dragon/process2.png" alt="Process 2"></div></div>
+      <div class="gallery-item"><div class="img-wrap natural"><img src="../images/avataria/Clan%20dragon/process3.png" alt="Process 3"></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="divider"></div>
+
+  <!-- ADVENT CALENDAR -->
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 02</div>
+      <div class="chapter-title"><span data-i18n="ch01_title">Event UI</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch01_desc">Разработка с нуля: базовый компонент календаря, который затем адаптировался под любую ивентовую тему без переработки структуры. Полный цикл — референсы, итерации, варианты цветов и форм ячеек. Результат: переиспользуемая система, которую команда могла ресинить под каждый ивент самостоятельно.</p>
+    </div>
+    <div class="gallery-grid cols3">
+      <div class="gallery-item">
+        <div class="img-wrap screen">
+          <img src="../images/avataria/Advent/Advent_event.png" alt="Advent Event Screen" loading="lazy">
+        </div>
+        <div class="gallery-label">Event screen</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen">
+          <img src="../images/avataria/Advent/Advent_modal.png" alt="Advent Modal" loading="lazy">
+        </div>
+        <div class="gallery-label">Modal window</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen">
+          <img src="../images/avataria/Advent/Advent_ny.png" alt="Advent New Year" loading="lazy">
+        </div>
+        <div class="gallery-label">New Year theme</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen">
+          <img src="../images/avataria/Advent/Advent_rewards.png" alt="Advent Rewards" loading="lazy">
+        </div>
+        <div class="gallery-label">Rewards layout</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen">
+          <img src="../images/avataria/Advent/Advent_rewards_1.png" alt="Advent Rewards Alt" loading="lazy">
+        </div>
+        <div class="gallery-label">Rewards variant</div>
+      </div>
+    </div>
+
+    <!-- Process image -->
+    <div class="gallery-grid cols1" style="margin-top:1.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap natural" style="max-width:70%;margin:0 auto;"><img src="../images/avataria/Advent/process.png" alt="Design process" loading="lazy"></div>
+        <div class="gallery-label">Процесс разработки</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 02.5</div>
+      <div class="chapter-title"><span data-i18n="ch06_title">Mini-games</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch06_desc">Крестики-нолики под разные ивентовые темы. Структура игры была готова — рисовала элементы игрового поля и картинки под каждую тему.</p>
+    </div>
+    <div class="gallery-grid cols2">
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY.png" alt="Tic-tac-toe NY" loading="lazy"></div>
+        <div class="gallery-label">Tic-tac-toe — NY event</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY2.png" alt="Tic-tac-toe NY variant" loading="lazy"></div>
+        <div class="gallery-label">Tic-tac-toe — variant</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REDESIGN -->
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 03</div>
+      <div class="chapter-title"><span data-i18n="ch02_title">HUD Redesign</span><span class="status-badge indev" data-i18n="badge_indev">In Dev</span></div>
+      <p class="chapter-desc" data-i18n="ch02_desc">Обновление визуального языка основных игровых экранов без изменения расположения элементов управления.</p>
+    </div>
+
+    <div class="nda-note">
+      <span class="nda-tag">// NDA</span>
+      <p data-i18n="nda_hud_note">Финальный редизайн и компонентная система находятся под NDA бывшего работодателя. Ниже — скрины «было» и рабочий процесс. Готова показать детали на интервью.</p>
+    </div>
+
+    <!-- БЫЛО → СТАЛО -->
+    <div class="sub-heading first" data-i18n="hud_before_heading">Было → Стало</div>
+    <div class="comp-row one-three">
+      <div class="comp-col">
+        <div class="comp-pill before" data-i18n="comp_before">Было · горизонталь</div>
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/811847_normal.webp" alt="Old HUD — landscape" loading="lazy"></div>
+        <div class="gallery-label" data-i18n="hud_before_label">Оригинал — горизонталь, без вертикали</div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-pill after" data-i18n="comp_after">Стало · вертикаль</div>
+        <div class="gallery-grid cols3" style="gap:.75rem;">
+          <div>
+            <div class="img-wrap" style="aspect-ratio:9/16;"><img src="../images/avataria/Redisign/New%20design/HUD_vert_b.png" alt="HUD Dark" loading="lazy"></div>
+            <div class="gallery-label">Тёмная тема</div>
+          </div>
+          <div>
+            <div class="img-wrap" style="aspect-ratio:9/16;"><img src="../images/avataria/Redisign/New%20design/HUD_vert_w_modal.png" alt="HUD Light + Modal" loading="lazy"></div>
+            <div class="gallery-label">Светлая + модал</div>
+          </div>
+          <div>
+            <div class="img-wrap" style="aspect-ratio:9/16;"><img src="../images/avataria/Redisign/New%20design/HUD%20_at%20home_b.png" alt="HUD at home" loading="lazy"></div>
+            <div class="gallery-label">Дом</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="sub-heading" data-i18n="hud_process_heading">Процесс</div>
+    <div class="gallery-grid cols3" style="margin-bottom:1.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/process/HUD_process1.png" alt="HUD Process 1" loading="lazy"></div>
+        <div class="gallery-label" data-i18n="proc_label1">Sketch exploration</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/process/HUD_process2.png" alt="HUD Process 2" loading="lazy"></div>
+        <div class="gallery-label" data-i18n="proc_label2">Wireframe iteration</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/process/HUD_process3.png" alt="HUD Process 3" loading="lazy"></div>
+        <div class="gallery-label" data-i18n="proc_label3">Pre-final layout</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols3" style="margin-bottom:2.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap natural"><img src="../images/avataria/Redisign/process/Btn1.png" alt="Button variant 1" loading="lazy"></div>
+        <div class="gallery-label">Button — variant 1</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap natural"><img src="../images/avataria/Redisign/process/Btn2.png" alt="Button variant 2" loading="lazy"></div>
+        <div class="gallery-label">Button — variant 2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODALS & SHOP -->
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 04</div>
+      <div class="chapter-title"><span data-i18n="ch_modals_title">Modals &amp; Shop</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch_modals_desc">Семплы экранов оценки и продаж — часть единой системы модалок. Полная библиотека (4 паттерна, auto-layout, variant компоненты) под NDA.</p>
+    </div>
+    <div class="gallery-grid cols3" style="margin-bottom:1.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/New%20design/rating-positive.jpg" alt="Rating Positive" loading="lazy"></div>
+        <div class="gallery-label">Rating — positive</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/New%20design/rating-neutral.jpg" alt="Rating Neutral" loading="lazy"></div>
+        <div class="gallery-label">Rating — neutral</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/New%20design/rating-negative.jpg" alt="Rating Negative" loading="lazy"></div>
+        <div class="gallery-label">Rating — negative</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;align-items:flex-start;">
+      <div style="flex:2;min-width:0;">
+        <div class="img-wrap screen"><img src="../images/avataria/Redisign/New%20design/sale_3.png" alt="Sale screen" loading="lazy"></div>
+        <div class="gallery-label">Sale — landscape</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="img-wrap" style="aspect-ratio:8/9;"><img src="../images/avataria/Redisign/New%20design/vert_sale_2.png" alt="Vertical Sale 2" loading="lazy" style="object-fit:contain;"></div>
+        <div class="gallery-label">Sale — portrait 2</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="img-wrap" style="aspect-ratio:8/9;"><img src="../images/avataria/Redisign/New%20design/vert_sale_3.png" alt="Vertical Sale 3" loading="lazy" style="object-fit:contain;"></div>
+        <div class="gallery-label">Sale — portrait 3</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4">
+
+      <div class="gallery-item">
+        <div class="img-wrap" style="aspect-ratio:9/16;"><img src="../images/avataria/Redisign/New%20design/vert_sale_4.png" alt="Vertical Sale 4" loading="lazy"></div>
+        <div class="gallery-label">Portrait — 4</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap" style="aspect-ratio:9/16;"><img src="../images/avataria/Redisign/New%20design/vert_sale_5.png" alt="Vertical Sale 5" loading="lazy"></div>
+        <div class="gallery-label">Portrait — 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2D ART -->
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 05</div>
+      <div class="chapter-title"><span data-i18n="ch03_title">2D Art</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch03_desc">Изометрическая мебель для ивентовых паков — 30+ предметов за 6+ коллекций. Подключалась когда команда художников не успевала в срок.</p>
+    </div>
+
+    <!-- Room context -->
+    <div class="gallery-grid cols3" style="margin-bottom:1.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap square"><img src="../images/avataria/2D/комната1.png" alt="Room 1" loading="lazy"></div>
+        <div class="gallery-label">In-game room — 1</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap square"><img src="../images/avataria/2D/комната2.png" alt="Room 2" loading="lazy"></div>
+        <div class="gallery-label">In-game room — 2</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap square"><img src="../images/avataria/2D/комната3.png" alt="Room 3" loading="lazy"></div>
+        <div class="gallery-label">In-game room — 3</div>
+      </div>
+    </div>
+
+        <!-- Individual assets — 28 items, 7×4 grid -->
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_armchair_1.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · armchair</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_clocks.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · clocks</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/GraffitiNY25.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">NY25 · graffiti</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_armchair_b.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · armchair</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_carpet.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · carpet</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_lamp_flr.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · floor lamp</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/advent24_llama.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Advent · llama</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBdsv24_vase_2.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBdsv · vase</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny24_lamp_flr.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny · floor lamp</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/bpny25_bed.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">BPNY · bed</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_armchair_2.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · armchair 2</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_armchair_3.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · armchair 3</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_plant_1.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · plant 1</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_plant_2.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · plant 2</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/catstrm24_plant_3.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Catstrm · plant 3</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_armchair_f.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · armchair F</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_plant_2.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · plant</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/dnrm1324_stool.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Dnrm · stool</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny24_pillow_1.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny · pillow 1</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny24_pillow_2.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny · pillow 2</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny24_pillow_3.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny · pillow 3</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny25_decor_tbl_1.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny25 · decor table</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/LBny25_mirror.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">LBny25 · mirror</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/pnk4224_bedtable.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Pnk · bed table</div>
+      </div>
+    </div>
+    <div class="gallery-grid cols4" style="margin-bottom:1rem;">
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/pnk4224_plush.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Pnk · plush</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/pnk4224_vase.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Pnk · vase</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/rm20124_carpet.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Rm20 · carpet</div>
+      </div>
+      <div class="gallery-item">
+      <div class="img-wrap square"><img src="../images/avataria/2D/rm20124_plant_flr.png" alt="" loading="lazy"></div>
+      <div class="gallery-label">Rm20 · floor plant</div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div class="chapter-num">// 06</div>
+      <div class="chapter-title"><span data-i18n="ch05_title">Icons</span><span class="status-badge shipped" data-i18n="badge_shipped">Shipped</span></div>
+      <p class="chapter-desc" data-i18n="ch05_desc">Небольшая часть от общего набора иконок для UI-системы — читаемый в маленьком размере, вписанный в общий визуальный стиль.</p>
+    </div>
+    <!-- Icon sheets -->
+    <div class="gallery-grid cols3" style="margin-bottom:1.5rem;">
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Icons/Icons1.png" alt="Icons Sheet 1" loading="lazy"></div>
+        <div class="gallery-label">Icons — sheet 01</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Icons/Icons2.png" alt="Icons Sheet 2" loading="lazy"></div>
+        <div class="gallery-label">Icons — sheet 02</div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-wrap screen"><img src="../images/avataria/Icons/Icons3.png" alt="Icons Sheet 3" loading="lazy"></div>
+        <div class="gallery-label">Icons — sheet 03</div>
+      </div>
+    </div>
+    <!-- Individual icons -->
+    <div class="gallery-grid cols4">
+      <div class="gallery-item">
+        <div class="img-wrap square"><img src="../images/avataria/Icons/dragon_icon.png" alt="Dragon Icon" loading="lazy"></div>
+        <div class="gallery-label">Dragon icon</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 07</div>
+      <div class="chapter-title"><span data-i18n="ch07_title">Outcomes</span></div>
+    </div>
+    <p class="chapter-desc" data-i18n="ch07_desc">What shipped to production and what's in active development.</p>
+    <div class="outcomes-grid">
+      <div>
+        <div class="outcomes-col-title">
+          <span class="status-badge shipped" data-i18n="shipped_label">Shipped to production</span>
+        </div>
+        <ul class="outcomes-list">
+          <li data-i18n="shipped_1">Clan Dragon mini-game — full 6-screen flow, 2 event reskins (Dragon + Cat)</li>
+          <li data-i18n="shipped_2">Advent Calendar — 2 grid sizes, 2 seasonal themes (Easter + NY)</li>
+          <li data-i18n="shipped_3">Seasonal mini-games — Tic-tac-toe NY event</li>
+          <li data-i18n="shipped_4">Icon set — handed off for production</li>
+          <li data-i18n="shipped_5">2D art — 30+ furniture & decor items across 6+ event collections</li>
+        </ul>
+      </div>
+      <div>
+        <div class="outcomes-col-title">
+          <span class="status-badge indev" data-i18n="indev_label">In active development</span>
+        </div>
+        <ul class="outcomes-list">
+          <li data-i18n="indev_1">HUD redesign — core game interface overhaul, landscape + portrait</li>
+          <li data-i18n="indev_2">Component library — UI guide, unified components, event style variants</li>
+          <li data-i18n="indev_3">Modal library — 4 standardised patterns across all interruptions</li>
+        </ul>
+      </div>
+    </div>
+    <div class="feedback-block">
+      <p class="feedback-text" data-i18n="player_feedback">"Players left positive reviews about the new visual style of the mini-games after the Clan Dragon update shipped."</p>
+      <p class="feedback-source">— Player reviews, 2024</p>
+    </div>
+  </div>
+
+  <div class="case-section">
+    <div class="chapter">
+      <div class="chapter-num">// 08</div>
+      <div class="chapter-title"><span data-i18n="av_itog_title">Итог</span></div>
+    </div>
+    <p class="chapter-desc" data-i18n="av_itog_text">Аватария — работа в масштабе живого продукта под реальным продакшн-давлением, с фидбеком от нескольких стейкхолдеров: арт-лид, продюсер, PM, геймдизайнеры. Самое сложное — приходить к решению которое работает для всей команды, а не только то, которое выбрала бы сама. Хороший дизайн в продакшне — это не лучший вариант лично для тебя, а тот который прошёл через всех.</p>
+  </div>
+
+</div><!-- /case-body -->
+
+<footer>
+  <a href="portfolio_arina.html" class="ft-logo">AK</a>
+  <span class="ft-copy">© 2026 Arina Karpova</span>
+</footer>
+
+<a href="portfolio_arina.html?section=projects" class="back-btn" data-i18n="back_btn">← Return to Projects</a>
+
+<script>
+const co=document.getElementById('cursor-outer'),ci=document.getElementById('cursor-inner');
+let mx=window.innerWidth/2,my=window.innerHeight/2,ox=mx,oy=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+(function animC(){ox+=(mx-ox)*.28;oy+=(my-oy)*.28;co.style.transform='translate(calc('+ox+'px - 50%),calc('+oy+'px - 50%))';ci.style.transform='translate(calc('+mx+'px - 50%),calc('+my+'px - 50%))';requestAnimationFrame(animC);})();
+document.querySelectorAll('a,button,[onclick]').forEach(el=>{el.addEventListener('mouseenter',()=>co.classList.add('hover'));el.addEventListener('mouseleave',()=>co.classList.remove('hover'));});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.case-section').forEach(s=>{obs.observe(s);});
+window.addEventListener('load',()=>{document.querySelectorAll('.case-section').forEach(s=>s.classList.add('in'));});
+// Image zoom
+const zOverlay=document.createElement('div');zOverlay.id='zoom-overlay';
+const zImg=document.createElement('img');zImg.id='zoom-img';zImg.alt='';
+zOverlay.appendChild(zImg);document.body.appendChild(zOverlay);
+zOverlay.addEventListener('click',()=>zOverlay.classList.remove('open'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')zOverlay.classList.remove('open');});
+window.addEventListener('load',()=>{
+  document.querySelectorAll('.img-wrap img').forEach(img=>{
+    img.addEventListener('click',e=>{e.stopPropagation();zImg.src=img.src;zOverlay.classList.add('open');});
+  });
+});
+// LANG SWITCHER
+const CASE_T={
+en:{
+nav_back:'Projects',back_btn:'← Return to Projects',
+brief_tag:'// Project Brief',work_tag:'// What I Did',
+label_role:'Role',label_platform:'Platform',label_period:'Period',label_goal:'Goal',label_type:'Type',
+meta_role_val:'UI Designer · 2D Artist',meta_type_val:'Social Avatar Game',
+brief_heading:'UI Redesign & Event Systems<br>for a 10M+ user live game',
+brief_meta_role:'Middle UI/UX Designer — redesign, event UI, landscape-to-portrait adaptation',
+brief_meta_goal:'Modernise the interface without breaking what players already know. Ship new event features in parallel.',
+brief_meta_platform:'Mobile — landscape 2730×1536 + portrait 1440×2560 adaptation',
+brief_note:'Avataria is a social mobile game by 101XP. I joined as a middle UI designer on a live product with 10M+ users — meaning every change goes to a real audience, with real feedback coming back fast.',
+block1_title:'UI Guide & Components',
+block1_desc:'Unified component library — auto-layout, 4px grid, consistent radii and shadows. Gave the team a shared visual language to build from.',
+block2_title:'Modals & Rating Windows',
+block2_desc:'4 modal patterns covering every interruption in the game loop: info, confirm, reward, timer. Standardising this cut design time on new screens significantly.',
+block3_title:'HUD Redesign',
+block3_desc:'The old action wheel had no clear hierarchy — players couldn\'t tell actions apart at a glance. Redesigned with clear priority levels for portrait and landscape.',
+block4_title:'Clan Dragon — Mini-game',
+block4_desc:'Full 6-screen design: tutorial, lobby, crafting, game, results, connection error. Built to ship — and shipped with two seasonal reskins.',
+block5_title:'Advent Calendars',
+block5_desc:'Two grid sizes (14 and 21 cells) for different event durations, three cell states, info modals and schedule screens. Reskinned for each seasonal theme.',
+ch01_title:'Event UI',
+ch01_desc:'Seasonal daily reward system built around the Advent calendar mechanic. Two grid sizes, three cell states — clear reward tracking without visual clutter.',
+ch03_title:'2D Art',
+ch03_desc:'In-game furniture, decor and prop illustrations for the avatar room customisation system.',
+ch04_title:'Clan Dragon',ch04_sub:'mini game',
+ch04_desc1:'"Tame the Dragon" — a clan-based 60-second competitive mini-game. Players tap together to fill the dragon\'s energy bar and reach a tier reward.',
+ch04_desc2:'The dragon has six mood states that reflect team performance in real time. It\'s both a feedback system and an emotional hook for social play.',
+ch04_desc3:'The UX goal: connect individual taps to a meaningful group outcome, and make clan identity feel real through a shared challenge.',
+ch05_title:'Icons',
+ch05_desc:'A selection from a larger icon set — consistent style, readable at small sizes, fitting the overall visual language of the game.',
+ch06_title:'Mini-games',
+ch06_desc:'Seasonal mini-game UI — quick holiday experiences that need to ship fast and reskin easily. I designed the game field art and assets for each theme.',
+cat_reskin_label:'Event reskin — Cat',
+cat_reskin_desc:'Same UI structure — boss and colour palette swapped for the seasonal event. Layout unchanged.',
+badge_shipped:'Shipped',badge_indev:'In Dev',
+ch_modals_title:'Modals & Shop',ch_modals_desc:'Sample rating and sale screens — part of the unified modal system. Full library (4 patterns, auto-layout, variant components) under NDA.',
+nda_hud_note:'The final redesign and component library are under the former employer\'s NDA. Below — the "before" state and working process. Happy to walk through details in an interview.',
+stat1_label:'Users on<br>live product',stat2_label:'Screens<br>designed',stat3_label:'Features<br>shipped',stat4_label:'Months<br>on product',
+ch02_title:'HUD Redesign',
+ch02_desc:'Core interface overhaul — replacing fragmented, unclear UI with a clear action hierarchy. In development — the full version is under NDA.',
+ch02_decision:'The old action wheel had no visual logic — players struggled to distinguish action types at a glance. The redesign introduces clear priority levels across both orientations.',
+hud_before_heading:'Before → After',comp_before:'Before · Landscape',comp_after:'After · Portrait',hud_before_label:'Original — landscape only, no portrait',hud_process_heading:'Process',hud_result_heading:'Rating & Sale Screens',hud_process_section:'// Process',proc_label1:'Sketch exploration',proc_label2:'Wireframe iteration',proc_label3:'Pre-final layout',
+ch07_title:'Outcomes',
+ch07_desc:'What shipped to production and what\'s in active development.',
+shipped_label:'Shipped to production',
+shipped_1:'Clan Dragon mini-game — full 6-screen flow, 2 seasonal reskins',
+shipped_2:'Advent Calendar — 2 grid sizes, 2 seasonal themes',
+shipped_3:'Tic-tac-toe seasonal mini-game',
+shipped_4:'Icon set — handed off to production',
+shipped_5:'2D art — 30+ furniture and decor items across 6+ event collections',
+indev_label:'In active development',
+indev_1:'HUD redesign — core interface overhaul, both orientations',
+indev_2:'Component library — UI guide, unified components, event style variants',
+indev_3:'Modal library — 4 standardised patterns',
+player_feedback:'Players left positive reviews about the new visual style after Clan Dragon shipped. — Player reviews, 2024',
+av_itog_title:'Takeaway',
+av_itog_text:'Avataria taught me what it means to design at scale on a live product. Fast feedback loops, real user reactions, decisions that go live — not into a prototype. You learn to trust your judgment quickly, and to keep your system thinking sharp even under production pressure.',
+},
+ru:{
+nav_back:'Проекты',back_btn:'← К проектам',
+brief_tag:'// Описание проекта',work_tag:'// Что я делала',
+label_role:'Роль',label_platform:'Платформа',label_period:'Период',label_goal:'Цель',label_type:'Тип',
+meta_role_val:'UI-дизайнер · 2D-художник',meta_type_val:'Социальная игра-аватар',
+brief_heading:'Редизайн интерфейса и ивентовые системы<br>для живой игры с аудиторией 10M+',
+brief_meta_role:'Middle UI/UX Дизайнер — редизайн, ивентовый UI, адаптация горизонталь→портрет',
+brief_meta_goal:'Обновить интерфейс так, чтобы не сломать то, к чему игроки уже привыкли. Параллельно — новые ивентовые фичи.',
+brief_meta_platform:'Мобильная — горизонталь 2730×1536 + адаптация под вертикаль 1440×2560',
+brief_note:'Аватария — социальная мобильная игра от 101XP. Я пришла middle UI-дизайнером на живой продукт с 10M+ пользователей. Каждое изменение уходит к реальной аудитории, и обратная связь приходит быстро.',
+block1_title:'UI-гайд и компоненты',
+block1_desc:'Единая компонентная библиотека — auto-layout, сетка 4px, согласованные радиусы и тени. Дала команде общий визуальный язык для работы.',
+block2_title:'Модальные окна и окна оценки',
+block2_desc:'4 паттерна модалок под все прерывания в игровом процессе: инфо, подтверждение, награда, таймер. Стандартизация заметно ускорила работу над новыми экранами.',
+block3_title:'Редизайн HUD',
+block3_desc:'Старое колесо действий не имело чёткой иерархии — игроки путались. Редизайн с явными приоритетами под портрет и горизонталь.',
+block4_title:'Клановый дракон — мини-игра',
+block4_desc:'6 экранов полного цикла: туториал, лобби, крафт, игра, итоги, ошибка соединения. Сделано и сдано — плюс два сезонных рескина.',
+block5_title:'Адвент-календари',
+block5_desc:'Две сетки (14 и 21 ячейка) под разные длительности ивентов, три состояния ячеек, инфо-модалки и экраны расписания. Рескинились под каждую сезонную тему.',
+ch01_title:'Ивентовый UI',
+ch01_desc:'Система ежедневных наград вокруг механики адвент-календаря. Два размера сетки, три состояния ячеек — чёткое отображение прогресса без визуального шума.',
+ch03_title:'2D-арт',
+ch03_desc:'Иллюстрации мебели, декора и предметов для системы кастомизации комнаты аватара.',
+ch04_title:'Клановый дракон',ch04_sub:'мини-игра',
+ch04_desc1:'«Укроти дракона» — клановая 60-секундная мини-игра. Игроки вместе нажимают, чтобы заполнить шкалу энергии дракона и получить тировую награду.',
+ch04_desc2:'У дракона шесть состояний настроения — они отражают результат команды в реальном времени. Это одновременно система обратной связи и эмоциональный крючок для социальной игры.',
+ch04_desc3:'Задача по UX: связать одиночные нажатия с командным результатом, сделать клановую идентичность ощутимой через общий вызов.',
+ch05_title:'Иконки',
+ch05_desc:'Часть иконок из большего набора — единый стиль, читаемость на маленьких размерах, вписанность в визуальный язык игры.',
+ch06_title:'Мини-игры',
+ch06_desc:'Сезонный UI мини-игры — праздничные механики, которые нужно быстро сдать и легко рескинить. Делала арт игрового поля и ассеты под каждую тему.',
+cat_reskin_label:'Ивентовый скин — Кот',
+cat_reskin_desc:'Та же структура UI — босс и цветовая палитра заменены под сезонный ивент. Структура экранов не менялась.',
+badge_shipped:'Shipped',badge_indev:'В разработке',
+ch_modals_title:'Модалки и магазин',ch_modals_desc:'Семплы экранов оценки и продаж — часть единой системы модалок. Полная библиотека (4 паттерна, auto-layout, вариантные компоненты) под NDA.',
+nda_hud_note:'The final redesign and component library are under the former employer\'s NDA. Below — the "before" state and working process. Happy to walk through details in an interview.',
+stat1_label:'Пользователей<br>продукта',stat2_label:'Экранов<br>спроектировано',stat3_label:'Фич<br>в продакшн',stat4_label:'Месяцев<br>на продукте',
+ch02_title:'Редизайн HUD',
+ch02_desc:'Обновление основного интерфейса — замена разрозненного UI на системную иерархию действий. В разработке — финальная версия под NDA.',
+ch02_decision:'Старое колесо действий не имело визуальной логики — игроки не различали типы действий с первого взгляда. Редизайн вводит чёткие приоритеты для обеих ориентаций.',
+hud_before_heading:'Было → Стало',comp_before:'Было · горизонталь',comp_after:'Стало · вертикаль',hud_before_label:'Оригинал — горизонталь, вертикали не было',hud_process_heading:'Процесс',hud_result_heading:'Окна оценки и продаж',hud_process_section:'// Процесс',proc_label1:'Скетч-исследование',proc_label2:'Итерация вайрфреймов',proc_label3:'Предфинальная раскладка',
+ch07_title:'Результаты',
+ch07_desc:'Что зашиппилось в продакшн и что сейчас в активной разработке.',
+shipped_label:'Зашиппилось в продакшн',
+shipped_1:'Мини-игра «Клановый дракон» — 6 экранов полного цикла, 2 сезонных рескина',
+shipped_2:'Адвент-календарь — 2 размера сетки, 2 сезонные темы',
+shipped_3:'Сезонная мини-игра «Крестики-нолики»',
+shipped_4:'Набор иконок — сдан в производство',
+shipped_5:'2D-арт — 30+ предметов мебели и декора в 6+ ивентовых коллекциях',
+indev_label:'В активной разработке',
+indev_1:'Редизайн HUD — обновление основного интерфейса, обе ориентации',
+indev_2:'Компонентная библиотека — UI-гайд, единые компоненты, ивентовые варианты',
+indev_3:'Библиотека модалок — 4 стандартизированных паттерна',
+player_feedback:'После выхода Кланового дракона игроки оставляли положительные отзывы о новом визуальном стиле. — Отзывы игроков, 2024',
+av_itog_title:'Итог',
+av_itog_text:'Аватария — это опыт работы в масштабе живого продукта. Быстрые циклы обратной связи, реальные реакции пользователей, решения которые уходят не в прототип, а в продакшн. Учишься доверять своему суждению и держать системное мышление чётким даже под давлением.'
+}};
+window.switchLang=function(lang){if(lang!=='en'&&lang!=='ru')lang='ru';try{localStorage.setItem('lang',lang);}catch(e){}var t=CASE_T[lang];document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(t&&t[k]!==undefined)el.innerHTML=t[k];});document.querySelectorAll('[data-lang]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});};(function(){var s='ru';try{s=localStorage.getItem('lang')||'ru';}catch(e){}switchLang(s==='en'?'en':'ru');})();
+</script>
+</body>
+</html>

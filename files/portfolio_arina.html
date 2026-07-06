@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arina Karpova — UI/UX Designer & 2D Artist</title>
+<meta name="description" content="Portfolio of Arina Karpova — UI/UX Designer and 2D Artist. Mobile apps, game interfaces, branding, and illustrations.">
+<meta property="og:title" content="Arina Karpova — UI/UX Designer & 2D Artist">
+<meta property="og:description" content="Portfolio of Arina Karpova — UI/UX Designer and 2D Artist. Mobile apps, game interfaces, branding, and illustrations.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../images/EverLove/обложка.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arina Karpova — UI/UX Designer & 2D Artist">
+<meta name="twitter:description" content="Portfolio of Arina Karpova — UI/UX Designer and 2D Artist.">
+<link rel="icon" type="image/png" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#07060e;--ink2:#0d0b18;--ink3:#14122a;
+  --violet:#2a1a5e;--violet2:#5a40a0;--violet3:#9a80d0;
+  --gold:#b89040;--gold2:#d4b060;--gold3:#e8d090;
+  --silver:#9090b8;--bone:#e0d8f0;--bone2:#b0a8c8;
+  --peach:#e8c0a8;--peach2:#d4a888;
+  --lace:rgba(220,200,255,0.4);--lace2:rgba(220,200,255,0.15);
+  --red:#8a1818;--red2:#c02828;
+  --glow:rgba(180,140,220,0.15);
+  --border:rgba(200,170,240,0.2);--border2:rgba(200,170,240,0.45);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+#cursor-outer{position:fixed;left:0;top:0;width:32px;height:32px;border:1px solid var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;will-change:transform;transition:width .3s,height .3s,border-color .3s,background .3s;}
+#cursor-inner{position:fixed;left:0;top:0;width:5px;height:5px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:99999;will-change:transform;}
+#cursor-outer.hover{width:50px;height:50px;border-color:var(--gold3);background:rgba(180,140,80,0.06);}
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;}
+.noise-overlay{position:fixed;inset:0;z-index:998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");mix-blend-mode:overlay;}
+#veil{display:none;}
+
+
+/* INTRO — ARKNIGHTS STYLE */
+#intro{position:relative;height:65svh;min-height:460px;background:#060508;overflow:hidden;}
+.intro-bg,.intro-rune,.intro-sigil,.intro-title,.intro-sub,.intro-line,.press-start,.intro-fog{display:none;}
+
+/* LEFT SIDEBAR — with watercolor blobs */
+.intro-sidebar{position:relative;z-index:10;background:linear-gradient(180deg,rgba(4,3,8,0.96) 0%,rgba(6,4,11,0.94) 100%);border-right:1px solid rgba(170,135,55,0.15);display:flex;flex-direction:column;padding:0;overflow:hidden;}
+.intro-sidebar::after{content:'';position:absolute;top:0;right:-1px;bottom:0;width:1px;background:linear-gradient(180deg,transparent 0%,rgba(170,135,55,0.35) 30%,rgba(170,135,55,0.2) 70%,transparent 100%);}
+
+/* Watercolor SVG canvas inside sidebar — absolutely positioned behind content */
+.intro-sidebar-watercolor{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+
+.intro-sidebar-top{position:relative;z-index:1;padding:1.6rem 1.4rem 1.4rem;border-bottom:1px solid rgba(150,120,45,0.12);flex-shrink:0;}
+.intro-logo-mark{display:flex;align-items:center;gap:8px;margin-bottom:.6rem;}
+.intro-logo-text{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(170,135,55,0.85);line-height:1.5;}
+.intro-menu-items{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.intro-menu-item{display:flex;align-items:center;gap:.75rem;padding:.85rem 1.4rem;font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.05em;color:rgba(190,175,145,0.5);border-left:2px solid transparent;transition:all .22s;position:relative;cursor:none;flex-shrink:0;}
+.intro-menu-item:hover{color:rgba(215,195,150,0.9);border-left-color:rgba(170,135,55,0.7);background:rgba(170,135,55,0.06);}
+.intro-menu-item.im-active{color:rgba(230,210,168,1);border-left-color:rgba(200,160,55,1);background:rgba(170,135,55,0.09);}
+.intro-menu-item.im-active::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:3px;height:55%;background:rgba(200,160,55,0.5);}
+.intro-menu-icon-wrap{width:16px;height:16px;display:grid;place-items:center;flex-shrink:0;opacity:.65;}
+.intro-menu-new{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.08em;color:rgba(200,75,75,0.9);padding:.06rem .28rem;border:1px solid rgba(200,75,75,0.35);margin-left:auto;flex-shrink:0;}
+.intro-sidebar-bottom{position:relative;z-index:1;padding:1.2rem 1.4rem;border-top:1px solid rgba(150,120,45,0.12);margin-top:auto;flex-shrink:0;}
+.intro-status-text{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(130,110,70,0.6);line-height:1.7;}
+
+/* INTRO REEL BACKGROUND */
+.intro-reel{position:absolute;inset:0;z-index:1;display:flex;gap:8px;pointer-events:none;overflow:hidden;}
+.ireel-col{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;will-change:transform;}
+.ireel-col img{width:100%;height:auto;display:block;filter:brightness(.35) saturate(.5);}
+.ireel-col:nth-child(1){animation:fall 9s linear infinite;}
+.ireel-col:nth-child(2){animation:fall 7.5s linear infinite;}
+.ireel-col:nth-child(3){animation:fall 8.5s linear infinite;}
+.ireel-col:nth-child(4){animation:fall 10s linear infinite;}
+.ireel-col:nth-child(5){animation:fall 8.8s linear infinite;}
+.ireel-col:nth-child(6){animation:fall 11s linear infinite;}
+
+/* RIGHT ART AREA */
+.intro-main{position:relative;overflow:hidden;width:100%;height:100%;}
+.intro-art-placeholder{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 60% 40%,rgba(28,22,45,0.85) 0%,transparent 65%),radial-gradient(ellipse 70% 55% at 25% 55%,rgba(12,9,22,0.92) 0%,transparent 60%),radial-gradient(ellipse 45% 75% at 80% 20%,rgba(18,13,35,0.75) 0%,transparent 60%),linear-gradient(140deg,#080612 0%,#060410 40%,#0c0918 100%);}
+.intro-vignette{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,9,0.55) 0%,transparent 30%),radial-gradient(ellipse 130% 100% at 50% 50%,transparent 38%,rgba(3,2,7,0.65) 100%),linear-gradient(0deg,rgba(3,2,7,0.88) 0%,transparent 28%),linear-gradient(180deg,rgba(3,2,7,0.45) 0%,transparent 14%);}
+.intro-scanlines{position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.035) 3px,rgba(0,0,0,0.035) 4px);}
+
+/* Gold 4-point star vignette — SVG canvas over the art */
+.intro-star-vignette{position:absolute;inset:0;z-index:4;pointer-events:none;}
+
+/* Top-right buttons */
+.intro-topbar{position:absolute;top:0;right:0;z-index:10;display:flex;align-items:center;gap:2px;padding:.85rem 1.2rem;}
+.intro-tb-btn{display:flex;align-items:center;gap:.45rem;padding:.38rem .85rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;color:rgba(195,178,142,0.8);border:1px solid rgba(165,132,50,0.22);background:rgba(5,4,9,0.72);backdrop-filter:blur(6px);transition:all .2s;cursor:none;}
+.intro-tb-btn:hover{border-color:rgba(195,155,55,0.55);color:rgba(220,198,155,1);}
+.intro-tb-btn{text-decoration:none;}
+.cv-wrap{position:relative;}
+.cv-drop{position:absolute;top:100%;right:0;padding-top:6px;background:transparent;display:none;min-width:120px;z-index:20;flex-direction:column;}
+.cv-drop-inner{background:rgba(8,6,16,.96);border:1px solid rgba(165,132,50,0.35);display:flex;flex-direction:column;}
+.cv-wrap:hover .cv-drop{display:flex;}
+.cv-drop a{display:flex;align-items:center;gap:.5rem;padding:.42rem .85rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;color:rgba(195,178,142,0.85);text-decoration:none;border-bottom:1px solid rgba(165,132,50,0.12);transition:background .18s;}
+.cv-drop a:last-child{border-bottom:none;}
+.cv-drop a:hover{background:rgba(165,130,45,0.1);color:rgba(220,198,155,1);}
+/* Bottom content */
+.intro-bottom{position:absolute;bottom:0;left:0;right:0;z-index:8;padding:0 3rem 2.4rem 4rem;background:linear-gradient(0deg,rgba(3,2,7,0.97) 0%,rgba(3,2,7,0.75) 45%,transparent 100%);}
+.intro-event-tag{display:inline-flex;align-items:center;gap:.55rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(195,175,132,0.9);padding:.22rem .75rem;border:1px solid rgba(165,132,50,0.38);background:rgba(165,132,50,0.07);margin-bottom:.9rem;}
+.intro-event-dot{width:5px;height:5px;border-radius:50%;background:rgba(175,138,48,0.95);animation:edot 2s ease-in-out infinite;}
+@keyframes edot{0%,100%{opacity:1;}50%{opacity:.25;}}
+.intro-main-title{font-family:'Cinzel',serif;font-size:clamp(2.8rem,5.5vw,5.8rem);font-weight:900;line-height:.88;letter-spacing:.07em;color:rgba(232,218,192,1);margin-bottom:.45rem;text-shadow:0 0 80px rgba(165,132,50,0.18),0 2px 6px rgba(0,0,0,0.9);position:relative;padding-left:2.2rem;}
+.intro-star-decor{position:absolute;left:0;top:50%;transform:translateY(-50%);width:22px;height:22px;flex-shrink:0;}
+.intro-main-subtitle{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(155,138,100,0.65);margin-bottom:1.5rem;padding-left:2.2rem;}
+.intro-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(172,155,118,0.65);line-height:1.75;max-width:480px;margin-bottom:2rem;padding-left:2.2rem;}
+.intro-enter-btn{display:none;}
+.intro-enter-btn:hover{background:rgba(165,130,45,0.18);border-color:rgba(210,172,65,0.9);color:rgba(252,236,195,1);box-shadow:0 0 28px rgba(165,130,45,0.18);}
+.intro-enter-arrow{transition:transform .25s;}
+.intro-enter-btn:hover .intro-enter-arrow{transform:translateX(5px);}
+.intro-hline{position:absolute;height:1px;pointer-events:none;z-index:5;background:linear-gradient(90deg,transparent,rgba(165,132,50,0.28),transparent);}
+.intro-right-panel{position:absolute;right:1.4rem;bottom:4.5rem;z-index:9;display:flex;flex-direction:column;gap:.7rem;align-items:flex-end;}
+.intro-rp-item{padding:.55rem .85rem;background:rgba(5,4,9,0.78);border:1px solid rgba(160,128,48,0.18);backdrop-filter:blur(8px);min-width:90px;text-align:right;}
+.intro-rp-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(130,110,72,0.7);display:block;margin-bottom:.18rem;}
+.intro-rp-val{font-family:'Cinzel',serif;font-size:.875rem;color:rgba(205,183,138,0.9);letter-spacing:.05em;}
+.intro-sparkle{position:absolute;z-index:6;pointer-events:none;opacity:0;animation:sparkle-in 4s ease-in-out infinite;}
+/* CHARACTER VIDEO */
+.intro-char{position:absolute;bottom:2rem;right:2rem;z-index:7;pointer-events:none;width:240px;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.6);}
+.intro-char video{width:100%;display:block;}
+@keyframes sparkle-in{0%{opacity:0;transform:scale(.6);}25%{opacity:.75;}75%{opacity:.35;}100%{opacity:0;transform:scale(1.15);}}
+
+/* APP */
+#app{display:block;position:relative;z-index:1;}
+.scene-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scene-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 15% 50%,rgba(60,30,120,.4) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 85% 30%,rgba(80,40,140,.35) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 50% 90%,rgba(180,100,80,.1) 0%,transparent 60%),radial-gradient(ellipse 55% 45% at 70% 60%,rgba(40,20,90,.3) 0%,transparent 65%);animation:bs 15s ease-in-out infinite;}
+@keyframes bs{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;padding:.9rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(7,6,14,.95) 0%,transparent 100%);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);transition:opacity .3s ease,transform .3s ease;}
+.navbar.hidden{opacity:0;pointer-events:none;transform:translateY(-8px);}
+.nb-logo{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;letter-spacing:.18em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:12px;}
+.nb-gem{width:18px;height:18px;border:1px solid var(--gold);transform:rotate(45deg);display:grid;place-items:center;flex-shrink:0;}
+.nb-gem::before{content:'';width:6px;height:6px;background:var(--gold);opacity:.7;transform:rotate(45deg);}
+.nb-links{display:flex;gap:2rem;list-style:none;}
+.nb-links a{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bone2);text-decoration:none;transition:color .2s;}
+.nb-links a:hover{color:var(--gold2);}
+
+/* SECTIONS */
+.section{position:relative;z-index:1;padding:4rem 4rem 3rem;} #projects-section{padding:1.5rem 4rem 2rem;}
+
+@keyframes si{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:none;}}
+.s-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:.6rem;}
+.s-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,4.5vw,4rem);font-weight:700;line-height:.9;letter-spacing:.04em;margin-bottom:3.5rem;}
+.s-title em{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.42em;color:var(--violet3);letter-spacing:.06em;margin-top:.3em;}
+.rev{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.rev.in{opacity:1;transform:none;}
+
+/* MENU */
+#menu-section{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:5rem 2rem;}
+.menu-wrap{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;z-index:2;width:100%;max-width:480px;}
+.menu-wrap::before{content:'';position:absolute;left:-40px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold),transparent);opacity:.25;}
+.menu-header{text-align:center;margin-bottom:3rem;}
+.menu-portrait{width:120px;height:120px;border:1px solid var(--border2);border-radius:50%;overflow:hidden;margin:0 auto 1.5rem;position:relative;flex-shrink:0;}
+.menu-portrait video{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.menu-portrait::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,rgba(180,140,80,.2) 0%,transparent 60%);}
+.menu-name{font-family:'Cinzel',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:.12em;background:linear-gradient(180deg,var(--gold3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+.menu-class{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.3em;color:var(--silver);}
+.menu-item{width:100%;font-family:'Cinzel',serif;font-size:1rem;font-weight:600;letter-spacing:.12em;color:var(--bone);background:transparent;border:none;padding:1.1rem 2.5rem;text-align:left;cursor:none;position:relative;transition:color .2s,padding-left .2s;border-bottom:1px solid rgba(180,140,80,.08);}
+.menu-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:0;background:var(--gold);transition:height .25s ease;}
+.menu-item::after{content:attr(data-num);position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;color:var(--gold);opacity:.4;}
+.menu-item:hover{color:var(--gold2);padding-left:3rem;}
+.menu-item:hover::before{height:60%;}
+.menu-item.exit{color:var(--silver);border-bottom:none;margin-top:.5rem;}
+.menu-item.exit:hover{color:var(--red2);}
+.menu-version{margin-top:2.5rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.18em;color:var(--bone2);opacity:.35;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:320px 1fr;gap:5rem;align-items:start;}
+.char-card{border:1px solid var(--border);background:rgba(13,11,24,.6);backdrop-filter:blur(4px);position:relative;overflow:hidden;}
+.char-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,31,90,.3) 0%,transparent 60%);pointer-events:none;}
+.char-card::after{content:'';}
+.char-portrait{width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;border-bottom:1px solid var(--border);}
+.char-portrait video{width:100%;height:100%;object-fit:cover;object-position:center top;filter:contrast(1.1) saturate(.8);}
+.char-portrait::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,11,24,.9) 0%,transparent 40%);}
+.portrait-fade{position:absolute;inset:0;z-index:5;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .5s ease;}
+.portrait-fade.on{opacity:1;}
+.char-meta{padding:1.4rem;}
+.char-name{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;letter-spacing:.08em;color:var(--bone);margin-bottom:.3rem;}
+.char-class{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;}
+.char-specs{display:flex;flex-direction:column;gap:0;margin-top:.6rem;}
+.char-spec-row{display:grid;grid-template-columns:3.5rem 1fr;gap:.6rem;padding:.55rem 0;border-top:1px solid rgba(200,170,240,.08);align-items:baseline;}
+.char-spec-row:first-child{border-top:none;}
+.char-spec-key{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.7;}
+.char-spec-val{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.06em;color:rgba(210,195,245,.55);line-height:1.5;}
+.char-status{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);}
+.char-status-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:.5rem;}
+.char-status-items{display:flex;flex-wrap:wrap;gap:.4rem;}
+.status-badge{padding:.15rem .6rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;border:1px solid var(--border);color:var(--bone2);}
+.about-lore-title{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.7rem;}
+.about-lore{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--bone2);line-height:1.85;margin-bottom:2rem;border-left:2px solid rgba(180,140,80,.25);padding-left:1.2rem;}
+.about-body{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--bone2);line-height:1.9;font-weight:300;margin-bottom:1.2rem;}
+.abilities-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:2rem;}
+.ability-item{background:rgba(13,11,24,.7);padding:1.1rem;transition:background .2s;}
+.ability-item:hover{background:rgba(42,31,90,.3);}
+.ability-name{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
+.ability-dots{display:flex;gap:.3rem;margin-bottom:.4rem;}
+.ability-dot{width:6px;height:6px;border-radius:50%;background:var(--violet2);}
+.ability-dot.lit{background:var(--gold2);}
+.ability-desc{font-family:'Share Tech Mono',monospace;font-size:.875rem;color:var(--bone2);line-height:1.6;}
+.artifacts-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem;}
+.artifact{padding:.25rem .8rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;border:1px solid var(--border);color:var(--bone2);transition:border-color .2s,color .2s;}
+.artifact:hover{border-color:var(--gold2);color:var(--gold2);}
+
+/* FALLING REEL */
+.reel-wrap{position:relative;overflow:hidden;height:520px;margin:3rem -3.5rem 3.5rem;mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 88%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 88%,transparent 100%);}
+.reel-inner{display:flex;gap:10px;height:100%;padding:0 3.5rem;}
+.reel-col{display:flex;flex-direction:column;gap:10px;flex:1;min-width:0;will-change:transform;}
+.reel-col img{width:100%;height:200px;object-fit:cover;display:block;border:1px solid rgba(200,170,240,.07);transition:filter .3s;}
+.reel-col:nth-child(1){animation:fall 9s linear infinite;}
+.reel-col:nth-child(2){animation:fall 7.5s linear infinite;}
+.reel-col:nth-child(3){animation:fall 8.5s linear infinite;}
+.reel-col:nth-child(4){animation:fall 10s linear infinite;}
+.reel-col:nth-child(5){animation:fall 8s linear infinite;}
+@keyframes fall{0%{transform:translateY(0);}100%{transform:translateY(-50%);}}
+@media(max-width:900px){.reel-col:nth-child(4),.reel-col:nth-child(5){display:none;}}
+@media(max-width:600px){.reel-col:nth-child(3){display:none;}}
+
+/* PROJECTS */
+.quests-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--border);border:1px solid var(--border);}
+.quest-card{background:rgba(13,11,24,.7);text-decoration:none;color:var(--bone);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .3s;cursor:none;}
+.quest-card:hover{background:rgba(20,18,42,.9);}
+.quest-thumb{height:240px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.qt-slides{position:absolute;inset:0;}
+.qt-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;}
+.qt-slide.qs-active{opacity:1;}
+.qt-screens{position:absolute;inset:0;display:flex;align-items:stretch;gap:3px;padding:3px;background:#07060e;}
+.qt-screens img{flex:1;min-width:0;object-fit:cover;object-position:top center;display:block;filter:brightness(.7) saturate(.85);}
+.qt-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10;}
+.qt-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s;}
+.qt-dot.active{background:rgba(220,190,100,.9);}
+.quest-thumb-glyph{font-family:'Cinzel',serif;font-size:5rem;opacity:.05;color:var(--bone);transition:opacity .4s,transform .4s;}
+.quest-card:hover .quest-thumb-glyph{opacity:.12;transform:scale(1.08);}
+.quest-thumb-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,11,24,.95) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(42,31,90,.3) 0%,transparent 70%);}
+.quest-num{position:absolute;top:12px;left:14px;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;color:var(--gold);opacity:.7;}
+.quest-type{position:absolute;top:12px;right:12px;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .55rem;border:1px solid var(--border);color:var(--violet3);}
+.quest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .4s ease;z-index:2;}
+.quest-card:hover::before{transform:scaleX(1);}
+.quest-body{padding:1.5rem 1.6rem 2rem;}
+.quest-id{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.18em;color:var(--gold);opacity:.5;margin-bottom:.5rem;}
+.quest-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;letter-spacing:.06em;color:var(--bone);margin-bottom:.4rem;}
+.quest-subtitle{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.08em;color:var(--bone2);margin-bottom:.9rem;}
+.quest-tags{display:flex;flex-wrap:wrap;gap:.35rem;}
+.q-tag{padding:.12rem .55rem;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.08em;border:1px solid;}
+.q-tag-a{color:var(--violet3);border-color:rgba(122,106,170,.3);}
+.q-tag-b{color:var(--gold);border-color:rgba(180,140,80,.25);}
+.q-tag-c{color:var(--silver);border-color:var(--border);}
+
+/* EXPERIENCE */
+.timeline{position:relative;padding-left:3rem;max-width:800px;margin:0 auto;}
+.timeline::before{content:'';position:absolute;left:1px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold),var(--gold),transparent);opacity:.2;}
+.tl-item{position:relative;margin-bottom:3.5rem;opacity:0;transform:translateX(-20px);transition:opacity .65s ease,transform .65s ease;}
+.tl-item.in{opacity:1;transform:none;}
+.tl-node{position:absolute;left:-3rem;top:4px;width:10px;height:10px;background:var(--ink);border:1px solid var(--gold);transform:rotate(45deg);}
+.tl-node::after{content:'';position:absolute;inset:2px;background:var(--gold);opacity:.5;}
+.tl-line{position:absolute;left:-2.54rem;top:14px;bottom:-3.5rem;width:1px;background:linear-gradient(180deg,var(--gold3),transparent);opacity:.15;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-chapter{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--violet3);opacity:.6;margin-bottom:.3rem;}
+.tl-date{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.18em;color:var(--gold);opacity:.7;margin-bottom:.5rem;}
+.tl-company{font-family:'Cinzel',serif;font-size:1rem;font-weight:600;letter-spacing:.08em;color:var(--bone);margin-bottom:.2rem;}
+.tl-role{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--violet3);margin-bottom:.7rem;}
+.tl-desc{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--bone2);line-height:1.85;font-weight:300;max-width:640px;}
+.tl-media{display:flex;gap:8px;margin-top:1.2rem;flex-wrap:wrap;}
+.tl-media img{height:120px;width:auto;border-radius:10px;object-fit:cover;filter:brightness(.75) saturate(.8);transition:filter .3s;flex-shrink:0;}
+.tl-media img:hover{filter:brightness(1) saturate(1);}
+
+/* SKILLS */
+.skills-outer{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.skill-tree-title{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:1.5rem;}
+.skill-bar-list{display:flex;flex-direction:column;gap:1.1rem;}
+.sk-row{display:flex;align-items:center;gap:1rem;}
+.sk-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.06em;color:var(--bone);min-width:190px;}
+.sk-track{flex:1;height:2px;background:rgba(180,140,80,.1);overflow:hidden;}
+.sk-fill{height:100%;background:linear-gradient(90deg,var(--violet2),var(--gold));width:0%;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
+.sk-val{font-family:'Share Tech Mono',monospace;font-size:.875rem;color:var(--gold);min-width:26px;text-align:right;opacity:.8;}
+.relics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.relic-item{background:rgba(13,11,24,.7);padding:1.3rem;transition:background .2s;text-align:center;}
+.relic-item:hover{background:rgba(42,31,90,.25);}
+.relic-icon{font-size:1.6rem;opacity:.5;margin-bottom:.6rem;display:block;}
+.relic-name{font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.08em;color:var(--bone);margin-bottom:.25rem;}
+.relic-tier{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.6;}
+
+/* CONTACT */
+.summon-outer{max-width:800px;margin:0 auto;text-align:center;}
+.summon-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.5vw,3.5rem);font-weight:700;letter-spacing:.06em;color:var(--bone);margin-bottom:1rem;}
+.summon-sub--main{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-style:italic;color:var(--bone);opacity:.92;letter-spacing:.02em;margin-bottom:3rem;text-align:center;}
+.summon-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--bone2);margin-bottom:3rem;}
+.summon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem;}
+/* Contact cards */
+.summon-card{background:rgba(13,11,24,.7);text-decoration:none;padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:.8rem;transition:background .25s;cursor:none;position:relative;overflow:hidden;}
+.summon-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .3s;}
+.summon-card:hover::before{transform:scaleX(1);}
+.summon-card:hover{background:rgba(42,31,90,.25);}
+.summon-icon{display:flex;align-items:center;opacity:.65;}
+.summon-platform{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);}
+.summon-val{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone);}
+/* ArtStation button in intro topbar */
+.intro-as-btn{display:flex;align-items:center;gap:.5rem;padding:.38rem .85rem;font-family:'Share Tech Mono',monospace;letter-spacing:.12em;color:rgba(195,178,142,0.8);border:1px solid rgba(165,132,50,0.22);background:rgba(5,4,9,0.72);backdrop-filter:blur(6px);transition:all .2s;cursor:none;text-decoration:none;}
+.intro-as-btn:hover{border-color:rgba(195,155,55,0.55);color:rgba(220,198,155,1);}
+.intro-as-btn .summon-platform{font-size:.875rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.intro-as-btn .summon-val{font-size:.875rem;color:rgba(195,178,142,0.7);font-family:'Share Tech Mono',monospace;}
+.summon-sep{color:rgba(165,132,50,0.35);margin:0 .1rem;}
+.summon-signal{display:flex;align-items:center;gap:.6rem;margin:0 auto;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;color:#80c880;justify-content:center;}
+.signal-dot{width:6px;height:6px;border-radius:50%;background:#60c060;animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+/* LANG SWITCHER */
+.lang-sw{display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;}
+.lang-sw button{background:none;border:none;color:rgba(200,185,240,.5);cursor:pointer;padding:.4rem .7rem;transition:color .2s,background .15s;line-height:1;font-size:.875rem;letter-spacing:.12em;pointer-events:auto;position:relative;z-index:201;}
+.lang-sw button.active{color:var(--gold2);opacity:1;}
+.lang-sw span{color:rgba(200,170,240,.3);font-size:.875rem;}
+
+/* BACK BTN */
+.back-btn{display:none!important;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+.back-btn.show{display:block;}
+
+/* SKILL MEDALLIONS — gold engraving */
+.sk-cat-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.28em;text-transform:uppercase;color:#8a6e28;opacity:.9;margin-bottom:2rem;}
+
+
+
+
+
+
+
+
+
+
+@media(max-width:900px){}
+
+/* FOOTER */
+footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:1.5rem 3.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(7,6,14,.95);}
+.ft-logo{font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.18em;font-weight:700;color:var(--bone);text-decoration:none;}
+.ft-copy{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;color:var(--bone2);opacity:.4;}
+
+/* ── PROJECT BLOCKS — vitya.pro style ── */
+
+to{transform:translateX(-50%);}  }
+
+/* scroll indicator */
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:10;cursor:none;animation:scroll-bounce 2.5s ease-in-out infinite;}
+.hero-scroll-line{width:1px;height:40px;background:linear-gradient(180deg,rgba(165,132,50,.8),transparent);}
+.hero-scroll-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(165,132,50,.6);}
+@keyframes scroll-bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+
+@media(max-width:900px){
+  .pb-top{grid-template-columns:1fr;gap:1.5rem;}
+  .pb-meta-row{flex-wrap:wrap;}
+  .pb-meta-cell{flex:1 1 45%;}
+  .pb-meta-cell--link{flex:1 1 100%;justify-content:flex-start;padding:.85rem 1.1rem;}
+  .section{padding:4rem 1.5rem 3rem;}
+  #projects-section{padding:3rem 1.5rem 2rem;}
+}
+
+@media(max-width:900px){
+  .about-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .char-card{max-width:320px;margin:0 auto;}
+  .quests-grid{grid-template-columns:1fr;}
+  .skills-outer{grid-template-columns:1fr;}
+  .summon-grid{grid-template-columns:1fr;}
+  .section{padding:6rem 1.5rem 4rem;}
+  .navbar{padding:.9rem 1.5rem;}
+  .abilities-grid{grid-template-columns:1fr 1fr;}
+  .relics-grid{grid-template-columns:1fr 1fr;}
+  .pb-screens{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .pb-head{flex-direction:column;gap:1rem;}
+}
+
+/* ── Project Grid ── */
+.proj-grid{display:flex;flex-direction:column;gap:3rem;}
+.proj-card{display:flex;flex-direction:row;align-items:center;gap:3rem;text-decoration:none;color:inherit;cursor:none;padding:2.5rem 0;border-bottom:1px solid rgba(180,150,220,.08);}
+.proj-card:last-child{border-bottom:none;}
+.proj-card:nth-child(even){flex-direction:row-reverse;}
+.proj-card-cover{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.proj-card-img-wrap{position:relative;overflow:hidden;border-radius:18px;flex:0 0 48%;aspect-ratio:16/9;background:#0a0812;}
+.proj-card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:brightness(.72) saturate(.85);transition:transform .6s cubic-bezier(.4,0,.2,1),filter .5s;}
+.proj-card:hover .proj-card-img-wrap img{transform:scale(1.05);filter:brightness(.38) saturate(.7);}
+.proj-card-overlay{display:none;}
+.proj-card:hover .proj-card-overlay{opacity:1;}
+.proj-card-overlay p{font-size:.88rem;line-height:1.65;color:rgba(220,210,245,.82);margin:0 0 1.1rem;}
+.proj-card-cta{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);opacity:.85;}
+.proj-card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.8rem;padding:.25rem 0;}
+.proj-card-num{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.25em;color:var(--gold);opacity:.55;display:block;margin-bottom:.2rem;}
+.proj-card-name{font-family:'Cinzel',serif;font-size:clamp(1.4rem,2.4vw,2.2rem);font-weight:700;letter-spacing:.04em;color:var(--bone);line-height:1.1;margin:0 0 .45rem;}
+.proj-card-tags{display:flex;flex-wrap:wrap;gap:.4rem .7rem;}
+.proj-card-desc{font-size:.92rem;line-height:1.7;color:rgba(220,210,245,.72);margin:.2rem 0 .4rem;}
+.proj-card-meta{display:grid;grid-template-columns:1fr 1fr;gap:.3rem 2rem;margin-top:.6rem;}
+.proj-card-meta-item{display:flex;flex-direction:column;gap:.15rem;}
+.proj-card-meta-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.18em;color:rgba(190,165,230,.38);text-transform:uppercase;}
+.proj-card-meta-val{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.06em;color:rgba(220,210,245,.75);}
+.proj-card-cta-wrap{margin-top:.8rem;}
+.proj-card-cta{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(var(--gold-rgb),.35);padding:.55rem 1.4rem;border-radius:4px;display:inline-block;transition:background .3s,color .3s;}
+.proj-card:hover .proj-card-cta{background:rgba(var(--gold-rgb),.12);}
+.proj-card-tag{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;color:rgba(190,165,230,.42);}
+@keyframes pb-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── Skills rows ── */
+.sk-rows{display:flex;flex-direction:column;gap:0;max-width:860px;}
+.sk-row{display:grid;grid-template-columns:160px 1fr;gap:2rem;padding:1.4rem 0;border-top:1px solid rgba(200,170,240,.08);align-items:start;}
+.sk-row:first-child{border-top:none;padding-top:0;}
+.sk-row-cat{font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;letter-spacing:.06em;color:var(--bone);opacity:.75;padding-top:.15rem;}
+.sk-row-tags{display:flex;flex-wrap:wrap;gap:.5rem .6rem;}
+.sk-tag{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.04em;color:rgba(215,200,250,.6);padding:.3rem .75rem;border:1px solid rgba(200,170,240,.15);border-radius:4px;transition:border-color .2s,color .2s;}
+.sk-tag:hover{border-color:rgba(200,170,240,.45);color:var(--bone);}
+.sk-tag--lit{color:rgba(215,200,250,.88);border-color:rgba(200,170,240,.28);}
+/* Education */
+.sk-edu{display:flex;flex-direction:column;gap:0;margin-top:.6rem;max-width:700px;}
+.sk-edu-row{display:grid;grid-template-columns:100px 1fr auto;gap:1.5rem;padding:1rem 0;border-top:1px solid rgba(200,170,240,.08);align-items:baseline;}
+.sk-edu-row:first-child{border-top:none;}
+.sk-edu-year{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.1em;color:var(--gold);opacity:.5;}
+.sk-edu-name{font-family:'Cinzel',serif;font-size:.9rem;color:var(--bone);}
+.sk-edu-org{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.06em;color:rgba(190,165,230,.4);}
+
+.proj-section-label{font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(200,170,240,.35);margin-bottom:1.8rem;}
+/* === DODO MINI-CASE === */
+.dodo-case{margin-top:2rem;padding:0;}
+.dodo-case-inner{background:linear-gradient(135deg,rgba(255,102,0,.06) 0%,rgba(20,16,35,.0) 60%);border:1px solid rgba(255,102,0,.15);border-radius:24px;padding:2.2rem 2.5rem 2.5rem;position:relative;overflow:hidden;}
+.dodo-case-inner::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(255,102,0,.1) 0%,transparent 70%);pointer-events:none;}
+.dodo-eyebrow{font-size:.75rem;letter-spacing:.18em;color:rgba(255,102,0,.75);text-transform:uppercase;margin-bottom:.5rem;}
+.dodo-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:700;color:var(--bone);letter-spacing:.04em;margin:0 0 .35rem;}
+.dodo-subtitle{font-size:.85rem;color:rgba(220,210,245,.5);margin:0 0 1rem;}
+.dodo-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2rem;}
+.dodo-tag{font-size:.68rem;padding:.25rem .65rem;border-radius:20px;border:1px solid rgba(255,102,0,.28);color:rgba(255,102,0,.85);letter-spacing:.07em;text-transform:uppercase;}
+.dodo-screens{display:flex;gap:1.4rem;justify-content:center;align-items:flex-end;margin-bottom:2.8rem;}
+.dodo-phone{flex:0 0 auto;width:clamp(162px,17.6vw,235px);aspect-ratio:9/19.5;border-radius:1.6rem;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.5);transition:transform .4s ease,box-shadow .4s ease;}
+.dodo-phone:hover{transform:translateY(-6px);box-shadow:0 24px 55px rgba(0,0,0,.6);}
+.dodo-phone img{width:100%;height:100%;object-fit:cover;object-position:top;}
+.dodo-phone-main{transform:translateY(-12px);box-shadow:0 22px 55px rgba(255,102,0,.18),0 16px 40px rgba(0,0,0,.5);}
+.dodo-phone-main:hover{transform:translateY(-18px);}
+.dodo-insights{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.4rem;}
+.dodo-insight{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1.2rem 1.3rem;}
+.dodo-insight-title{font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,102,0,.8);margin:0 0 .6rem;}
+.dodo-insight-text{font-size:.8rem;line-height:1.75;color:rgba(220,210,245,.62);margin:0;}
+.dodo-kit{border-radius:12px;overflow:hidden;margin-bottom:1.2rem;border:1px solid rgba(255,255,255,.06);}
+.dodo-flow{border-radius:12px;overflow-x:auto;overflow-y:hidden;margin-bottom:1.2rem;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);}
+.dodo-flow img{height:437px;width:auto;display:block;}
+.dodo-kit img{width:70%;display:block;margin:0 auto;}
+.dodo-strips{width:100%;}
+.dodo-strips img{width:70%;height:auto;display:block;border-radius:.6rem;margin:0 auto;}
+@media(max-width:768px){.dodo-insights{grid-template-columns:1fr;}.dodo-screens{gap:.6rem;}.dodo-phone{width:clamp(147px,36.8vw,206px);}}
+/* ── 2D ART CARD ── */
+.art-card-wrap{margin:3rem 0 0;padding:0;}
+.art-card{display:flex;flex-direction:row-reverse;align-items:center;gap:3rem;padding:2.5rem 0;border-top:1px solid var(--border);}
+.art-card-body{flex:1;display:flex;flex-direction:column;gap:.8rem;min-width:0;}
+.art-marquee-outer{flex:0 0 48%;border-radius:18px;overflow:hidden;background:rgba(10,8,20,.95);border:1px solid var(--border);padding:1.6rem 0;display:flex;flex-direction:column;justify-content:center;}
+.art-marquee-track{display:flex;gap:1rem;width:max-content;}
+.art-marquee-track.rev{animation:artMarqueeRev 22s linear infinite;}
+.art-marquee-track img{height:130px;width:auto;border-radius:8px;object-fit:cover;flex-shrink:0;display:block;}
+@keyframes artMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes artMarqueeRev{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+/* Art lightbox */
+#artLightbox{position:fixed;inset:0;z-index:9999;background:rgba(4,3,9,.88);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(6px);}
+#artLightbox.open{opacity:1;pointer-events:all;}
+#artLightbox img{max-width:70vw;max-height:70vh;object-fit:contain;border:1px solid rgba(200,170,240,.2);border-radius:8px;transform:scale(.95);transition:transform .3s cubic-bezier(.2,.8,.3,1);}
+#artLightbox.open img{transform:scale(1);}
+.art-marquee-track img{cursor:pointer;}
+
+.art-card-wrap.open 
+
+
+
+.art-grid-item:hover img{transform:scale(1.04);filter:brightness(1);}
+
+
+
+
+@media(max-width:900px){.art-card{flex-direction:column;}.art-marquee-outer{flex:none;width:100%;}}
+@media(max-width:560px){}
+
+
+
+/* === PLAYRIX MINI-CASE === */
+.playrix-case{margin-top:2rem;padding:0;}
+.playrix-case-inner{background:linear-gradient(135deg,rgba(60,160,255,.07) 0%,rgba(20,16,35,.0) 60%);border:1px solid rgba(60,160,255,.18);border-radius:24px;padding:2rem 2rem 2rem;}
+.playrix-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(100,180,255,.6);margin-bottom:.6rem;}
+.playrix-title{font-family:'Cinzel',serif;font-size:1.9rem;font-weight:700;color:var(--bone);margin:0 0 .4rem;}
+.playrix-subtitle{font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:.07em;color:rgba(190,165,230,.45);margin-bottom:1.4rem;line-height:1.6;}
+.playrix-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.8rem;}
+.playrix-tag{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .75rem;border:1px solid rgba(60,160,255,.25);border-radius:2rem;color:rgba(150,200,255,.7);}
+.playrix-scroll{overflow-x:auto;overflow-y:hidden;width:100%;margin-bottom:1.4rem;border-radius:12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(60,160,255,.3) transparent;}
+.playrix-scroll::-webkit-scrollbar{height:4px;}
+.playrix-scroll::-webkit-scrollbar-track{background:transparent;}
+.playrix-scroll::-webkit-scrollbar-thumb{background:rgba(60,160,255,.3);border-radius:2px;}
+.playrix-scroll-inner{display:flex;gap:.7rem;padding-bottom:.5rem;width:max-content;}
+.playrix-scroll-inner img{height:160px;width:auto;border-radius:10px;filter:brightness(.9) saturate(.9);transition:filter .3s,transform .3s;display:block;flex-shrink:0;}
+.playrix-scroll-inner img:hover{filter:brightness(1) saturate(1);transform:scale(1.02);}
+.playrix-hud{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;}
+.playrix-hud-main{flex:1;min-width:0;}
+.playrix-hud-main img{width:100%;height:auto;border-radius:10px;display:block;filter:brightness(.9);}
+.playrix-hud-icon{flex:0 0 auto;width:110px;display:flex;align-items:center;justify-content:center;}
+.playrix-hud-icon img{width:100%;height:auto;border-radius:10px;display:block;filter:brightness(1);}
+.playrix-wide-wrap{width:100%;overflow:hidden;border-radius:10px;margin-bottom:.7rem;}
+.playrix-wide-wrap img{width:100%;height:auto;display:block;filter:brightness(.92);border-radius:10px;}
+.playrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.4rem;}
+.playrix-grid img{width:100%;height:auto;border-radius:10px;display:block;filter:brightness(.92);}
+.playrix-strip{width:100%;overflow-x:auto;margin-bottom:1rem;border-radius:12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(60,160,255,.3) transparent;}
+.playrix-strip::-webkit-scrollbar{height:4px;}
+.playrix-strip::-webkit-scrollbar-thumb{background:rgba(60,160,255,.3);border-radius:2px;}
+.playrix-strip img{height:180px;width:auto;display:block;border-radius:10px;filter:brightness(.92);}
+.playrix-section-label{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(100,180,255,.45);margin:1.6rem 0 .8rem;padding-left:.2rem;}
+.playrix-tasks{display:flex;flex-direction:column;gap:1.1rem;margin-bottom:1.8rem;}
+.playrix-task{display:grid;grid-template-columns:2.2rem 1fr;gap:.8rem;align-items:start;}
+.playrix-task-num{font-family:'Share Tech Mono',monospace;font-size:1.4rem;font-weight:700;color:rgba(60,160,255,.35);line-height:1.2;padding-top:.1rem;}
+.playrix-task-title{font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;color:rgba(150,200,255,.9);margin:0 0 .35rem;}
+.playrix-task-text{font-family:'Share Tech Mono',monospace;font-size:.75rem;letter-spacing:.04em;color:rgba(190,165,230,.5);line-height:1.7;margin:0;}
+
+/* === IMAGE SLIDER (A) === */
+.proj-card-img-wrap{position:relative;overflow:hidden;}
+.pcis{position:relative;width:100%;height:100%;}
+.proj-card-img-wrap .pcis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;filter:brightness(.72) saturate(.85);transition:opacity .55s ease,filter .5s;transform:none !important;}
+.proj-card-img-wrap .pcis img.pcis-a{opacity:1;}
+.proj-card:hover .proj-card-img-wrap .pcis img.pcis-a{filter:brightness(.42) saturate(.7);}
+.pcis-dots{position:absolute;bottom:.7rem;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:3;opacity:0;transition:opacity .3s;pointer-events:none;}
+.proj-card:hover .pcis-dots{opacity:1;}
+.pcis-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s;}
+.pcis-dot.pcis-da{background:var(--gold2);}
+/* === SCREENS MARQUEE === */
+.proj-card-marquee{overflow:hidden;width:100%;min-width:0;margin-top:1.1rem;}
+.pcm-track{display:flex;gap:.4rem;width:max-content;animation:pcm-scroll var(--pcm-dur,22s) linear infinite;}
+.proj-card-marquee:hover .pcm-track{animation-play-state:paused;}
+@keyframes pcm-scroll{to{transform:translateX(-50%);}}
+.pcm-item{flex-shrink:0;overflow:hidden;border:1px solid rgba(180,150,220,.1);border-radius:6px;}
+.pcm-item.pcm-port{height:220px;aspect-ratio:9/16;background:#09070e;}
+.pcm-item.pcm-land{height:148px;aspect-ratio:16/9;background:#09070e;}
+.pcm-item img{width:100%;height:100%;object-fit:contain;object-position:center;filter:brightness(.9) saturate(.9);transition:filter .3s;}
+.proj-card-marquee:hover .pcm-item img{filter:brightness(.95) saturate(1);}
+
+/* === 4-UP PORTRAIT SLIDER === */
+.pcis4{position:relative;width:100%;height:100%;}
+.pcis4-slide{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr;gap:3px;opacity:0;transition:opacity .6s ease;}
+.pcis4-slide.pcis4-a{opacity:1;}
+.pcis4-slide img{width:100%;height:100%;object-fit:contain;object-position:center;background:#09070e;filter:brightness(.88) saturate(.9);transition:filter .4s;}
+.proj-card:hover .pcis4-slide img{filter:brightness(.88) saturate(1);}
+.pcis4-slide.pcis4-cover{grid-template-columns:1fr;grid-template-rows:1fr;padding:0;gap:0;}
+.pcis4-slide.pcis4-cover img{object-fit:cover;object-position:center;background:none;filter:brightness(.88) saturate(.92);}
+
+/* EMAIL COPY TOAST */
+.copy-toast{position:fixed;bottom:2.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,22,55,.95);border:1px solid rgba(180,140,80,.4);color:var(--gold2);font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:.6rem 1.4rem;border-radius:2rem;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;z-index:9999;}
+.copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+
+
+@media(max-width:480px){
+  .abilities-grid{grid-template-columns:1fr 1fr!important;}
+  .art-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .mini-case-grid,.pcm-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .playrix-screens,.dodo-screens{grid-template-columns:1fr!important;}
+}
+
+/* ===== MOBILE ADAPTATION ===== */
+@media(max-width:768px){
+  /* Hide custom cursor on touch */
+  #cursor-outer,#cursor-inner{display:none;}
+  body{cursor:auto;}
+  a,button{cursor:pointer;}
+
+  /* Intro hero */
+  #intro{height:auto;min-height:auto;}
+  .intro-sidebar{width:100%!important;height:auto!important;border-right:none!important;border-bottom:1px solid rgba(150,120,45,0.15);}
+  .intro-sidebar-top{padding:1rem 1.2rem .8rem;}
+  .intro-menu-items{display:none;}
+  .intro-sidebar-bottom{display:none;}
+  .intro-main{min-height:55svh;}
+  .intro-reel{opacity:.5;}
+  .intro-topbar{padding:.6rem .8rem;gap:0;}
+  .intro-tb-btn{font-size:.7rem;padding:.3rem .6rem;}
+  .cv-drop{right:0;}
+  .intro-right-panel{right:.8rem;bottom:3rem;gap:.5rem;}
+  .intro-bottom{padding:0 1rem 1.8rem 1.2rem;}
+  .intro-event-tag{font-size:.65rem;}
+
+  /* Navbar */
+  .navbar{padding:.75rem 1.2rem;justify-content:space-between;}
+  .nb-links{display:none;}
+
+  /* Intro — fix absolute overlay elements */
+  .intro-topbar{display:none;}
+  .intro-right-panel{display:none;}
+  .intro-hline{display:none;}
+  .intro-scanlines{display:none;}
+  .intro-char{display:none;}
+  .intro-sparkle{display:none;}
+
+  /* intro-bottom becomes static flow on mobile */
+  .intro-bottom{
+    position:relative;
+    bottom:auto;left:auto;right:auto;
+    padding:1.6rem 1.2rem 2rem;
+    background:linear-gradient(0deg,rgba(3,2,7,0.97) 0%,rgba(3,2,7,0.85) 60%,transparent 100%);
+  }
+  .intro-main{
+    min-height:50svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+  }
+  .intro-main-title{font-size:clamp(2.4rem,11vw,4rem);}
+  .intro-main-subtitle{font-size:.6rem;letter-spacing:.25em;}
+  .intro-desc{font-size:.88rem;}
+
+  /* Sections */
+  .section{padding:2.5rem 1.2rem 2rem;}
+  .section-eyebrow{font-size:.52rem;letter-spacing:.18em;}
+
+  /* About */
+  .about-grid{grid-template-columns:1fr!important;gap:2rem;}
+  .char-card{max-width:100%;}
+  .char-portrait{aspect-ratio:3/2;}
+  .abilities-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .relics-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .about-right{min-width:0;}
+
+  /* Projects */
+  .proj-card{flex-direction:column!important;gap:1.4rem;padding:1.8rem 0;}
+  .proj-card-img-wrap{flex:none!important;width:100%!important;aspect-ratio:16/9;}
+  .proj-card-body{padding:0!important;}
+  .proj-card-title{font-size:1.2rem!important;}
+  .proj-card-desc{font-size:.88rem!important;-webkit-line-clamp:3!important;}
+  .proj-card-marquee{display:none;}
+
+  /* Mini cases */
+  .mini-cases-section .section{padding:2.5rem 1.2rem 2rem;}
+  .dodo-screens{flex-direction:column!important;align-items:center;gap:1rem;}
+  .dodo-phone{width:180px!important;}
+  .dodo-insights{grid-template-columns:1fr!important;gap:.8rem;}
+  .dodo-kit{flex-direction:column!important;gap:1rem;}
+  .playrix-grid{grid-template-columns:1fr!important;}
+  .playrix-tasks{flex-direction:column!important;gap:1rem;}
+  .playrix-task{width:100%!important;}
+
+  /* Timeline */
+  .timeline{padding-left:1.4rem;}
+  .tl-item{margin-bottom:2.5rem;}
+
+  /* Skills */
+  .sk-row{grid-template-columns:1fr!important;gap:.8rem;}
+  .sk-row-label{min-width:auto!important;}
+  .sk-rows{max-width:100%;}
+  .sk-edu-row{grid-template-columns:80px 1fr!important;gap:1rem;}
+
+  /* Contact */
+  .summon-grid{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Art */
+  .art-card{flex-direction:column!important;gap:1.5rem;}
+  .art-marquee-outer{flex:none!important;width:100%!important;}
+}
+@media(max-width:480px){
+  .intro-main{min-height:50svh;}
+  .abilities-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .relics-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .summon-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .dodo-phone{width:150px!important;}
+}
+</style>
+</head>
+<body>
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
+<div class="noise-overlay"></div>
+<canvas id="particleCanvas"></canvas>
+<div id="veil"></div>
+
+<!-- INTRO — ARKNIGHTS STYLE -->
+<div id="intro">
+
+
+  <!-- ── RIGHT ART AREA ── -->
+  <div class="intro-main">
+
+    <!-- VIDEO PLACEHOLDER — замени этот div на <video> когда будешь готова -->
+    <div class="intro-art-placeholder">
+      <!--
+        КАК ДОБАВИТЬ ВИДЕО:
+        1. Удали этот <div class="intro-art-placeholder">...</div>
+        2. Вставь вместо него:
+        <video autoplay muted loop playsinline
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;">
+          <source src="ВАШ_ФАЙЛ.mp4" type="video/mp4">
+        </video>
+      -->
+      <!-- Декоративный текст-подсказка -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:1;">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" style="margin:0 auto 1rem;display:block;opacity:.12;">
+          <rect x="8" y="12" width="44" height="30" rx="3" stroke="rgba(170,135,55,1)" stroke-width="1.5"/>
+          <path d="M24 20 L24 34 L38 27 Z" stroke="rgba(170,135,55,1)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+        </svg>
+        <p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.2em;color:rgba(170,135,55,0.18);text-transform:uppercase;">Video Placeholder</p>
+      </div>
+    </div>
+
+    <!-- FALLING SCREENS REEL -->
+    <div class="intro-reel">
+        <!-- COL 1 -->
+        <div class="ireel-col">
+        <img src="../images/Home/fairy-kingdom-screens.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-ui-kit.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-map.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-popups.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-icons.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-extras.jpg" alt="" loading="lazy">
+        <img src="../images/Home/candy-land-cover.jpg" alt="" loading="lazy">
+        <img src="../images/Home/candy-land-icons.jpg" alt="" loading="lazy">
+        <img src="../images/Home/complete.jpg" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Magic_main.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Kawaii_main.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Pretty Kitty Nails Salon.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Unicorns Nail Beauty Salon.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната1.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната2.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната3.png" alt="" loading="lazy">
+        <img src="../images/avataria/t1UXxkcrW3M.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons3.png" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-screens.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-ui-kit.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-map.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-popups.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-icons.jpg" alt="" loading="lazy">
+        <img src="../images/Home/fairy-kingdom-extras.jpg" alt="" loading="lazy">
+        <img src="../images/Home/candy-land-cover.jpg" alt="" loading="lazy">
+        <img src="../images/Home/candy-land-icons.jpg" alt="" loading="lazy">
+        <img src="../images/Home/complete.jpg" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Magic_main.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Kawaii_main.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Pretty Kitty Nails Salon.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/Unicorns Nail Beauty Salon.png" alt="" loading="lazy">
+        <img src="../images/sonakai/Nails/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната1.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната2.png" alt="" loading="lazy">
+        <img src="../images/avataria/2D/комната3.png" alt="" loading="lazy">
+        <img src="../images/avataria/t1UXxkcrW3M.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Icons/Icons3.png" alt="" loading="lazy">
+        </div>
+        <!-- COL 2 -->
+        <div class="ireel-col">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft11.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft1_cat.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft2_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft_empty.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft_pinyata_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_end_of_the_game.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_end_of_the_game_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_lobby_cat.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/UD_clan_dragon_lobby_2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POPUP_clan_dragon_rating1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POPUP_clan_dragon_rating_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POP_UP_crash.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POP_UP_crash_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive1.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive2.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive3.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/process1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/process2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY.png" alt="" loading="lazy">
+        <img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft11.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft1_cat.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft2_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft_empty.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft_pinyata_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_end_of_the_game.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_end_of_the_game_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/HUD_clan_dragon_lobby_cat.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/UD_clan_dragon_lobby_2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POPUP_clan_dragon_rating1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POPUP_clan_dragon_rating_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POP_UP_crash.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/POP_UP_crash_cat.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive1.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive2.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive3.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/process1.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/process2.png" alt="" loading="lazy">
+        <img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY.png" alt="" loading="lazy">
+        <img src="../images/avataria/Mini-games/HUD_game_Tic-tac-toe_NY2.png" alt="" loading="lazy">
+        </div>
+        <!-- COL 3 -->
+        <div class="ireel-col">
+        <img src="../images/seven-hearts/User Profile.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User ProfileDecor.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_ Achievements.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_Status3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_cards2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_frames2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_icons.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/dailynew1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/dailynew2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenВсе.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenжанры.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenколлекция.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages_received.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages_received2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Relationship.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/персонаж.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User ProfileDecor.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_ Achievements.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_Status3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_cards2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_frames2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/User Profile_icons.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/DailyRewardCalendar3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/dailynew1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/dailynew2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenВсе.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenжанры.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/StoryScreenколлекция.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages_received.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Messages_received2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Relationship.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/персонаж.png" alt="" loading="lazy">
+        </div>
+        <!-- COL 4 -->
+        <div class="ireel-col">
+        <img src="../images/seven-hearts/Shop.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Shop2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/МагазинНаборов.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/МагазинСкинов1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/EventHubScreen2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/EventHubScreen3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/ивенты4.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Wardrobe.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Wardrobe2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Showcase_favorite.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Showcase_favorite2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/VIP_SubscriptionScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/AchievementDetailsScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Modal.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Settings.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Кейс.png" alt="" loading="lazy">
+        <img src="../images/Home/Frame 110211981.png" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive1.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive5.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive6.jpg" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Shop.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Shop2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/МагазинНаборов.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/МагазинСкинов1.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/EventHubScreen2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/EventHubScreen3.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/ивенты4.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Wardrobe.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Wardrobe2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Showcase_favorite.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Showcase_favorite2.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/VIP_SubscriptionScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/AchievementDetailsScreen.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Modal.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Settings.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" alt="" loading="lazy">
+        <img src="../images/seven-hearts/Кейс.png" alt="" loading="lazy">
+        <img src="../images/Home/Frame 110211981.png" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive1.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive5.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Adaptive6.jpg" alt="" loading="lazy">
+        </div>
+        <!-- COL 5 -->
+        <div class="ireel-col">
+        <img src="../images/EverLove/Main.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Loading.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Story_screen_like.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Story_screen_like.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_collect.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_about.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_restart.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_time.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_missing_tickets.png" alt="" loading="lazy">
+        <img src="../images/EverLove/3.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_event.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_modal.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_ny.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_rewards.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_rewards_1.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Main.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Loading.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Story_screen_like.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Story_screen_like.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_collect.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_about.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_restart.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_time.png" alt="" loading="lazy">
+        <img src="../images/EverLove/Modal_missing_tickets.png" alt="" loading="lazy">
+        <img src="../images/EverLove/3.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_event.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_modal.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_ny.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_rewards.png" alt="" loading="lazy">
+        <img src="../images/avataria/Advent/Advent_rewards_1.png" alt="" loading="lazy">
+        </div>
+        <!-- COL 6 -->
+        <div class="ireel-col">
+        <img src="../images/Home/Modal.png" alt="" loading="lazy">
+        <img src="../images/Home/Modal_restart.png" alt="" loading="lazy">
+        <img src="../images/Home/Modal_time.png" alt="" loading="lazy">
+        <img src="../images/Home/Messages_received.png" alt="" loading="lazy">
+        <img src="../images/Home/Relationship.png" alt="" loading="lazy">
+        <img src="../images/Home/Settings.png" alt="" loading="lazy">
+        <img src="../images/Home/Story_screen.png" alt="" loading="lazy">
+        <img src="../images/Home/VIP_SubscriptionScreen.png" alt="" loading="lazy">
+        <img src="../images/Home/rating-positive.jpg" alt="" loading="lazy">
+        <img src="../images/Home/rating-neutral.jpg" alt="" loading="lazy">
+        <img src="../images/Home/rating-negative.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Advent_event.png" alt="" loading="lazy">
+        <img src="../images/Home/Advent_modal.png" alt="" loading="lazy">
+        <img src="../images/Home/Advent_ny.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive4.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive5.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive6.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive7.png" alt="" loading="lazy">
+        <img src="../images/Home/Modal.png" alt="" loading="lazy">
+        <img src="../images/Home/Modal_restart.png" alt="" loading="lazy">
+        <img src="../images/Home/Modal_time.png" alt="" loading="lazy">
+        <img src="../images/Home/Messages_received.png" alt="" loading="lazy">
+        <img src="../images/Home/Relationship.png" alt="" loading="lazy">
+        <img src="../images/Home/Settings.png" alt="" loading="lazy">
+        <img src="../images/Home/Story_screen.png" alt="" loading="lazy">
+        <img src="../images/Home/VIP_SubscriptionScreen.png" alt="" loading="lazy">
+        <img src="../images/Home/rating-positive.jpg" alt="" loading="lazy">
+        <img src="../images/Home/rating-neutral.jpg" alt="" loading="lazy">
+        <img src="../images/Home/rating-negative.jpg" alt="" loading="lazy">
+        <img src="../images/Home/Advent_event.png" alt="" loading="lazy">
+        <img src="../images/Home/Advent_modal.png" alt="" loading="lazy">
+        <img src="../images/Home/Advent_ny.png" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive4.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive5.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive6.jpg" alt="" loading="lazy">
+        <img src="../images/avataria/Clan dragon/Adaptive7.png" alt="" loading="lazy">
+        </div>
+    </div>
+
+        <!-- Overlays -->
+    <div class="intro-vignette"></div>
+    <div class="intro-scanlines"></div>
+
+    <!-- Gold 4-point star vignette — barely visible, edge-scattered -->
+    <svg class="intro-star-vignette" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- 4-point star symbol: thin cross + diagonal cross, tiny -->
+        <g id="s4">
+          <line x1="0" y1="-7" x2="0" y2="7"  stroke="rgba(210,180,80,0.22)" stroke-width="0.7"/>
+          <line x1="-7" y1="0" x2="7" y2="0"  stroke="rgba(210,180,80,0.22)" stroke-width="0.7"/>
+          <line x1="-4.5" y1="-4.5" x2="4.5" y2="4.5" stroke="rgba(210,180,80,0.12)" stroke-width="0.5"/>
+          <line x1="4.5" y1="-4.5" x2="-4.5" y2="4.5" stroke="rgba(210,180,80,0.12)" stroke-width="0.5"/>
+          <circle r="1.2" fill="rgba(230,200,110,0.35)"/>
+        </g>
+        <g id="s4sm">
+          <line x1="0" y1="-4" x2="0" y2="4"  stroke="rgba(210,180,80,0.16)" stroke-width="0.6"/>
+          <line x1="-4" y1="0" x2="4" y2="0"  stroke="rgba(210,180,80,0.16)" stroke-width="0.6"/>
+          <line x1="-2.5" y1="-2.5" x2="2.5" y2="2.5" stroke="rgba(210,180,80,0.09)" stroke-width="0.4"/>
+          <line x1="2.5" y1="-2.5" x2="-2.5" y2="2.5" stroke="rgba(210,180,80,0.09)" stroke-width="0.4"/>
+          <circle r="0.8" fill="rgba(230,200,110,0.25)"/>
+        </g>
+        <g id="s4lg">
+          <line x1="0" y1="-11" x2="0" y2="11" stroke="rgba(210,180,80,0.14)" stroke-width="0.8"/>
+          <line x1="-11" y1="0" x2="11" y2="0" stroke="rgba(210,180,80,0.14)" stroke-width="0.8"/>
+          <line x1="-7" y1="-7" x2="7" y2="7"  stroke="rgba(210,180,80,0.08)" stroke-width="0.5"/>
+          <line x1="7" y1="-7" x2="-7" y2="7"  stroke="rgba(210,180,80,0.08)" stroke-width="0.5"/>
+          <circle r="1.8" fill="rgba(230,200,110,0.2)"/>
+        </g>
+      </defs>
+
+      <!-- TOP EDGE — scattered stars -->
+      <use href="#s4"   transform="translate(42,18)"/>
+      <use href="#s4sm" transform="translate(120,8)"/>
+      <use href="#s4"   transform="translate(218,22)"/>
+      <use href="#s4sm" transform="translate(310,12)"/>
+      <use href="#s4lg" transform="translate(400,15)"/>
+      <use href="#s4sm" transform="translate(510,9)"/>
+      <use href="#s4"   transform="translate(620,20)"/>
+      <use href="#s4sm" transform="translate(730,7)"/>
+      <use href="#s4"   transform="translate(840,18)"/>
+      <use href="#s4lg" transform="translate(950,12)"/>
+
+      <!-- LEFT EDGE -->
+      <use href="#s4sm" transform="translate(12,80)"/>
+      <use href="#s4"   transform="translate(8,170)"/>
+      <use href="#s4sm" transform="translate(18,260)"/>
+      <use href="#s4lg" transform="translate(6,350)"/>
+      <use href="#s4sm" transform="translate(14,445)"/>
+      <use href="#s4"   transform="translate(9,530)"/>
+      <use href="#s4sm" transform="translate(20,620)"/>
+
+      <!-- RIGHT EDGE -->
+      <use href="#s4sm" transform="translate(985,75)"/>
+      <use href="#s4"   transform="translate(992,175)"/>
+      <use href="#s4sm" transform="translate(980,270)"/>
+      <use href="#s4lg" transform="translate(988,360)"/>
+      <use href="#s4sm" transform="translate(982,455)"/>
+      <use href="#s4"   transform="translate(990,545)"/>
+      <use href="#s4sm" transform="translate(978,635)"/>
+
+      <!-- BOTTOM EDGE -->
+      <use href="#s4sm" transform="translate(55,688)"/>
+      <use href="#s4"   transform="translate(160,692)"/>
+      <use href="#s4sm" transform="translate(270,685)"/>
+      <use href="#s4"   transform="translate(380,690)"/>
+      <use href="#s4lg" transform="translate(500,686)"/>
+      <use href="#s4sm" transform="translate(620,692)"/>
+      <use href="#s4"   transform="translate(740,688)"/>
+      <use href="#s4sm" transform="translate(860,692)"/>
+      <use href="#s4"   transform="translate(960,686)"/>
+
+      <!-- CORNER CLUSTERS — top-left -->
+      <use href="#s4lg" transform="translate(30,35)"/>
+      <use href="#s4sm" transform="translate(55,28)"/>
+      <use href="#s4sm" transform="translate(22,58)"/>
+
+      <!-- top-right -->
+      <use href="#s4lg" transform="translate(968,32)"/>
+      <use href="#s4sm" transform="translate(945,22)"/>
+      <use href="#s4sm" transform="translate(975,55)"/>
+
+      <!-- bottom-left -->
+      <use href="#s4lg" transform="translate(28,668)"/>
+      <use href="#s4sm" transform="translate(50,678)"/>
+      <use href="#s4sm" transform="translate(18,645)"/>
+
+      <!-- bottom-right -->
+      <use href="#s4lg" transform="translate(972,665)"/>
+      <use href="#s4sm" transform="translate(950,678)"/>
+      <use href="#s4sm" transform="translate(982,642)"/>
+
+      <!-- SCATTERED MID-AREA — very faint, sparse -->
+      <use href="#s4sm" transform="translate(150,110)" opacity="0.5"/>
+      <use href="#s4sm" transform="translate(870,90)"  opacity="0.45"/>
+      <use href="#s4sm" transform="translate(80,580)"  opacity="0.4"/>
+      <use href="#s4sm" transform="translate(920,600)" opacity="0.4"/>
+      <use href="#s4sm" transform="translate(200,600)" opacity="0.35"/>
+      <use href="#s4sm" transform="translate(800,580)" opacity="0.35"/>
+      <use href="#s4sm" transform="translate(480,50)"  opacity="0.45"/>
+      <use href="#s4sm" transform="translate(500,640)" opacity="0.4"/>
+    </svg>
+
+    <!-- Horizontal UI lines like Arknights -->
+    <div class="intro-hline" style="top:18%;left:0;right:0;"></div>
+    <div class="intro-hline" style="bottom:38%;left:5%;right:5%;opacity:.5;"></div>
+
+    <!-- Floating sparkle stars -->
+    <svg class="intro-sparkle" style="width:28px;height:28px;right:22%;top:22%;animation-delay:0s;animation-duration:5s;" viewBox="0 0 28 28" fill="none"><line x1="14" y1="2" x2="14" y2="26" stroke="rgba(215,195,140,0.8)" stroke-width="1"/><line x1="2" y1="14" x2="26" y2="14" stroke="rgba(215,195,140,0.8)" stroke-width="1"/><line x1="5" y1="5" x2="23" y2="23" stroke="rgba(215,195,140,0.5)" stroke-width="1"/><line x1="23" y1="5" x2="5" y2="23" stroke="rgba(215,195,140,0.5)" stroke-width="1"/><circle cx="14" cy="14" r="2.5" fill="rgba(230,210,160,0.95)"/><circle cx="14" cy="3" r="1.2" fill="rgba(230,210,160,0.7)"/><circle cx="14" cy="25" r="1.2" fill="rgba(230,210,160,0.7)"/><circle cx="3" cy="14" r="1.2" fill="rgba(230,210,160,0.7)"/><circle cx="25" cy="14" r="1.2" fill="rgba(230,210,160,0.7)"/></svg>
+    <svg class="intro-sparkle" style="width:16px;height:16px;left:35%;top:28%;animation-delay:1.8s;animation-duration:4s;" viewBox="0 0 16 16" fill="none"><line x1="8" y1="1" x2="8" y2="15" stroke="rgba(215,195,140,0.7)" stroke-width="1"/><line x1="1" y1="8" x2="15" y2="8" stroke="rgba(215,195,140,0.7)" stroke-width="1"/><circle cx="8" cy="8" r="1.8" fill="rgba(230,210,160,0.9)"/></svg>
+    <svg class="intro-sparkle" style="width:22px;height:22px;right:38%;top:60%;animation-delay:.9s;animation-duration:6s;" viewBox="0 0 22 22" fill="none"><line x1="11" y1="1" x2="11" y2="21" stroke="rgba(215,195,140,0.65)" stroke-width="1"/><line x1="1" y1="11" x2="21" y2="11" stroke="rgba(215,195,140,0.65)" stroke-width="1"/><line x1="3" y1="3" x2="19" y2="19" stroke="rgba(215,195,140,0.4)" stroke-width="1"/><line x1="19" y1="3" x2="3" y2="19" stroke="rgba(215,195,140,0.4)" stroke-width="1"/><circle cx="11" cy="11" r="2" fill="rgba(230,210,160,0.95)"/></svg>
+    <svg class="intro-sparkle" style="width:12px;height:12px;left:55%;top:70%;animation-delay:3s;animation-duration:4.5s;" viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="rgba(215,195,140,0.6)" stroke-width="1"/><line x1="1" y1="6" x2="11" y2="6" stroke="rgba(215,195,140,0.6)" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="rgba(230,210,160,0.9)"/></svg>
+
+    <!-- Top-right buttons -->
+    <div class="intro-topbar">
+      <!-- LinkedIn -->
+      <a href="https://www.artstation.com/ar11na" target="_blank" class="intro-as-btn"><span class="summon-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="rgba(200,170,100,0.9)" stroke-width="1"/><line x1="1" y1="6" x2="11" y2="6" stroke="rgba(200,170,100,0.9)" stroke-width="1"/><line x1="2" y1="2" x2="10" y2="10" stroke="rgba(200,170,100,0.6)" stroke-width="1"/><line x1="10" y1="2" x2="2" y2="10" stroke="rgba(200,170,100,0.6)" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="rgba(220,190,120,0.95)"/></svg></span><span class="summon-platform">ArtStation</span><span class="summon-sep">·</span><span class="summon-val">ar11na</span></a>
+        <a href="https://www.linkedin.com/in/arina-karpova-a38a0925a/" target="_blank" class="intro-tb-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1"/><line x1="4" y1="5" x2="4" y2="9" stroke="currentColor" stroke-width="1"/><line x1="4" y1="3.2" x2="4" y2="3.8" stroke="currentColor" stroke-width="1.2"/><path d="M6 5 L6 9 M6 6.5 C6 5.7 9 5.2 9 7 L9 9" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+        LinkedIn
+      </a>
+      <!-- CV dropdown -->
+      <div class="cv-wrap">
+        <div class="intro-tb-btn" style="cursor:none;">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1" stroke="currentColor" stroke-width="1"/><line x1="4" y1="4" x2="8" y2="4" stroke="currentColor" stroke-width="1"/><line x1="4" y1="6" x2="8" y2="6" stroke="currentColor" stroke-width="1"/><line x1="4" y1="8" x2="6.5" y2="8" stroke="currentColor" stroke-width="1"/></svg>
+          CV ▾
+        </div>
+        <div class="cv-drop">
+          <div class="cv-drop-inner">
+            <a href="Arina_Karpova_CV_RU.pdf" target="_blank">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1 L5 7 M2 5 L5 8 L8 5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="1" y1="9.5" x2="9" y2="9.5" stroke="currentColor" stroke-width="1"/></svg>
+              RU
+            </a>
+            <a href="Arina_Karpova_CV_EN.pdf" target="_blank">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1 L5 7 M2 5 L5 8 L8 5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="1" y1="9.5" x2="9" y2="9.5" stroke="currentColor" stroke-width="1"/></svg>
+              EN
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="lang-sw" style="margin-left:.5rem;"><button id="btnEnIntro" data-lang="en" onclick="switchLang('en')">EN</button><span>|</span><button id="btnRuIntro" data-lang="ru" onclick="switchLang('ru')">RU</button></div>
+    </div>
+
+    <!-- Right info panels -->
+    <div class="intro-right-panel">
+      <div class="intro-rp-item">
+        <span class="intro-rp-label" data-i18n="intro_exp_label">Experience</span>
+        <span class="intro-rp-val" data-i18n="intro_exp_val">4+ Years</span>
+      </div>
+      <div class="intro-rp-item">
+        <span class="intro-rp-label" data-i18n="intro_loc_label">Location</span>
+        <span class="intro-rp-val" data-i18n="intro_loc_val">Russia · Remote</span>
+      </div>
+      <div class="intro-rp-item">
+        <span class="intro-rp-label" data-i18n="intro_avail_label">Status</span>
+        <span class="intro-rp-val" style="color:rgba(100,200,120,0.9);" data-i18n="intro_avail_val">● Open to offers</span>
+      </div>
+    </div>
+
+    <!-- Bottom title area -->
+    <div class="intro-bottom">
+      <div class="intro-event-tag">
+        <div class="intro-event-dot"></div>
+        <span data-i18n="intro_role">UI/UX Designer &amp; 2D Artist</span>
+      </div>
+
+      <div style="position:relative;">
+        <h1 class="intro-main-title">
+          <svg class="intro-star-decor" viewBox="0 0 22 22" fill="none">
+            <line x1="11" y1="1" x2="11" y2="21" stroke="rgba(210,180,80,0.9)" stroke-width="1.2"/>
+            <line x1="1" y1="11" x2="21" y2="11" stroke="rgba(210,180,80,0.9)" stroke-width="1.2"/>
+            <line x1="3.5" y1="3.5" x2="18.5" y2="18.5" stroke="rgba(210,180,80,0.65)" stroke-width="1.2"/>
+            <line x1="18.5" y1="3.5" x2="3.5" y2="18.5" stroke="rgba(210,180,80,0.65)" stroke-width="1.2"/>
+            <circle cx="11" cy="11" r="2.5" fill="rgba(230,200,100,0.95)"/>
+          </svg>
+          ARINA<br>KARPOVA
+        </h1>
+      </div>
+
+      <p class="intro-main-subtitle" data-i18n="intro_subtitle">UI/UX Designer &nbsp;·&nbsp; 2D Artist &nbsp;·&nbsp; Game Interfaces</p>
+
+      <p class="intro-desc" data-i18n="intro_desc">
+        I craft immersive game experiences through<br>
+        meaningful UI/UX and painterly visuals.
+      </p>
+
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll" onclick="smoothTo('about-section')">
+      <span class="hero-scroll-label">scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div style="position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to bottom,transparent 0%,#060508 100%);z-index:9;pointer-events:none;"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="scene-bg"></div>
+  <nav class="navbar">
+    <a href="#" class="nb-logo" id="logoHome"><div class="nb-gem"></div>ARINA KARPOVA</a>
+    <ul class="nb-links">
+      <li><a href="#about-section" data-i18n="nav_about">About</a></li>
+      <li><a href="#projects-section" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="#exp-section" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="#skills-section" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="#contact-section" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="lang-sw"><button id="btnEn" data-lang="en" onclick="switchLang('en')">EN</button><span>|</span><button id="btnRu" data-lang="ru" onclick="switchLang('ru')">RU</button></div>
+  </nav>
+  <button class="back-btn" id="backBtn" onclick="goHome()" data-i18n="back_btn">← Return to Home</button>
+
+  <!-- PROJECTS -->
+<div id="about-section" class="section">
+    <h2 class="s-title rev">ABOUT</h2>
+    <div class="about-grid">
+      <div class="char-card">
+        <div class="char-portrait">
+          <img src="../1732090770154.jpg" alt="Arina Karpova" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
+          <!-- Lace corner stars -->
+          <svg style="position:absolute;top:8px;right:8px;z-index:3;pointer-events:none;" width="22" height="22" viewBox="0 0 22 22" fill="none"><line x1="11" y1="2" x2="11" y2="20" stroke="rgba(210,185,255,0.5)" stroke-width="1"/><line x1="2" y1="11" x2="20" y2="11" stroke="rgba(210,185,255,0.5)" stroke-width="1"/><line x1="4" y1="4" x2="18" y2="18" stroke="rgba(210,185,255,0.35)" stroke-width="1"/><line x1="18" y1="4" x2="4" y2="18" stroke="rgba(210,185,255,0.35)" stroke-width="1"/><circle cx="11" cy="11" r="2" fill="rgba(230,210,255,0.7)"/></svg>
+          <svg style="position:absolute;bottom:8px;left:8px;z-index:3;pointer-events:none;" width="22" height="22" viewBox="0 0 22 22" fill="none"><line x1="11" y1="2" x2="11" y2="20" stroke="rgba(210,185,255,0.4)" stroke-width="1"/><line x1="2" y1="11" x2="20" y2="11" stroke="rgba(210,185,255,0.4)" stroke-width="1"/><circle cx="11" cy="11" r="2" fill="rgba(230,210,255,0.6)"/></svg>
+        </div>
+        <div class="char-meta">
+          <p class="char-name">ARINA KARPOVA</p>
+          <p class="char-class" data-i18n="char_class">CLASS: UI/UX DESIGNER / 2D ARTIST</p></div>
+        </div>
+      
+      <div class="about-right">
+        <p class="about-body rev" data-i18n="about_body_1">UI/UX-дизайнер и 2D-художник в одном лице. Специализация — мобильные игры: HUD, монетизация, ивенты, дизайн-системы. Работала над живым продуктом с многомиллионной аудиторией — проектировала с нуля и передавала в разработку. Привлекает сложность игровых UI-задач: здесь нужно выстраивать и эмоцию, и поведение пользователя в одной системе. Активно использую нейросети в процессе — от концептов до генерации ассетов.</p>
+
+        <div class="abilities-grid rev">
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_ui_name">UI Design</p><p class="ability-desc" data-i18n="ability_ui_desc">HUD · Модалки · Game UI · Баннеры</p></div>
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_ux_name">UX Design</p><p class="ability-desc" data-i18n="ability_ux_desc">User Flow · Исследования · Аудит</p></div>
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_2d_name">2D Art</p><p class="ability-desc" data-i18n="ability_2d_desc">Иллюстрации · Иконки · Анимация</p></div>
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_sys_name">Design Systems</p><p class="ability-desc" data-i18n="ability_sys_desc">UI Kit · Компоненты · Handoff</p></div>
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_mon_name">Monetization UI</p><p class="ability-desc" data-i18n="ability_mon_desc">Магазин · Ивенты · Конверсия</p></div>
+          <div class="ability-item"><p class="ability-name" data-i18n="ability_mob_name">Mobile</p><p class="ability-desc" data-i18n="ability_mob_desc">Portrait · Landscape · iOS · Android</p></div>
+        </div>
+
+        <div class="artifacts-row rev">
+          <span class="artifact">Figma</span>
+          <span class="artifact">Photoshop</span>
+          <span class="artifact">Procreate</span>
+          <span class="artifact">Illustrator</span>
+          <span class="artifact">Miro</span>
+          <span class="artifact">Midjourney</span>
+          <span class="artifact" data-i18n="artifact_ru">🌐 RU — родной</span>
+          <span class="artifact">🌐 EN — B1-B2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="projects-section" class="section">
+    <p class="proj-section-label" data-i18n="proj_label">Избранные работы</p>
+
+        <div class="proj-grid">
+
+      <a class="proj-card rev" href="case-avataria.html">
+              <div class="proj-card-img-wrap">
+        <div class="pcis">
+        <img class="pcis-a" src="../images/avataria/t1UXxkcrW3M.jpg" alt="Avatar Life" loading="lazy">
+        <img src="../images/Home/HUD_clan_dragon_craft.png" alt="" loading="lazy">
+        <img src="../images/Home/Advent_event.png" alt="" loading="lazy">
+        <img src="../images/Home/Shop.png" alt="" loading="lazy">
+        </div>
+        <div class="pcis-dots">
+        <span class="pcis-dot pcis-da"></span>
+        <span class="pcis-dot"></span>
+        <span class="pcis-dot"></span>
+        <span class="pcis-dot"></span>
+        </div>
+      </div>
+        <div class="proj-card-body">
+          <span class="proj-card-num">// 01</span>
+          <h2 class="proj-card-name">Avatar Life</h2>
+          <div class="proj-card-tags"><span class="proj-card-tag">Social Avatar</span><span class="proj-card-tag">iOS · Android</span><span class="proj-card-tag">2023–2024</span></div>
+          <p class="proj-card-desc" data-i18n="proj_card_1_desc">Полный цикл UI/UX дизайна для мобильной игры. Система HUD, редизайн главного интерфейса, монетизация, событийный UI, мини-игры и библиотека 2D-объектов.</p>
+          <div class="proj-card-meta">
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_platform">Platform</span><span class="proj-card-meta-val">iOS · Android</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_genre">Genre</span><span class="proj-card-meta-val">Social Avatar Game</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_role">Role</span><span class="proj-card-meta-val">UI Designer · 2D Artist</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_status">Status</span><span class="proj-card-meta-val" data-i18n="status_pub">Опубликовано</span></div>
+          </div>
+                    <div class="proj-card-marquee">
+            <div class="pcm-track" style="--pcm-dur:25s">
+          <div class="pcm-item pcm-land"><img src="../images/avataria/t1UXxkcrW3M.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft11.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft2.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_event.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_modal.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_ny.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/t1UXxkcrW3M.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft11.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/Home/HUD_clan_dragon_craft2.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_event.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_modal.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/avataria/Advent/Advent_ny.png" loading="lazy" alt=""></div>
+            </div>
+          </div>
+          <div class="proj-card-cta-wrap"><span class="proj-card-cta" data-i18n="card_cta">Открыть кейс →</span></div>
+        </div>
+      </a>
+
+      <a class="proj-card rev" href="everlove-case/index.html">
+              <div class="proj-card-img-wrap">
+        <img class="proj-card-cover" src="../images/EverLove/обложка.png" loading="lazy" alt="Ever Love">
+      </div>
+        <div class="proj-card-body">
+          <span class="proj-card-num">// 03</span>
+          <h2 class="proj-card-name">Ever Love</h2>
+          <div class="proj-card-tags"><span class="proj-card-tag">Narrative RPG</span><span class="proj-card-tag">iOS · Android</span><span class="proj-card-tag" data-i18n="proj6_date">2024 — н.в.</span></div>
+          <p class="proj-card-desc" data-i18n="proj_card_6_desc">UI/UX и 2D-арт для нарративной мобильной игры. Загрузочные экраны, система сторис, модальные окна, магазин и полная визуальная концепция.</p>
+          <div class="proj-card-meta">
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_platform">Platform</span><span class="proj-card-meta-val">iOS · Android</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_genre">Genre</span><span class="proj-card-meta-val">Narrative RPG</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_role">Role</span><span class="proj-card-meta-val">UI/UX · 2D Artist</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_status">Status</span><span class="proj-card-meta-val" data-i18n="status_wip">В разработке</span></div>
+          </div>
+                    <div class="proj-card-marquee">
+            <div class="pcm-track" style="--pcm-dur:32s">
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Main.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_about.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_collect.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Story_screen_like.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Sing up.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/dlg1.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_time.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Restart.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_back.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Main.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_about.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_collect.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Story_screen_like.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Sing up.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/dlg1.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_time.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Restart.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/EverLove/Modal_back.png" loading="lazy" alt=""></div>
+            </div>
+          </div>
+          <div class="proj-card-cta-wrap"><span class="proj-card-cta" data-i18n="card_cta">Открыть кейс →</span></div>
+        </div>
+      </a>
+
+      <a class="proj-card rev" href="case-seven-hearts.html">
+              <div class="proj-card-img-wrap">
+        <img class="proj-card-cover" src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" loading="lazy" alt="Seven Hearts Stories">
+      </div>
+        <div class="proj-card-body">
+          <span class="proj-card-num">// 02</span>
+          <h2 class="proj-card-name">Seven Hearts<br>Stories</h2>
+          <div class="proj-card-tags"><span class="proj-card-tag">Visual Novel</span><span class="proj-card-tag">iOS · Android</span><span class="proj-card-tag" data-i18n="proj5_date">2025 — н.в.</span></div>
+          <p class="proj-card-desc" data-i18n="proj_card_5_desc">Дизайн-система и UX для мобильного визуального романа. Профили, чат, магазин, система выборов и полная визуальная концепция.</p>
+          <div class="proj-card-meta">
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_platform">Platform</span><span class="proj-card-meta-val">iOS · Android</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_genre">Genre</span><span class="proj-card-meta-val">Visual Novel</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_role">Role</span><span class="proj-card-meta-val">UI/UX · 2D Artist</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_status">Status</span><span class="proj-card-meta-val" data-i18n="status_wip">В разработке</span></div>
+          </div>
+                    <div class="proj-card-marquee">
+            <div class="pcm-track" style="--pcm-dur:38s">
+          <div class="pcm-item pcm-land"><img src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Messages_received.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Shop.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Relationship.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/User Profile.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Wardrobe.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/AchievementDetailsScreen.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/DailyRewardScreen.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/StoryScreenВсе.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Settings.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Modal.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/EventHubScreen2.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/VIP_SubscriptionScreen.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Messages_received.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Shop.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Relationship.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/User Profile.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Wardrobe.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/AchievementDetailsScreen.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/DailyRewardScreen.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/StoryScreenВсе.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Settings.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/Modal.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/EventHubScreen2.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/seven-hearts/VIP_SubscriptionScreen.png" loading="lazy" alt=""></div>
+            </div>
+          </div>
+          <div class="proj-card-cta-wrap"><span class="proj-card-cta" data-i18n="card_cta">Открыть кейс →</span></div>
+        </div>
+      </a>
+
+      <a class="proj-card rev" href="case-namskao.html">
+              <div class="proj-card-img-wrap">
+        <img class="proj-card-cover" src="../images/sonakai/%D0%BE%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0.png" loading="lazy" alt="Namskao">
+        <div class="pcis-dots">
+        <span class="pcis-dot pcis-da"></span>
+        <span class="pcis-dot"></span>
+        <span class="pcis-dot"></span>
+        <span class="pcis-dot"></span>
+        </div>
+      </div>
+        <div class="proj-card-body">
+          <span class="proj-card-num">// 04</span>
+          <h2 class="proj-card-name">Namskao<br>Casual Games</h2>
+          <div class="proj-card-tags"><span class="proj-card-tag">UI/UX · 2D Art</span><span class="proj-card-tag">6 Published Games</span><span class="proj-card-tag">Amazon Appstore</span><span class="proj-card-tag">2022–2023</span></div>
+          <p class="proj-card-desc" data-i18n="proj_namskao_desc">UI/UX дизайн и 2D-арт для 6 казуальных мобильных игр — match-3 пазлы и симуляторы красоты. Fairy Kingdom, серия Nails Salon и Funny Candy Land.</p>
+          <div class="proj-card-meta">
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_platform">Platform</span><span class="proj-card-meta-val">Amazon Appstore</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_genre">Genre</span><span class="proj-card-meta-val">Match-3 · Simulator</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_role">Role</span><span class="proj-card-meta-val">UI/UX · 2D Artist</span></div>
+            <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_status">Status</span><span class="proj-card-meta-val" data-i18n="status_pub">Опубликовано</span></div>
+          </div>
+                    <div class="proj-card-marquee">
+            <div class="pcm-track" style="--pcm-dur:44s">
+          <div class="pcm-item pcm-land"><img src="../images/sonakai/%D0%BE%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0%20%D1%84%D0%BA.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1JTzc2oZmL.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1NQAuiZKeL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1PxDf2nrXL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1x54E2oziL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_3.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_4.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_5.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_6.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/candy-land-icons.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-extras.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-icons.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-map.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-popups.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-screens.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-ui-kit.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-land"><img src="../images/sonakai/%D0%BE%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0%20%D1%84%D0%BA.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1JTzc2oZmL.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1NQAuiZKeL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1PxDf2nrXL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/B1x54E2oziL%20%281%29.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_3.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_4.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_5.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/Kawaii_6.png" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/candy-land-icons.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-extras.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-icons.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-map.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-popups.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-screens.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/fairy-kingdom-ui-kit.jpg" loading="lazy" alt=""></div>
+          <div class="pcm-item pcm-port"><img src="../images/sonakai/preview/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" loading="lazy" alt=""></div>
+            </div>
+          </div>
+          <div class="proj-card-cta-wrap"><span class="proj-card-cta" data-i18n="card_cta">Открыть кейс →</span></div>
+        </div>
+      </a>
+
+    </div>
+
+  <!-- MINI CASES SECTION -->
+  <div id="mini-cases-section" class="section">
+    <p class="s-eyebrow rev"><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px;margin-right:6px;"><line x1="7" y1="1" x2="7" y2="13" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="1" y1="7" x2="13" y2="7" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="2.5" y1="2.5" x2="11.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><line x1="11.5" y1="2.5" x2="2.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><circle cx="7" cy="7" r="1.8" fill="rgba(230,210,255,0.9)"/></svg><span data-i18n="section_mini_eyebrow">Мини-проекты</span></p>
+    <h2 class="s-title rev" data-i18n_key="mini_title">МИНИ-КЕЙСЫ<br><em data-i18n="section_mini_em">Концепты и эксперименты</em></h2>
+
+    <!-- DODO БЛОКИ -->
+    <div class="dodo-case rev">
+      <div class="dodo-case-inner">
+        <p class="dodo-eyebrow">// UX концепт · мини-игра</p>
+        <h2 class="dodo-title">Додо Блоки</h2>
+        <p class="dodo-subtitle" data-i18n="dodo_subtitle">Block Puzzle · UX-концепция для программы лояльности Додо Пицца · 2026</p>
+        <div class="dodo-tags">
+          <span class="dodo-tag" data-i18n="dodo_tag1">UX Концепт</span>
+          <span class="dodo-tag" data-i18n="dodo_tag2">Мини-игра</span>
+          <span class="dodo-tag">Dodo Pizza</span>
+          <span class="dodo-tag">Block Puzzle</span>
+          <span class="dodo-tag" data-i18n="dodo_role">UX-концепция и визуальный дизайн</span>
+        </div>
+        <div class="dodo-screens">
+          <div class="dodo-phone">
+            <img src="../images/dodo/Onboarding.png" loading="lazy" alt="Онбординг">
+          </div>
+          <div class="dodo-phone dodo-phone-main">
+            <img src="../images/dodo/Game Screen.png" loading="lazy" alt="Игровой экран">
+          </div>
+          <div class="dodo-phone">
+            <img src="../images/dodo/Leaderboard Screen.png" loading="lazy" alt="Рейтинг недели">
+          </div>
+        </div>
+        <div class="dodo-insights">
+          <div class="dodo-insight">
+            <p class="dodo-insight-title" data-i18n="dodo_ux_title">UX решения</p>
+            <p class="dodo-insight-text" data-i18n="dodo_ux_text">Игра встроена в приложение Додо как отдельный раздел — снижает порог входа. Онбординг — модальное окно поверх поля. Карточка заказа добавляет нарратив. Рейтинг с таймером мотивирует возвращаться. Петля «игра → покупка → игра».</p>
+          </div>
+          <div class="dodo-insight">
+            <p class="dodo-insight-title" data-i18n="dodo_brand_title">Брендирование</p>
+            <p class="dodo-insight-text" data-i18n="dodo_brand_text">Два слоя по гайду Shift: UI строго по бренду (#FF6600, Dodo Rounded); игровое поле — казуальный clay-арт. Термины говорят языком бренда. Фиолетовый исключён — он за Додо Комбо.</p>
+          </div>
+          <div class="dodo-insight">
+            <p class="dodo-insight-title" data-i18n="dodo_visual_title">Визуальная стилистика</p>
+            <p class="dodo-insight-text" data-i18n="dodo_visual_text">Принцип двух слоёв: строгий бренд в UI, свободный clay-арт в игровой зоне. Без фиолетового, тёмного фона и перегруза брендингом.</p>
+          </div>
+        </div>
+        <div class="dodo-kit">
+          <img src="../images/dodo/KIT.png" loading="lazy" alt="Asset kit">
+        </div>
+        <div class="dodo-flow">
+          <img src="../images/dodo/Флоу.png" loading="lazy" alt="User flow">
+        </div>
+        <div class="dodo-strips">
+          <img src="../images/dodo/Frame 93.png" loading="lazy" alt="UI компоненты">
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYRIX БЛОКИ -->
+    <div class="playrix-case rev">
+      <div class="playrix-case-inner">
+        <p class="playrix-eyebrow">// тестовое задание · Playrix · Township</p>
+        <h2 class="playrix-title" data-i18n="playrix_title">Space Mission</h2>
+        <p class="playrix-subtitle" data-i18n="playrix_subtitle">Тестовое задание: лидерборд события и иконка HUD для Township · 2026</p>
+        <div class="playrix-tags">
+          <span class="playrix-tag">Game UI</span>
+          <span class="playrix-tag">Township</span>
+          <span class="playrix-tag">Leaderboard</span>
+          <span class="playrix-tag">HUD Icon</span>
+          <span class="playrix-tag">Space Mission</span>
+          <span class="playrix-tag" data-i18n="playrix_tag_role">Арт + UI дизайн</span>
+        </div>
+
+        <div class="playrix-tasks">
+          <div class="playrix-task">
+            <p class="playrix-task-num">01</p>
+            <div class="playrix-task-body">
+              <p class="playrix-task-title" data-i18n="playrix_task1_title">Лидерборд события</p>
+              <p class="playrix-task-text" data-i18n="playrix_task1_text">Концепция окна рейтинга с нуля — взяла механику Space Mission из Royal Match и спроектировала аналог для Township. Придумала структуру UI-окна, верстку элементов, нарратив прогресса. Три атмосферы: лунная, марсианская, сатурнианская.</p>
+            </div>
+          </div>
+          <div class="playrix-task">
+            <p class="playrix-task-num">02</p>
+            <div class="playrix-task-body">
+              <p class="playrix-task-title" data-i18n="playrix_task2_title">Иконка HUD</p>
+              <p class="playrix-task-text" data-i18n="playrix_task2_text">Иконка события в HUD — левая зона экрана, под иконкой карты. Одно состояние, стилистика Township, учёт масштабирования и рендера. Цветовая схема по усмотрению дизайнера.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="playrix-section-label" data-i18n="playrix_label_leaderboard">— Лидерборд · три атмосферы</div>
+        <div class="playrix-grid">
+          <img src="../images/playrix/Moon_Start.png" loading="lazy" alt="Moon — старт">
+          <img src="../images/playrix/Moon_Claim.png" loading="lazy" alt="Moon — финиш">
+          <img src="../images/playrix/Mars_Claim.png" loading="lazy" alt="Mars — финиш">
+          <img src="../images/playrix/Saturn_Claim.png" loading="lazy" alt="Saturn — финиш">
+        </div>
+
+        <div class="playrix-section-label" data-i18n="playrix_label_hud">— HUD иконка события</div>
+        <div class="playrix-hud">
+          <div class="playrix-hud-main">
+            <img src="../images/playrix/HUD.png" loading="lazy" alt="HUD Township">
+          </div>
+          <div class="playrix-hud-icon">
+            <img src="../images/playrix/HudEvent.png" loading="lazy" alt="Иконка события">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 2D ART CARD -->
+  <div class="art-card-wrap" id="artWrap">
+    <div class="art-card">
+      <div class="art-card-body">
+        <span class="proj-card-num">// 2D</span>
+        <h2 class="proj-card-name" data-i18n="art_label">2D Арт</h2>
+        <div class="proj-card-tags">
+          <span class="proj-card-tag">Illustration</span>
+          <span class="proj-card-tag">Character Art</span>
+          <span class="proj-card-tag">Personal</span>
+        </div>
+        <div class="proj-card-meta">
+          <div class="proj-card-meta-item"><span class="proj-card-meta-label">Medium</span><span class="proj-card-meta-val">Digital · Procreate</span></div>
+          <div class="proj-card-meta-item"><span class="proj-card-meta-label" data-i18n="label_role">Роль</span><span class="proj-card-meta-val">2D Artist</span></div>
+        </div>
+      </div>
+      <div class="art-marquee-outer">
+        <div class="art-marquee-track"><img src="../images/Art/rina-k-.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-1.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-2.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-4.jpg" alt="" loading="eager"><img src="../images/Art/rina-k- (1).jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211395.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211398.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211401.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211405.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211408.jpg" alt="" loading="eager"><img src="../images/Art/db2c778d-80b5-4f8d-ac92-250af780479c.jpg" alt="" loading="eager"><img src="../images/Art/213b15208760241.66f401fadbeb0.png" alt="" loading="eager"><img src="../images/Art/GraffitiNY25.png" alt="" loading="eager"><img src="../images/Art/advent24_llama.png" alt="" loading="eager"><img src="../images/Art/bpny25_bed.png" alt="" loading="eager"><img src="../images/Art/комната1.png" alt="" loading="eager"><img src="../images/Art/комната2.png" alt="" loading="eager"><img src="../images/Art/комната3.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_1.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_2.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_3.png" alt="" loading="eager"><img src="../images/Art/catstrm24_clocks.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_1.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_2.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_3.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_1.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_2.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_3.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_vase_2.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_armchair_b.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_armchair_f.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_lamp_flr.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_plant_2.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_stool.png" alt="" loading="eager"><img src="../images/Art/pnk4224_bedtable.png" alt="" loading="eager"><img src="../images/Art/pnk4224_plush.png" alt="" loading="eager"><img src="../images/Art/pnk4224_vase.png" alt="" loading="eager"><img src="../images/Art/energySalad@location_icon.png" alt="" loading="eager"><img src="../images/Art/rm20124_plant_flr.png" alt="" loading="eager"><img src="../images/Art/rina-k-.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-1.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-2.jpg" alt="" loading="eager"><img src="../images/Art/rina-k-4.jpg" alt="" loading="eager"><img src="../images/Art/rina-k- (1).jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211395.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211398.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211401.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211405.jpg" alt="" loading="eager"><img src="../images/Art/5280771529090211408.jpg" alt="" loading="eager"><img src="../images/Art/db2c778d-80b5-4f8d-ac92-250af780479c.jpg" alt="" loading="eager"><img src="../images/Art/213b15208760241.66f401fadbeb0.png" alt="" loading="eager"><img src="../images/Art/GraffitiNY25.png" alt="" loading="eager"><img src="../images/Art/advent24_llama.png" alt="" loading="eager"><img src="../images/Art/bpny25_bed.png" alt="" loading="eager"><img src="../images/Art/комната1.png" alt="" loading="eager"><img src="../images/Art/комната2.png" alt="" loading="eager"><img src="../images/Art/комната3.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_1.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_2.png" alt="" loading="eager"><img src="../images/Art/catstrm24_armchair_3.png" alt="" loading="eager"><img src="../images/Art/catstrm24_clocks.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_1.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_2.png" alt="" loading="eager"><img src="../images/Art/catstrm24_plant_3.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_1.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_2.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_decor_tbl_3.png" alt="" loading="eager"><img src="../images/Art/LBdsv24_vase_2.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_armchair_b.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_armchair_f.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_lamp_flr.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_plant_2.png" alt="" loading="eager"><img src="../images/Art/dnrm1324_stool.png" alt="" loading="eager"><img src="../images/Art/pnk4224_bedtable.png" alt="" loading="eager"><img src="../images/Art/pnk4224_plush.png" alt="" loading="eager"><img src="../images/Art/pnk4224_vase.png" alt="" loading="eager"><img src="../images/Art/energySalad@location_icon.png" alt="" loading="eager"><img src="../images/Art/rm20124_plant_flr.png" alt="" loading="eager"></div>
+      </div>
+    </div>
+  </div>
+
+<div id="exp-section" class="section">
+    <p class="s-eyebrow rev"><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px;margin-right:6px;"><line x1="7" y1="1" x2="7" y2="13" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="1" y1="7" x2="13" y2="7" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="2.5" y1="2.5" x2="11.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><line x1="11.5" y1="2.5" x2="2.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><circle cx="7" cy="7" r="1.8" fill="rgba(230,210,255,0.9)"/></svg><span data-i18n="section_exp_eyebrow">Guild History</span></p>
+    <h2 class="s-title rev">JOURNEY<br><em data-i18n="section_exp_em">Timeline of Realms</em></h2>
+    <div class="timeline">
+            <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_1_date">МАРТ 2026 — НАСТОЯЩЕЕ</p>
+        <p class="tl-company">Ever Love <span class="tl-company-note" data-i18n="tl_1_company_note">— mobile narrative game, in development</span></p>
+        <p class="tl-role" data-i18n="tl_1_role">UI/UX Designer · 2D Artist · Freelance</p>
+        <p class="tl-desc" data-i18n="tl_1_desc">Проектирую мобильное приложение с нуля: ресёрч, конкурентный анализ, визуальный стиль, финальный UI. Разработала все ключевые экраны: навигация, библиотека контента, профиль, магазин. Создаю игровые иконки и UI-иллюстрации; Midjourney — для быстрого концептинга визуального стиля.</p>
+        <div class="tl-media">
+          <img src="../images/EverLove/Main.png" alt="">
+          <img src="../images/EverLove/Story_screen_like.png" alt="">
+          <img src="../images/EverLove/Modal_collect.png" alt="">
+        </div>
+      </div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_2_date">НОЯ 2025 — МАР 2026 · завершён</p>
+        <p class="tl-company">Seven Hearts Stories</p>
+        <p class="tl-role" data-i18n="tl_2_role">UX/UI Designer · Visual Novel App</p>
+        <p class="tl-desc" data-i18n="tl_2_desc">UX-аудит: проанализировала 20+ экранов, бенчмаркинг 5+ конкурентов в жанре. Разработала дизайн-систему и компонентную библиотеку — полностью обновила визуальный стиль. Спроектировала 7+ новых фич: профиль персонажа, достижения, магазин, уведомления, спецпредложения. Полный цикл: анализ → UX-флоу → wireframes → финальный UI → developer handoff.</p>
+        <div class="tl-media">
+          <img src="../images/seven-hearts/hf_20260525_134108_c1a06ee7-3a46-431e-9547-4e475536b6dd.png" alt="">
+          <img src="../images/seven-hearts/User Profile.png" alt="">
+          <img src="../images/seven-hearts/Shop.png" alt="">
+          <img src="../images/seven-hearts/DailyRewardScreen.png" alt="">
+        </div>
+      </div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_3_date">НОЯ 2023 — АВГ 2025</p>
+        <p class="tl-company">101XP — Avataria</p>
+        <p class="tl-role" data-i18n="tl_3_role">Middle UI/UX Designer · 2D Artist</p>
+        <p class="tl-desc" data-i18n="tl_3_desc">Новые фичи для живого продукта с многомиллионной аудиторией: UI магазина, профиля, меню, мини-игр; 2D-арт мебели в изометрии. Разработала UI-кит из 80+ компонентов (Auto Layout, Variants) — сократила время на developer handoff. Адаптировала игру из горизонтальной в вертикальную ориентацию: переработала 30+ экранов. Дизайн монетизационного UI с фокусом на конверсию; сторовые баннеры и промо-арт.</p>
+        <div class="tl-media">
+          <img src="../images/avataria/t1UXxkcrW3M.jpg" alt="">
+          
+          <img src="../images/avataria/Advent/Advent_event.png" alt="">
+          <img src="../images/avataria/Clan dragon/HUD_clan_dragon_craft.png" alt="">
+        </div>
+      </div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_4_date">ЯНВ 2022 — НОЯ 2023</p>
+        <p class="tl-company">Namskao <span class="tl-company-note" data-i18n="tl_4_company_note">— mobile casual games studio (App Store · Google Play)</span></p>
+        <p class="tl-role" data-i18n="tl_4_role">2D Artist · UI Designer</p>
+        <p class="tl-desc" data-i18n="tl_4_desc">UI/UX для серии казуальных мобильных игр (match-3, Nail Salon): от wireframes до финального дизайна. Персонажи, окружения, покадровые анимации; сторовые баннеры и промоматериалы. Участие в пользовательском тестировании и улучшении UX-паттернов. Опубликованные игры: Princess Nails Salon, Kawaii Nails Manicure Salon, Fairy Princess Kingdom Match-3.</p>
+        <div class="tl-media">
+          <img src="../images/sonakai/candy-land-cover.jpg" alt="">
+          <img src="../images/sonakai/candy-land-icons.jpg" alt="">
+          <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-screens.jpg" alt="">
+          <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-popups.jpg" alt="">
+          <img src="../images/sonakai/FAIRY_KINGDOM/fairy-kingdom-icons.jpg" alt="">
+          <img src="../images/sonakai/Nails/hf_20260528_081127_530d3511-34ff-4d02-aa93-fd2dfcd658d4.png" alt="">
+        </div>
+      </div>
+
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_5_date">АВГ 2019 — АПР 2021</p>
+        <p class="tl-company">ZEST</p>
+        <p class="tl-role" data-i18n="tl_5_role">Веб-дизайнер</p>
+        <p class="tl-desc" data-i18n="tl_5_desc">UX/UI для корпоративных и e-commerce продуктов: прототипирование, работа с разработчиками. Фирменный стиль, логотипы, брендбуки.</p>
+      </div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-line"></div>
+        <p class="tl-date" data-i18n="tl_6_date">2017 — 2019</p>
+        <p class="tl-company" data-i18n="tl_6_company">Фриланс</p>
+        <p class="tl-role" data-i18n="tl_6_role">Графический дизайнер · 2D художник</p>
+        <p class="tl-desc" data-i18n="tl_6_desc">Фирменный стиль, иллюстрации, стикеры, печатные материалы.</p>
+      </div>
+    </div>
+    <div style="margin-top:3rem;max-width:800px;margin-left:auto;margin-right:auto;">
+      <p class="s-eyebrow" data-i18n="edu_eyebrow">Education Scrolls</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:1rem;">
+        <div style="background:rgba(13,11,24,.7);padding:1.5rem;"><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;color:var(--gold);opacity:.6;margin-bottom:.3rem;">2025</p><p style="font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.3rem;">VK Education</p><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;color:var(--bone2);" data-i18n="edu_1_course">Getting Started in UX Research</p></div>
+        <div style="background:rgba(13,11,24,.7);padding:1.5rem;"><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;color:var(--gold);opacity:.6;margin-bottom:.3rem;">2024</p><p style="font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.3rem;">CG LAB</p><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;color:var(--bone2);" data-i18n="edu_2_course">Game Interface Design</p></div>
+        <div style="background:rgba(13,11,24,.7);padding:1.5rem;"><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.15em;color:var(--gold);opacity:.6;margin-bottom:.3rem;">2017–2022</p><p style="font-family:'Cinzel',serif;font-size:.875rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.3rem;" data-i18n="edu_3_name">Ulyanovsk State Technical Univ.</p><p style="font-family:'Share Tech Mono',monospace;font-size:.875rem;color:var(--bone2);" data-i18n="edu_3_course">Architectural Environment Design — Bachelor's</p></div>
+      </div>
+    </div>
+  </div>
+
+<div id="skills-section" class="section">
+    <p class="s-eyebrow rev"><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px;margin-right:6px;"><line x1="7" y1="1" x2="7" y2="13" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="1" y1="7" x2="13" y2="7" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="2.5" y1="2.5" x2="11.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><line x1="11.5" y1="2.5" x2="2.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><circle cx="7" cy="7" r="1.8" fill="rgba(230,210,255,0.9)"/></svg><span data-i18n="section_skills_eyebrow">Magic System</span></p>
+    <h2 class="s-title rev">ABILITIES<br><em data-i18n="section_skills_em">Spells &amp; Artifacts</em></h2>
+
+    <div class="sk-rows rev">
+
+      <div class="sk-row">
+        <span class="sk-row-cat">UI / UX</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag">HUD</span>
+          <span class="sk-tag" data-i18n="sk_shop">Магазин</span>
+          <span class="sk-tag" data-i18n="sk_monetize">Монетизация</span>
+          <span class="sk-tag" data-i18n="sk_events">Ивенты</span>
+          <span class="sk-tag" data-i18n="sk_onboard">Онбординг</span>
+          <span class="sk-tag" data-i18n="sk_inventory">Инвентарь</span>
+          <span class="sk-tag" data-i18n="sk_achievements">Достижения</span>
+          <span class="sk-tag" data-i18n="sk_ux_audit">UX-аудит</span>
+          <span class="sk-tag">Wireframing</span>
+          <span class="sk-tag" data-i18n="sk_prototype">Прототипирование</span>
+          <span class="sk-tag" data-i18n="sk_design_sys">Дизайн-системы</span>
+          <span class="sk-tag" data-i18n="sk_handoff">Developer Handoff</span>
+          <span class="sk-tag" data-i18n="sk_ux_research">UX Research</span>
+          <span class="sk-tag" data-i18n="sk_design_docs">Design Docs</span>
+          <span class="sk-tag" data-i18n="sk_guidelines">UI Guidelines</span>
+          <span class="sk-tag" data-i18n="sk_gd_collab">GD Collaboration</span>
+        </div>
+      </div>
+
+      <div class="sk-row">
+        <span class="sk-row-cat">2D Art</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag" data-i18n="sk_icons">Иконки</span>
+          <span class="sk-tag" data-i18n="sk_chars">Персонажи</span>
+          <span class="sk-tag" data-i18n="sk_promo">Промо-арт</span>
+          <span class="sk-tag" data-i18n="sk_environ">Окружения</span>
+          <span class="sk-tag" data-i18n="sk_anim">Покадровая анимация</span>
+          <span class="sk-tag" data-i18n="sk_iso">Изометрия</span>
+          <span class="sk-tag" data-i18n="sk_ui_illus">UI-иллюстрации</span>
+          <span class="sk-tag" data-i18n="sk_banners">Сторовые баннеры</span>
+        </div>
+      </div>
+
+      <div class="sk-row">
+        <span class="sk-row-cat">Figma</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag">Auto Layout</span>
+          <span class="sk-tag">Variants</span>
+          <span class="sk-tag">Component Libraries</span>
+          <span class="sk-tag">Interactive Prototypes</span>
+          <span class="sk-tag">Figma AI</span>
+          <span class="sk-tag">UI Specification</span>
+        </div>
+      </div>
+
+      <div class="sk-row">
+        <span class="sk-row-cat">Tools</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag">Photoshop</span>
+          <span class="sk-tag">Illustrator</span>
+          <span class="sk-tag">Procreate</span>
+          <span class="sk-tag">Miro</span>
+          <span class="sk-tag">Jira</span>
+          <span class="sk-tag">Notion</span>
+          <span class="sk-tag">Trello</span>
+        </div>
+      </div>
+
+      <div class="sk-row">
+        <span class="sk-row-cat">AI</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag">Midjourney</span>
+          <span class="sk-tag">Stable Diffusion</span>
+          <span class="sk-tag">Leonardo.ai</span>
+          <span class="sk-tag">ChatGPT</span>
+          <span class="sk-tag">Claude</span>
+        </div>
+      </div>
+
+      <div class="sk-row">
+        <span class="sk-row-cat">Languages</span>
+        <div class="sk-row-tags">
+          <span class="sk-tag sk-tag--lit" data-i18n="sk_lang_ru">Русский — родной</span>
+          <span class="sk-tag sk-tag--lit">English — B1-B2</span>
+        </div>
+      </div>
+
+    </div>
+
+        <!-- Tools -->
+    <div class="rev" style="margin-top:2rem;">
+      <p class="sk-cat-label" data-i18n="sk_tools_label">// Инструменты</p>
+      <div class="sk-tags">
+        <span class="sk-tag" data-i18n="sk_figma">Figma</span>
+        <span class="sk-tag" data-i18n="sk_figma_vars">Figma Variables</span>
+        <span class="sk-tag" data-i18n="sk_figma_comp">Figma Components & Auto-layout</span>
+        <span class="sk-tag" data-i18n="sk_ps">Photoshop</span>
+        <span class="sk-tag" data-i18n="sk_ai_tools">AI-инструменты</span>
+      </div>
+    </div>
+
+
+</div>
+  </div>
+
+<div id="contact-section" class="section">
+    <div class="summon-outer rev">
+      <p class="s-eyebrow" style="text-align:center;"><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px;margin-right:6px;"><line x1="7" y1="1" x2="7" y2="13" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="1" y1="7" x2="13" y2="7" stroke="rgba(200,170,240,0.8)" stroke-width="1"/><line x1="2.5" y1="2.5" x2="11.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><line x1="11.5" y1="2.5" x2="2.5" y2="11.5" stroke="rgba(200,170,240,0.5)" stroke-width="1"/><circle cx="7" cy="7" r="1.8" fill="rgba(230,210,255,0.9)"/></svg><span data-i18n="section_contact_eyebrow">Communication Portal</span></p>
+      <p class="summon-sub summon-sub--main" data-i18n="contact_sub">Available for collaboration — reach out anytime.</p>
+      <div class="summon-grid">
+        <div class="summon-card" id="emailCard" onclick="copyEmail()" style="cursor:pointer;"><span class="summon-icon"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><line x1="15" y1="3" x2="15" y2="27" stroke="rgba(210,185,255,0.7)" stroke-width="1"/><line x1="3" y1="15" x2="27" y2="15" stroke="rgba(210,185,255,0.7)" stroke-width="1"/><line x1="6" y1="6" x2="24" y2="24" stroke="rgba(210,185,255,0.45)" stroke-width="1"/><line x1="24" y1="6" x2="6" y2="24" stroke="rgba(210,185,255,0.45)" stroke-width="1"/><circle cx="15" cy="15" r="3" fill="rgba(230,210,255,0.9)"/><circle cx="15" cy="4" r="1.5" fill="rgba(230,210,255,0.6)"/><circle cx="15" cy="26" r="1.5" fill="rgba(230,210,255,0.6)"/></svg></span><span class="summon-platform">// Email</span><span class="summon-val" id="emailVal">arinanira104@gmail.com</span></div>
+        <a href="https://t.me/Orino4ek" target="_blank" class="summon-card"><span class="summon-icon"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><line x1="15" y1="3" x2="15" y2="27" stroke="rgba(190,210,255,0.7)" stroke-width="1"/><line x1="3" y1="15" x2="27" y2="15" stroke="rgba(190,210,255,0.7)" stroke-width="1"/><line x1="6" y1="6" x2="24" y2="24" stroke="rgba(190,210,255,0.45)" stroke-width="1"/><line x1="24" y1="6" x2="6" y2="24" stroke="rgba(190,210,255,0.45)" stroke-width="1"/><circle cx="15" cy="15" r="8" stroke="rgba(200,215,255,0.25)" stroke-width="1" fill="none"/><circle cx="15" cy="15" r="3" fill="rgba(210,225,255,0.9)"/><circle cx="15" cy="4" r="1.5" fill="rgba(210,225,255,0.6)"/><circle cx="26" cy="15" r="1.5" fill="rgba(210,225,255,0.6)"/></svg></span><span class="summon-platform">// Telegram</span><span class="summon-val">@Orino4ek</span></a>
+        <a href="https://www.linkedin.com/in/arina-karpova-a38a0925a/" target="_blank" class="summon-card"><span class="summon-icon"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><line x1="15" y1="3" x2="15" y2="27" stroke="rgba(255,200,220,0.7)" stroke-width="1"/><line x1="3" y1="15" x2="27" y2="15" stroke="rgba(255,200,220,0.7)" stroke-width="1"/><line x1="6" y1="6" x2="24" y2="24" stroke="rgba(255,200,220,0.45)" stroke-width="1"/><line x1="24" y1="6" x2="6" y2="24" stroke="rgba(255,200,220,0.45)" stroke-width="1"/><circle cx="15" cy="15" r="3" fill="rgba(255,215,230,0.9)"/><circle cx="4" cy="15" r="1.5" fill="rgba(255,215,230,0.6)"/><circle cx="26" cy="15" r="1.5" fill="rgba(255,215,230,0.6)"/></svg></span><span class="summon-platform">// LinkedIn</span><span class="summon-val">arinakarpova</span></a>
+      </div>
+    </div>
+  </div>
+
+<footer>
+    <a href="#" class="ft-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">// ARINA KARPOVA</a>
+    <span class="ft-copy" data-i18n="footer_copy">© 2026 — All rights reserved</span>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:.875rem;letter-spacing:.12em;color:var(--gold);opacity:.4;">UI · UX · 2D · GAMEDEV</span>
+  </footer>
+</div>
+
+<script>
+const co=document.getElementById('cursor-outer'),ci=document.getElementById('cursor-inner');
+let mx=window.innerWidth/2,my=window.innerHeight/2,ox=mx,oy=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+(function animC(){ox+=(mx-ox)*.28;oy+=(my-oy)*.28;co.style.transform='translate(calc('+ox+'px - 50%),calc('+oy+'px - 50%))';ci.style.transform='translate(calc('+mx+'px - 50%),calc('+my+'px - 50%))';requestAnimationFrame(animC);})();
+document.querySelectorAll('a,button,.quest-card,.summon-card,.tl-item,.pb-link,.pb-gallery img').forEach(el=>{el.addEventListener('mouseenter',()=>co.classList.add('hover'));el.addEventListener('mouseleave',()=>co.classList.remove('hover'));});
+
+// QUEST CARD SLIDESHOWS
+(function(){
+  const COVER_MS = 4800;   // обложка — дольше
+  const SCREEN_MS = 1400;  // экраны — быстрее
+
+  document.querySelectorAll('.qt-slides').forEach((container, idx) => {
+    const slides = container.querySelectorAll('.qt-slide');
+    const dotsWrap = container.parentElement.querySelector('.qt-dots');
+    if (!slides.length) return;
+    slides.forEach((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'qt-dot' + (i === 0 ? ' active' : '');
+      dotsWrap.appendChild(d);
+    });
+    const dots = dotsWrap.querySelectorAll('.qt-dot');
+    let cur = 0;
+
+    function next() {
+      slides[cur].classList.remove('qs-active');
+      dots[cur].classList.remove('active');
+      cur = (cur + 1) % slides.length;
+      slides[cur].classList.add('qs-active');
+      dots[cur].classList.add('active');
+      // cover slide (index 0) stays longer
+      setTimeout(next, cur === 0 ? COVER_MS : SCREEN_MS);
+    }
+
+    setTimeout(next, COVER_MS + idx * 600);
+  });
+})();
+
+// PARTICLES
+const canvas=document.getElementById('particleCanvas'),ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+class P{
+  constructor(init){this.reset(init);}
+  reset(init){
+    this.type=Math.random()<0.5?'shoot':'dust';
+    if(this.type==='shoot'){
+      // spawn across top edge, or top-right corner for diagonal feel
+      this.x=Math.random()*W*(init?1.5:1.3);
+      this.y=init?Math.random()*H:-20;
+      const angle=Math.PI/4+Math.random()*0.35;
+      const spd=1.4+Math.random()*2.2;
+      this.vx=Math.cos(angle)*spd;
+      this.vy=Math.sin(angle)*spd;
+      this.len=25+Math.random()*60;
+      this.life=init?Math.random()*0.5:0;
+      this.maxLife=0.55+Math.random()*0.5;
+      this.size=0.8+Math.random()*1.1;
+      this.warm=Math.random()<0.45; // warm gold vs cool blue-white
+    } else {
+      this.x=Math.random()*W;
+      this.y=Math.random()*H;
+      this.vx=(Math.random()-.5)*.12;
+      this.vy=-Math.random()*.08-.02;
+      this.life=init?Math.random():0;
+      this.maxLife=1.2+Math.random()*1.5;
+      this.size=Math.random()*.9+.2;
+    }
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy;
+    this.life+=this.type==='shoot'?.011:.0018;
+    if(this.life>this.maxLife||this.x>W+100||this.y>H+100||this.y<-100)this.reset(false);
+  }
+  draw(){
+    const p=Math.sin((this.life/this.maxLife)*Math.PI);
+    if(this.type==='shoot'){
+      const spd=Math.hypot(this.vx,this.vy);
+      const nx=this.vx/spd, ny=this.vy/spd;
+      const tx=this.x-nx*this.len, ty=this.y-ny*this.len;
+      // tail gradient
+      const gr=ctx.createLinearGradient(tx,ty,this.x,this.y);
+      if(this.warm){
+        gr.addColorStop(0,'rgba(255,240,190,0)');
+        gr.addColorStop(0.6,'rgba(255,245,210,0.18)');
+        gr.addColorStop(1,'rgba(255,252,230,0.85)');
+      } else {
+        gr.addColorStop(0,'rgba(200,195,255,0)');
+        gr.addColorStop(0.6,'rgba(220,215,255,0.2)');
+        gr.addColorStop(1,'rgba(240,235,255,0.9)');
+      }
+      ctx.globalAlpha=p*0.9;
+      ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(this.x,this.y);
+      ctx.strokeStyle=gr; ctx.lineWidth=this.size*0.65; ctx.stroke();
+      // bright head dot
+      ctx.globalAlpha=p;
+      ctx.fillStyle=this.warm?'rgba(255,252,225,0.95)':'rgba(235,230,255,0.95)';
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill();
+
+    } else {
+      ctx.globalAlpha=p*0.18;
+      ctx.fillStyle=Math.random()<.5?'rgba(210,195,255,1)':'rgba(255,220,235,1)';
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }
+}
+for(let i=0;i<15;i++)particles.push(new P(true));
+(function animP(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animP);})();
+
+// ── smooth scroll helper ──
+function smoothTo(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// legacy stubs (kept for any remaining onclick refs)
+function enterSection(name){smoothTo(name+'-section');}
+function goHome(){window.scrollTo({top:0,behavior:'smooth'});}
+function showSection(name){smoothTo(name+'-section');}
+
+const _ps=document.getElementById('pressStart');if(_ps)_ps.addEventListener('click',()=>{smoothTo('about-section');});
+
+
+// Handle ?section= param — jump straight to a section from external links
+(function(){
+  const p=new URLSearchParams(window.location.search).get('section');
+  if(p){enterSection(p);}
+})();
+
+// ── IntersectionObserver for .rev scroll animations ──
+const revObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      revObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.06});
+document.querySelectorAll('.rev').forEach(el=>revObserver.observe(el));
+
+// ── IntersectionObserver for timeline + skill bars ──
+const tlObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      tlObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.06});
+document.querySelectorAll('.tl-item').forEach(el=>tlObserver.observe(el));
+
+// ── Skill bars fill on scroll ──
+const barObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const b=e.target;
+      const w=b.dataset.w;
+      setTimeout(()=>{b.style.width=w||'0%';},300);
+      barObserver.unobserve(b);
+    }
+  });
+},{threshold:0.08});
+document.querySelectorAll('.sk-fill').forEach(b=>barObserver.observe(b));
+
+// ── Corner cam: show only when About section is in view ──
+
+const cam=document.getElementById('corner-cam');
+const aboutSec=document.getElementById('about-section');
+if(cam && aboutSec){
+  const camObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){cam.style.display='block';setTimeout(()=>{cam.style.opacity='1';},50);}
+      else{cam.style.opacity='0';setTimeout(()=>{cam.style.display='none';},400);}
+    });
+  },{threshold:0.08});
+  camObserver.observe(aboutSec);
+}
+
+function exitVoid(){window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('logoHome').addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});
+
+// Hide navbar while intro is visible
+(function(){
+  var navbar = document.querySelector('.navbar');
+  var intro  = document.getElementById('intro');
+  if(!navbar || !intro) return;
+  function updateNav(){
+    var introBottom = intro.getBoundingClientRect().bottom;
+    navbar.classList.toggle('hidden', introBottom > 10);
+  }
+  window.addEventListener('scroll', updateNav, {passive:true});
+  updateNav();
+})();
+
+// ABOUT VIDEO — portrait is now a static image, no video needed
+function startAboutVideo(){}
+
+// MENU: photo, no video needed
+
+// ── LANGUAGE SWITCHER ──
+const TRANSLATIONS = {
+  en: {
+    nav_about: 'About',
+    nav_projects: 'Projects',
+    nav_experience: 'Experience',
+    nav_skills: 'Skills',
+    nav_contact: 'Contact',
+    back_btn: '← Return to Home',
+    intro_role: 'UI/UX Designer &amp; 2D Artist',
+    intro_subtitle: 'UI/UX Designer &nbsp;·&nbsp; 2D Artist &nbsp;·&nbsp; Game Interfaces',
+    intro_desc: '4 years making game interfaces — from wireframes to production assets.<br>HUD, monetisation, events, design systems.',
+    intro_enter: 'NEW GAME',
+    intro_exp_label: 'Experience',
+    intro_exp_val: '4+ yrs · gamedev UI',
+    intro_status: 'UI/UX DESIGNER<br>2D ARTIST<br><span style="color:rgba(80,160,80,0.7);">● AVAILABLE 2026</span>',
+    section_about_eyebrow: 'Character Archive',
+    section_about_em: 'Profile &amp; Lore',
+    char_class: 'CLASS: UI/UX DESIGNER / 2D ARTIST',
+    about_lore_title: '— Origin Story —',
+    about_lore: '"Started with wireframes, shipped with assets in production. Used to working on live products — where there\'s no time for endless iterations."',
+    about_body_1: 'Middle UI/UX designer and 2D artist, specialised in mobile games. 4 years taking interfaces from research to handoff — HUD, events, monetisation, icons, promo art. Worked on a 10M+ user live product, which means quick decisions under NDA constraints and working from game design docs.',
+    ability_ui_name: 'UI Design', ability_ux_name: 'UX Design', ability_2d_name: '2D Art', ability_sys_name: 'Systems', ability_brand_name: 'Branding', ability_brand_desc: 'Logo · Identity · Guidelines',
+    ability_mob_name: 'Mobile', section_projects_eyebrow: 'Quest Archive',
+    section_projects_em: 'Created &amp; Conquered',
+    quest_001_id: '// REALM: AVATAR LIFE', quest_001_subtitle: 'Mobile Game UI/UX — Full Lifecycle',
+    quest_002_id: '// STUDIO: NAMSKAO', quest_002_subtitle: 'Casual Mobile Games — UI/UX &amp; 2D Art',
+    quest_003_id: '// ARCHIVE: SEVEN HEARTS STORIES', quest_003_subtitle: 'Visual Novel — UX/UI Design System',
+    quest_004_id: '// REALM: EVER LOVE', quest_004_subtitle: 'Mobile Game — UI/UX &amp; 2D Art',
+    section_exp_eyebrow: '// Experience',
+    section_exp_em: 'Work History & Timeline',
+    tl_1_chapter: 'Chapter VII — Present',
+    tl_1_role: 'UI/UX Designer · 2D Artist · Freelance',
+    tl_1_desc: 'Narrative mobile game, working on it from the ground up. Built loading screens, story selection flow, shop with premium content hierarchy, and system modals. 2D art alongside: illustrations and promo materials.',
+    tl_2_chapter: 'Chapter VI — The Great Forge',
+    tl_2_role: 'Middle UX/UI Game Interface Designer · Contract · 4 months',
+    tl_2_desc: 'Contract work — design system from scratch for a mobile visual novel. Profiles, shop, events, wardrobe, system screens. Worked from game design docs, built UX flows in wireframes, handed off to dev.',
+    tl_3_chapter: 'Chapter V — The Avataria Era',
+    tl_3_role: 'Middle UI/UX Designer · 2D Artist · Full-time',
+    tl_3_desc: 'Live product at 10M+ users, publisher 101XP. Shipped Advent Calendar event UI, Clan Dragon mini-game end-to-end, HUD redesign, and system components. 2D art: room furniture and decor for customisation, icon set.',
+    tl_4_chapter: 'Chapter IV — The Art Sanctum',
+    tl_4_role: '2D Artist · UI Designer · Full-time',
+    tl_4_desc: 'Casual games — match-3 puzzlers and nail salon sims. UI design, characters, environments, frame-by-frame animation. Store screenshots, banners, promo art.',
+    tl_5_chapter: 'Chapter III — The Web Citadel',
+    tl_5_role: 'Web Designer',
+    tl_5_desc: 'Website concepts and prototypes. Corporate and e-commerce layouts, logos and brand identities.',
+    edu_eyebrow: 'Education Scrolls',
+    edu_1_course: 'Getting Started in UX Research',
+    edu_2_course: 'Game Interface Design',
+    edu_3_name: 'Ulyanovsk State Technical Univ.',
+    edu_3_course: "Architectural Environment Design — Bachelor's",
+    section_skills_eyebrow: '// Skills',
+    section_skills_em: 'Tools &amp; Expertise',
+    skills_cat_tools: '// Tools',
+    skills_cat_skills: '// Skills',
+    section_contact_eyebrow: 'Communication Portal',
+    contact_title: 'Contact',
+    proj_label: 'Selected Works',
+    mini_label: 'Mini Cases',
+    section_mini_eyebrow: 'Side Quests',
+    section_mini_em: 'Concepts &amp; Experiments',
+    art_label: '2D Art',
+    art_hint: '// personal works',
+    art_view: 'View all →',
+    art_collapse: 'Collapse',
+    contact_sub: 'Available for collaboration — reach out anytime.',
+    footer_copy: '© 2026 — All rights reserved',
+    tl_1_date: 'MAR 2026 — PRESENT',
+    tl_2_date: 'NOV 2025 — MAR 2026 · completed',
+    tl_3_date: 'NOV 2023 — AUG 2025',
+    tl_4_date: 'JAN 2022 — NOV 2023',
+    tl_5_date: 'AUG 2019 — APR 2021',
+    tl_6_chapter: 'Chapter I — Origins',
+    tl_6_date: '2017 — 2019',
+    tl_6_role: 'Graphic Designer · 2D Artist',
+    tl_6_desc: 'Brand identity, illustrations, stickers, print.',
+    ability_ui_desc: 'HUD · Modals · Game UI · Banners',
+    ability_ux_desc: 'User Flow · Research · Audit',
+    ability_2d_desc: 'Illustrations · Icons · Animation',
+    ability_sys_desc: 'UI Kit · Components · Handoff',
+    ability_mon_name: 'Monetization UI',
+    ability_mon_desc: 'Shop · Events · Conversion',
+    ability_mob_desc: 'Portrait · Landscape · iOS · Android',
+    proj_card_1_desc: 'Full-cycle UI/UX for a mobile game. HUD system, main interface redesign, monetization, event UI, mini-games and 2D asset library.',
+    dodo_role: 'UX Concept & Visual Design',
+    playrix_title: 'Space Mission',
+    playrix_subtitle: 'Test assignment: event leaderboard & HUD icon for Township · 2026',
+    playrix_tag_role: 'Art + UI Design',
+    playrix_task1_title: 'Event Leaderboard',
+    playrix_task1_text: 'Conceived the leaderboard window from scratch — not a copy, but a reimagining: took the Space Mission event mechanic from Royal Match and designed an equivalent for Township in their visual style. Defined the UI window structure, element layout, and progress narrative. Theme: space exploration with vertical player movement (horizontal variant already exists). Three atmosphere grades: lunar, martian, saturnian.',
+    playrix_task2_title: 'HUD Icon',
+    playrix_task2_text: 'Event icon in the HUD — left side of the screen, below the map icon. Single state, Township visual style, attention to scaling and render quality. Colour scheme chosen freely by the designer.',
+    playrix_label_leaderboard: '— Leaderboard · three atmospheres',
+    playrix_label_hud: '— HUD event icon',
+    dodo_status: 'Concept',
+    dodo_tag1: 'UX Concept',
+    dodo_tag2: 'Mini-game',
+    dodo_subtitle: 'Block Puzzle · UX concept for Dodo Pizza loyalty program · 2026',
+    dodo_ux_title: 'UX Solutions',
+    dodo_ux_text: 'Embedded in the Dodo app as a section — lowering entry barrier and leveraging the existing user base. Onboarding is a modal over the game field so users see mechanics immediately. An order card with goals adds narrative: players \'build a pizza\'. The leaderboard with a timer and pinned position drives return visits. Extra attempts via a real Dodo order closes the loop: game → purchase → game.',
+    dodo_brand_title: 'Branding',
+    dodo_brand_text: 'Two-layer visual language per Shift guide: UI shell strictly on-brand (#FF6600, Dodo Rounded, white cards); game field gets casual clay art — ingredient tiles, pizza box frame, Dodo mascot. Game terms speak brand language. Purple excluded — reserved for Dodo Combo.',
+    dodo_visual_title: 'Visual Style',
+    dodo_visual_text: 'Two-layer principle: strict brand in UI shell, free clay-art in game zone. Avoided purple (Dodo Combo), dark UI backgrounds, and overloading the game field with branding.',
+    proj_namskao_desc: 'UI/UX design and 2D art for 6 casual mobile games — match-3 puzzlers and beauty simulators. Fairy Kingdom, Nails Salon series and Funny Candy Land.',
+    proj_card_2_desc: 'UI kit, game icons, level map and popups for a casual match-3. Full cycle from concept to final art.',
+    proj_card_3_desc: 'Game UI for a sweet match-3: HUD, boosters, modals, promo art and store banners.',
+    proj_card_4_desc: 'UI/UX and 2D art for a nail games series: characters, interface, animations and promo materials. Published on App Store and Google Play.',
+    proj_card_5_desc: 'Design system and UX for a mobile visual novel. Profiles, chat, shop, choice system and full visual concept.',
+    proj_card_6_desc: 'UI/UX and 2D art for a narrative mobile game. Loading screens, stories system, modals, shop and full visual concept.',
+    card_cta: 'Open case →',
+    proj5_date: '2025 — Present',
+    proj6_date: '2024 — Present',
+    artifact_ru: '🌐 RU — Native',
+    tl_6_company: 'Freelance',
+    sk_shop: 'Shop',
+    sk_monetize: 'Monetization',
+    sk_events: 'Events',
+    sk_onboard: 'Onboarding',
+    sk_inventory: 'Inventory',
+    sk_achievements: 'Achievements',
+    sk_ux_audit: 'UX Audit',
+    sk_prototype: 'Prototyping',
+    sk_design_sys: 'Design Systems',
+    sk_icons: 'Icons',
+    sk_chars: 'Characters',
+    sk_promo: 'Promo Art',
+    sk_environ: 'Environments',
+    sk_anim: 'Frame-by-Frame Animation',
+    sk_iso: 'Isometric Art',
+    sk_ui_illus: 'UI Illustrations',
+    sk_banners: 'Store Banners',
+    sk_lang_ru: 'Russian — Native',
+    sk_edu_label: '// Education',
+    sk_edu1_name: 'Getting Started in UX Research',
+    sk_edu2_name: 'Game Interface Design',
+    sk_edu3_name: "Architectural Environment Design — Bachelor's",
+    sk_edu3_org: 'UlSTU, Ulyanovsk',
+    intro_loc_label: 'Location',
+    intro_loc_val: 'Russia · Remote / Relocation',
+    intro_avail_label: 'Status',
+    intro_avail_val: '● Open to offers',
+    tl_1_company_note: '— narrative mobile game',
+    tl_4_company_note: '— mobile casual games studio (App Store · Google Play)'},
+    sk_tools_label: '// Tools',
+    sk_figma: 'Figma',
+    sk_figma_vars: 'Figma Variables',
+    sk_figma_comp: 'Figma Components & Auto-layout',
+    sk_ps: 'Photoshop',
+    sk_ai_tools: 'AI Tools',
+        tl_gap_chapter: 'Chapter III.V — The Pause',
+    tl_gap_date: 'MAY 2021 — DEC 2021',
+    tl_gap_company: 'Freelance / Self-education',
+    tl_gap_role: 'Freelance Designer · Self-education',
+    tl_gap_desc: 'Freelance projects and self-study: mobile game UI patterns, frame-by-frame animation, UX research. Transition into gamedev.',
+        label_platform: 'Platform',
+    label_genre: 'Genre',
+    label_role: 'Role',
+    label_status: 'Status',
+    status_wip: 'In Progress',
+    status_pub: 'Published',
+        sk_handoff: 'Developer Handoff',
+    sk_ux_research: 'UX Research',
+    sk_design_docs: 'Design Documentation',
+    sk_guidelines: 'UI Guidelines',
+    sk_gd_collab: 'GD Collaboration',
+      ru: {
+    sk_handoff: 'Передача разработке',
+    sk_ux_research: 'UX-исследования',
+    sk_design_docs: 'Дизайн-документация',
+    sk_guidelines: 'UI-гайдлайны',
+    sk_gd_collab: 'Работа с геймдизайнерами',
+    label_platform: 'Платформа',
+    label_genre: 'Жанр',
+    label_role: 'Роль',
+    label_status: 'Статус',
+    status_wip: 'В разработке',
+    status_pub: 'Опубликовано',
+    nav_about: 'О себе',
+    nav_projects: 'Проекты',
+    nav_experience: 'Опыт',
+    nav_skills: 'Навыки',
+    nav_contact: 'Контакты',
+    back_btn: '← На главную',
+    intro_role: 'UI/UX Дизайнер &amp; 2D Художник',
+    intro_subtitle: 'UI/UX Дизайнер &nbsp;·&nbsp; 2D Художник &nbsp;·&nbsp; Игровые интерфейсы',
+    intro_desc: 'Middle UI/UX Дизайнер & 2D Художник · 4+ года в мобильном геймдеве.<br>HUD · Монетизация · Ивенты · Дизайн-системы · Shipped products.',
+    intro_enter: 'НОВАЯ ИГРА',
+    intro_exp_label: 'Опыт',
+    intro_exp_val: '4+ года · gamedev UI',
+    intro_status: 'UI/UX ДИЗАЙНЕР<br>2D ХУДОЖНИК<br><span style="color:rgba(80,160,80,0.7);">● ДОСТУПНА 2026</span>',
+    section_about_eyebrow: 'Архив персонажа',
+    section_about_em: 'Профиль и лор',
+    char_class: 'КЛАСС: UI/UX ДИЗАЙНЕР / 2D ХУДОЖНИК',
+    about_lore_title: '— История происхождения —',
+    about_lore: '«4+ года — игровые интерфейсы от первого вайрфрейма до production-ассетов. Полный цикл: UX-исследование, визуальный дизайн, дизайн-системы, dev handoff.»',
+    about_body_1: 'Middle UI/UX дизайнер и 2D художник, специализация — мобильные игры. 4 года делаю интерфейсы от исследования до сдачи в разработку: HUD, ивенты, монетизация, иконки, промо-арт. Работала в живом продукте на 10M+ пользователей — быстрые решения, NDA-ограничения, работа по дизайн-докам с геймдизайнерами.',
+    ability_ui_name: 'UI Дизайн', ability_ux_name: 'UX Дизайн', ability_2d_name: '2D Арт', ability_sys_name: 'Системы', ability_brand_name: 'Брендинг', ability_brand_desc: 'Логотип · Айдентика · Гайдлайны',
+    ability_mob_name: 'Мобайл', section_projects_eyebrow: 'Архив квестов',
+    section_projects_em: 'Создано и покорено',
+    quest_001_id: '// МИР: AVATAR LIFE', quest_001_subtitle: 'Мобильная игра UI/UX — Полный цикл',
+    quest_002_id: '// СТУДИЯ: NAMSKAO', quest_002_subtitle: 'Казуальные мобильные игры — UI/UX и 2D Арт',
+    quest_003_id: '// АРХИВ: SEVEN HEARTS STORIES', quest_003_subtitle: 'Визуальный роман — Дизайн-система UX/UI',
+    quest_004_id: '// МИР: EVER LOVE', quest_004_subtitle: 'Мобильная игра — UI/UX и 2D Арт',
+    section_exp_eyebrow: '// Опыт',
+    section_exp_em: 'История работы',
+    tl_1_chapter: 'Глава VII — Настоящее',
+    tl_1_role: 'UI/UX Дизайнер · 2D Художник · Фриланс',
+    tl_1_desc: 'Нарративная мобильная игра, иду с ней с самого начала. Сделала загрузочные экраны, систему выбора историй, монетизацию с иерархией премиум-контента, системные модалки. Плюс 2D-арт: иллюстрации и промографика.',
+    tl_2_chapter: 'Глава VI — Великая Кузница',
+    tl_2_role: 'Middle UX/UI Game Interface Designer · Контракт · 4 месяца',
+    tl_2_desc: 'Контракт — дизайн-система с нуля для мобильного визуального романа. Профили, магазин, ивенты, гардероб, системные экраны. Работа по дизайн-докам, UX-флоу в вайрфреймах, сдача в разработку.',
+    tl_3_chapter: 'Глава V — Эра Аватарии',
+    tl_3_role: 'Middle UI/UX Дизайнер · 2D Художник · Полная занятость',
+    tl_3_desc: 'Живой продукт на 10M+ пользователей, издатель 101XP. Сдала адвент-календари, мини-игру «Клановый дракон» целиком, редизайн HUD и системные компоненты. 2D-арт: мебель и декор для кастомизации, иконки.',
+    tl_4_chapter: 'Глава IV — Святилище Искусства',
+    tl_4_role: '2D Художник · UI Дизайнер · Полная занятость',
+    tl_4_desc: 'Казуальные игры — match-3 и симуляторы маникюра. Интерфейс, персонажи, окружения, покадровая анимация. Скрины для стора, баннеры, промо.',
+    tl_5_chapter: 'Глава III — Веб-Цитадель',
+    tl_5_role: 'Веб-дизайнер',
+    tl_5_desc: 'Концепции и прототипы для сайтов. Корпоративные и e-commerce макеты, логотипы, фирменный стиль.',
+    edu_eyebrow: 'Свитки образования',
+    edu_1_course: 'Введение в UX-исследования',
+    edu_2_course: 'Дизайн игровых интерфейсов',
+    edu_3_name: 'УлГТУ',
+    edu_3_course: 'Дизайн архитектурной среды — Бакалавр',
+    section_skills_eyebrow: '// Навыки',
+    section_skills_em: 'Инструменты и экспертиза',
+    skills_cat_tools: '// Инструменты',
+    skills_cat_skills: '// Навыки',
+    section_contact_eyebrow: 'Портал связи',
+    contact_title: 'Связаться',
+    proj_label: 'Избранные работы',
+    mini_label: 'Мини-кейсы',
+    section_mini_eyebrow: 'Мини-проекты',
+    section_mini_em: 'Концепты и эксперименты',
+    art_label: '2D Арт',
+    art_hint: '// личные работы',
+    art_view: 'Посмотреть все →',
+    art_collapse: 'Свернуть',
+    contact_sub: 'Открыта к сотрудничеству — пишите в любое время.',
+    footer_copy: '© 2026 — Все права защищены',
+    tl_1_date: 'МАРТ 2026 — НАСТОЯЩЕЕ',
+    tl_2_date: 'НОЯ 2025 — МАР 2026 · завершён',
+    tl_3_date: 'НОЯ 2023 — АВГ 2025',
+    tl_4_date: 'ЯНВ 2022 — НОЯ 2023',
+    tl_5_date: 'АВГ 2019 — АПР 2021',
+    sk_tools_label: '// Инструменты',
+    sk_figma: 'Figma',
+    sk_figma_vars: 'Figma Variables',
+    sk_figma_comp: 'Figma Components & Auto-layout',
+    sk_ps: 'Photoshop',
+    sk_ai_tools: 'AI-инструменты',
+    tl_gap_chapter: 'Глава IV.V — Пауза',
+    tl_gap_date: 'МАЙ 2021 — ДЕК 2021',
+    tl_gap_company: 'Фриланс / Самообразование',
+    tl_gap_role: 'Фриланс-дизайнер · Самообразование',
+    tl_gap_desc: 'Фриланс и самообучение: паттерны мобильного game UI, покадровая анимация, UX-исследования. Переход в геймдев.',
+    tl_6_chapter: 'Глава I — Начало пути',
+    tl_6_date: '2017 — 2019',
+    tl_6_role: 'Графический дизайнер · 2D художник',
+    tl_6_desc: 'Фирменный стиль, иллюстрации, стикеры, печать.',
+    ability_ui_desc: 'HUD · Модалки · Game UI · Баннеры',
+    ability_ux_desc: 'Флоу · Исследования · Аудит',
+    ability_2d_desc: 'Иллюстрации · Иконки · Анимация',
+    ability_sys_desc: 'UI Kit · Компоненты · Handoff',
+    ability_mon_name: 'Монетизация UI',
+    ability_mon_desc: 'Магазин · Ивенты · Конверсия',
+    ability_mob_desc: 'Портрет · Ландшафт · iOS · Android',
+    proj_card_1_desc: 'Полный цикл UI/UX дизайна для мобильной игры. Система HUD, редизайн главного интерфейса, монетизация, событийный UI, мини-игры и библиотека 2D-объектов.',
+    dodo_role: 'UX-концепция и визуальный дизайн',
+    playrix_title: 'Space Mission',
+    playrix_subtitle: 'Тестовое задание: лидерборд события и иконка HUD для Township · 2026',
+    playrix_tag_role: 'Арт + UI дизайн',
+    playrix_task1_title: 'Лидерборд события',
+    playrix_task1_text: 'Концепция окна рейтинга с нуля — не копия, а переосмысление: взяла механику события Space Mission из Royal Match и спроектировала аналог для Township в их стилистике. Придумала структуру UI-окна, верстку элементов, нарратив прогресса. Тема — исследование космоса, вертикальное движение игроков (горизонтальный аналог на продукте уже есть). Три атмосферы: лунная, марсианская, сатурнианская.',
+    playrix_task2_title: 'Иконка HUD',
+    playrix_task2_text: 'Иконка события в HUD — левая зона экрана, под иконкой карты. Одно состояние, стилистика Township, учёт масштабирования и рендера. Цветовая схема по усмотрению дизайнера.',
+    playrix_label_leaderboard: '— Лидерборд · три атмосферы',
+    playrix_label_hud: '— HUD иконка события',
+    dodo_status: 'Концепт',
+    dodo_tag1: 'UX Концепт',
+    dodo_tag2: 'Мини-игра',
+    dodo_subtitle: 'Block Puzzle · UX-концепция для программы лояльности Додо Пицца · 2026',
+    dodo_ux_title: 'UX решения',
+    dodo_ux_text: 'Игра встроена в приложение Додо как отдельный раздел — снижает порог входа. Онбординг — модальное окно поверх поля. Карточка заказа с прогресс-баром добавляет нарратив: игрок «собирает пиццу». Рейтинг с таймером мотивирует возвращаться. Механика доп. попыток за реальный заказ замыкает петлю «игра → покупка → игра».',
+    dodo_brand_title: 'Брендирование',
+    dodo_brand_text: 'Два слоя по гайду Shift: UI-оболочка строго по бренду (#FF6600, Dodo Rounded, белые карточки); игровое поле — казуальный clay-арт с тайлами-ингредиентами, коробкой пиццы, маскотом. Игровые термины говорят языком бренда. Фиолетовый не используется — он за Додо Комбо.',
+    dodo_visual_title: 'Визуальная стилистика',
+    dodo_visual_text: 'Принцип двух слоёв: строгий бренд в UI и свободный clay-арт в игровой зоне. Не использовала фиолетовый, тёмный фон и избыточный брендинг на поле игры.',
+    proj_namskao_desc: 'UI/UX дизайн и 2D-арт для 6 казуальных мобильных игр — match-3 пазлы и симуляторы красоты. Fairy Kingdom, серия Nails Salon и Funny Candy Land.',
+    proj_card_2_desc: 'UI-кит, игровые иконки, карта уровней и попапы для казуального match-3. Полный цикл от концепта до финального арта.',
+    proj_card_3_desc: 'Дизайн игрового UI для сладкого match-3: HUD, бустеры, модальные окна, промо-арт и сторовые баннеры.',
+    proj_card_4_desc: 'UI/UX и 2D-арт для серии игр про маникюр: персонажи, интерфейс, анимации и промоматериалы. Опубликовано в App Store и Google Play.',
+    proj_card_5_desc: 'Дизайн-система и UX для мобильного визуального романа. Профили, чат, магазин, система выборов и полная визуальная концепция.',
+    proj_card_6_desc: 'UI/UX и 2D-арт для нарративной мобильной игры. Загрузочные экраны, система сторис, модальные окна, магазин и полная визуальная концепция.',
+    card_cta: 'Открыть кейс →',
+    proj5_date: '2025 — н.в.',
+    proj6_date: '2024 — н.в.',
+    artifact_ru: '🌐 RU — родной',
+    tl_6_company: 'Фриланс',
+    sk_shop: 'Магазин',
+    sk_monetize: 'Монетизация',
+    sk_events: 'Ивенты',
+    sk_onboard: 'Онбординг',
+    sk_inventory: 'Инвентарь',
+    sk_achievements: 'Достижения',
+    sk_ux_audit: 'UX-аудит',
+    sk_prototype: 'Прототипирование',
+    sk_design_sys: 'Дизайн-системы',
+    sk_icons: 'Иконки',
+    sk_chars: 'Персонажи',
+    sk_promo: 'Промо-арт',
+    sk_environ: 'Окружения',
+    sk_anim: 'Покадровая анимация',
+    sk_iso: 'Изометрия',
+    sk_ui_illus: 'UI-иллюстрации',
+    sk_banners: 'Сторовые баннеры',
+    sk_lang_ru: 'Русский — родной',
+    sk_edu_label: '// Образование',
+    sk_edu1_name: 'Старт в UX-исследованиях',
+    sk_edu2_name: 'Дизайн игровых интерфейсов',
+    sk_edu3_name: 'Дизайн архитектурной среды — Бакалавриат',
+    sk_edu3_org: 'УлГТУ, Ульяновск',
+    intro_loc_label: 'Локация',
+    intro_loc_val: 'Россия · Ремот / Релокация',
+    intro_avail_label: 'Статус',
+    intro_avail_val: '● Открыта к офферам',
+    tl_1_company_note: '— мобильная нарративная игра',
+    tl_4_company_note: '— студия казуальных мобильных игр (App Store · Google Play)'}
+}
+
+window.switchLang = function(lang) {
+  if (lang !== 'en' && lang !== 'ru') lang = 'ru';
+  try { localStorage.setItem('lang', lang); } catch(e) {}
+  var t = TRANSLATIONS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-lang]').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+  document.documentElement.lang = lang;
+};
+
+// Wire buttons (backup — onclick also present)
+document.querySelectorAll('[data-lang]').forEach(function(btn) {
+  btn.addEventListener('click', function() { window.switchLang(btn.getAttribute('data-lang')); });
+});
+
+// Init on page load
+(function() {
+  var stored = '';
+  try { stored = localStorage.getItem('lang') || ''; } catch(e) {}
+  window.switchLang(stored === 'en' ? 'en' : 'ru');
+})();
+</script>
+<div id="artLightbox"><img id="artLightboxImg" src="" alt=""></div>
+<script>
+(function(){
+  var lb = document.getElementById('artLightbox');
+  var lbImg = document.getElementById('artLightboxImg');
+
+  // Open on image click in marquee
+  document.querySelectorAll('.art-marquee-track img').forEach(function(img){
+    img.addEventListener('click', function(e){
+      e.stopPropagation();
+      lbImg.src = img.src;
+      lb.classList.add('open');
+    });
+  });
+
+  // Close on overlay click or Escape
+  lb.addEventListener('click', function(){ lb.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') lb.classList.remove('open'); });
+})();
+</script>
+
+  <script>
+  /* Smooth marquee with hover slow-down — no jump */
+  (function(){
+    var track = document.querySelector('.art-marquee-track');
+    if (!track) return;
+    var outer = track.closest('.art-marquee-outer');
+    var pos = 0, halfWidth = 0, lastTime = null;
+    var NORMAL_MS = 25990;          /* -20% speed from 20792 */
+    var HOVER_MS  = 45371;          /* -20% speed from 36297 */
+    var normalPx = 0, hoverPx = 0, currentPx = 0, targetPx = 0;
+
+    function doInit(){
+      track.style.willChange = 'transform';
+      halfWidth = track.scrollWidth / 2;
+      if (halfWidth <= 0){ setTimeout(doInit, 100); return; }
+      normalPx = halfWidth / NORMAL_MS;
+      hoverPx  = halfWidth / HOVER_MS;
+      currentPx = targetPx = normalPx;
+      requestAnimationFrame(step);
+    }
+
+    function init(){
+      /* wait for ALL track images to load before measuring scrollWidth */
+      var imgs = Array.prototype.slice.call(track.querySelectorAll('img'));
+      var total = imgs.length;
+      if (total === 0){ doInit(); return; }
+      var loaded = 0;
+      function onLoad(){ loaded++; if (loaded >= total) doInit(); }
+      imgs.forEach(function(img){
+        if (img.complete && img.naturalWidth > 0) onLoad();
+        else { img.addEventListener('load', onLoad); img.addEventListener('error', onLoad); }
+      });
+    }
+
+    function step(now){
+      if (lastTime === null){ lastTime = now; requestAnimationFrame(step); return; }
+      var dt = Math.min(now - lastTime, 50);
+      lastTime = now;
+      currentPx += (targetPx - currentPx) * 0.05;
+      pos -= currentPx * dt;
+      if (pos <= -halfWidth) pos += halfWidth;
+      track.style.transform = 'translateX(' + pos + 'px)';
+      requestAnimationFrame(step);
+    }
+
+    if (outer){
+      outer.addEventListener('mouseenter', function(){ targetPx = hoverPx; });
+      outer.addEventListener('mouseleave', function(){ targetPx = normalPx; });
+    }
+
+    if (document.readyState === 'complete') init();
+    else window.addEventListener('load', init);
+  })();
+  
+// === Project card image slider ===
+(function(){
+  document.querySelectorAll('.proj-card').forEach(function(card){
+    var slides = card.querySelectorAll('.pcis img');
+    var dots   = card.querySelectorAll('.pcis-dot');
+    if(!slides.length) return;
+    var idx = 0, timer = null;
+    function goTo(n){
+      slides[idx].classList.remove('pcis-a');
+      if(dots[idx]) dots[idx].classList.remove('pcis-da');
+      idx = ((n % slides.length) + slides.length) % slides.length;
+      slides[idx].classList.add('pcis-a');
+      if(dots[idx]) dots[idx].classList.add('pcis-da');
+    }
+    card.addEventListener('mouseenter', function(){ timer = setInterval(function(){ goTo(idx+1); }, 1400); });
+    card.addEventListener('mouseleave', function(){ clearInterval(timer); goTo(0); });
+  });
+})();
+
+// === Auto-cycling 4-up portrait slider ===
+(function(){
+  document.querySelectorAll('.pcis4').forEach(function(slider){
+    var slides = slider.querySelectorAll('.pcis4-slide');
+    if(slides.length < 2) return;
+    var wrap = slider.closest('.proj-card-img-wrap');
+    var dots = wrap ? wrap.querySelectorAll('.pcis-dot') : [];
+    var idx = 0;
+    function advance(){
+      slides[idx].classList.remove('pcis4-a');
+      if(dots[idx]) dots[idx].classList.remove('pcis-da');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('pcis4-a');
+      if(dots[idx]) dots[idx].classList.add('pcis-da');
+      setTimeout(advance, idx === 0 ? 4000 : 2000);
+    }
+    setTimeout(advance, 4000);
+  });
+})();
+</script>
+
+<div class="copy-toast" id="copyToast">✓ &nbsp;Скопировано</div>
+<script>
+function copyEmail(){
+  var email='arinanira104@gmail.com';
+  navigator.clipboard.writeText(email).then(function(){
+    var t=document.getElementById('copyToast');
+    t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show');},2000);
+  }).catch(function(){
+    // fallback
+    var ta=document.createElement('textarea');
+    ta.value=email;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    var t=document.getElementById('copyToast');
+    t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show');},2000);
+  });
+}
+</script>
+</body>
+</html>

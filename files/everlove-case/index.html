@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverLove — Arina Karpova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#08040e;--ink2:#1d0828;
+  --ac:#c83878;--ac2:#e05090;--ac3:#f8b0d0;
+  --gold:#b89040;--gold2:#d4b060;
+  --bone:#f0e8f5;--bone2:#c4a8d4;
+  --border:rgba(220,140,190,.14);--border2:rgba(220,140,190,.3);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+#cursor-outer{position:fixed;width:32px;height:32px;border:1px solid var(--ac2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
+#cursor-inner{position:fixed;width:5px;height:5px;background:var(--ac2);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);}
+#cursor-outer.h{width:48px;height:48px;border-color:var(--ac3);}
+.noise{position:fixed;inset:0;z-index:998;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");mix-blend-mode:overlay;}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--ac),var(--gold2));z-index:9999;width:0%;pointer-events:none;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:.9rem 3.5rem;display:flex;justify-content:space-between;align-items:center;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;}
+.nav.dark{background:rgba(8,4,14,.93);backdrop-filter:blur(14px);border-color:var(--border);}
+.nb-logo{font-family:'Cinzel',serif;font-size:.78rem;font-weight:700;letter-spacing:.18em;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:10px;}
+.nb-gem{width:14px;height:14px;border:1px solid var(--ac);transform:rotate(45deg);display:grid;place-items:center;flex-shrink:0;}
+.nb-gem::before{content:'';width:4px;height:4px;background:var(--ac);transform:rotate(45deg);}
+.nb-right{display:flex;align-items:center;gap:1.4rem;}
+.nb-back{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:7px;cursor:none;}
+.nb-back:hover{color:var(--ac2);}
+.lang-sw{display:flex;align-items:center;gap:3px;font-family:'Share Tech Mono',monospace;font-size:.54rem;}
+.lang-sw button{background:none;border:none;color:var(--bone2);cursor:none;padding:.2rem .35rem;transition:color .2s;}
+.lang-sw button.active{color:var(--ac2);}
+.lang-sw span{color:rgba(220,140,190,.3);}
+#zo{display:none;position:fixed;inset:0;z-index:9000;background:rgba(8,4,14,.97);place-items:center;cursor:zoom-out;}
+#zo.on{display:grid;}
+#zi{max-width:92vw;max-height:92vh;object-fit:contain;}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  background:
+    radial-gradient(ellipse 70% 75% at 10% 55%, rgba(200,30,110,.62) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 60% at 90% 20%, rgba(155,15,85,.48) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 50% 100%, rgba(110,8,55,.3) 0%, transparent 55%),
+    var(--ink);}
+.hero-bg-num{position:absolute;top:-2rem;right:-1rem;font-family:'Cinzel',serif;font-size:30vw;font-weight:900;color:var(--ac);opacity:.028;line-height:1;pointer-events:none;user-select:none;}
+.hero-phones{position:absolute;right:4%;top:50%;transform:translateY(-48%);display:flex;align-items:flex-end;gap:2.5rem;z-index:2;}
+.hp{padding:7px;border-radius:40px;border:1px solid rgba(220,140,190,.22);}
+.hp-a{background:linear-gradient(160deg,#2e1428,#0e0810);transform:rotate(-7deg);box-shadow:0 40px 90px -25px rgba(0,0,0,.95),0 0 90px -10px rgba(200,40,120,.55);}
+.hp-b{background:linear-gradient(160deg,#381830,#100810);transform:rotate(4deg);box-shadow:0 50px 110px -25px rgba(0,0,0,.98),0 0 110px -12px rgba(220,50,140,.68);}
+.hp img{display:block;border-radius:33px;}
+.hp-a img{width:210px;}
+.hp-b img{width:250px;}
+.hero-body{position:relative;z-index:3;padding:8rem 4.5rem 5rem;flex:1;display:flex;flex-direction:column;justify-content:flex-end;max-width:680px;}
+.h-eye{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(220,120,170,.85);margin-bottom:1.4rem;display:flex;align-items:center;gap:.8rem;opacity:0;transform:translateY(8px);transition:all .6s .1s;}
+.h-eye.up{opacity:1;transform:none;}
+.h-eye::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ac2);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.1;}}
+.h-ttl{font-family:'Cinzel',serif;font-size:clamp(4rem,10vw,10rem);font-weight:900;line-height:.85;letter-spacing:.04em;color:var(--bone);}
+.h-ttl .ln{overflow:hidden;display:block;}
+.h-ttl .ln span{display:block;transform:translateY(110%);opacity:0;transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .6s;}
+.h-ttl.up .ln span{transform:none;opacity:1;}
+.h-ttl .ln:nth-child(2) span{transition-delay:.12s;}
+.h-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;color:var(--bone2);margin-top:1rem;opacity:0;transform:translateY(8px);transition:all .65s .75s;}
+.h-tag.up{opacity:1;transform:none;}
+.h-chips{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.2rem;opacity:0;transform:translateY(6px);transition:all .5s .95s;}
+.h-chips.up{opacity:1;transform:none;}
+.chip{padding:.2rem .7rem;font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border2);color:var(--bone2);}
+.chip.ac{border-color:rgba(200,56,120,.5);color:var(--ac2);}
+.hero-scroll{position:absolute;bottom:2.5rem;right:3.5rem;z-index:3;display:flex;flex-direction:column;align-items:center;gap:.4rem;}
+.scroll-lbl{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.22em;color:rgba(220,120,170,.4);text-transform:uppercase;writing-mode:vertical-rl;}
+.scroll-line{width:1px;height:54px;overflow:hidden;position:relative;}
+.scroll-line::after{content:'';position:absolute;top:0;left:0;width:1px;height:100%;background:linear-gradient(180deg,var(--ac2),transparent);animation:sd 2s ease-in-out infinite;}
+@keyframes sd{0%{transform:translateY(-100%);}100%{transform:translateY(100%);}}
+
+/* LAYOUT */
+.s{padding:7rem 4.5rem;position:relative;}
+.si{max-width:1360px;margin:0 auto;}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);max-width:1360px;margin:0 auto;}
+.s-alt{background:linear-gradient(180deg,var(--ink2) 0%,var(--ink) 100%);}
+.eye{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.35em;text-transform:uppercase;color:var(--ac);opacity:.8;margin-bottom:.5rem;}
+.ttl{font-family:'Cinzel',serif;font-size:clamp(1.5rem,2.4vw,2.2rem);font-weight:700;letter-spacing:.05em;color:var(--bone);}
+.ttl-lg{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;letter-spacing:.04em;color:var(--bone);}
+.body{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone2);line-height:1.85;font-weight:300;}
+.rev{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s;}
+.rev.in{opacity:1;transform:none;}
+.rev[data-d="1"]{transition-delay:.1s;}.rev[data-d="2"]{transition-delay:.2s;}.rev[data-d="3"]{transition-delay:.3s;}.rev[data-d="4"]{transition-delay:.4s;}.rev[data-d="5"]{transition-delay:.5s;}
+
+/* OV STRIP */
+.ov{border:1px solid var(--border);border-left:2px solid var(--ac);background:rgba(14,6,22,.6);display:grid;grid-template-columns:repeat(4,1fr);}
+.ov-c{padding:1.8rem 2rem;border-right:1px solid var(--border);}
+.ov-c:last-child{border-right:none;}
+.ov-l{font-family:'Share Tech Mono',monospace;font-size:.42rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ac);opacity:.7;margin-bottom:.4rem;}
+.ov-v{font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.05em;color:var(--bone);margin-bottom:.2rem;}
+.ov-d{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bone2);line-height:1.5;}
+
+/* BRIEF */
+.brief{display:grid;grid-template-columns:1fr 1fr;gap:5rem;padding:3.5rem 4rem;border:1px solid var(--border);border-left:2px solid var(--ac);background:rgba(14,6,22,.55);}
+.brief-tag{font-family:'Share Tech Mono',monospace;font-size:.44rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ac);opacity:.72;margin-bottom:1.1rem;}
+.brief-h{font-family:'Cinzel',serif;font-size:clamp(1.3rem,2.2vw,2rem);font-weight:700;letter-spacing:.04em;color:var(--bone);margin-bottom:1.8rem;line-height:1.15;}
+.brief-r{display:flex;gap:1.2rem;align-items:baseline;margin-bottom:.75rem;}
+.brief-rl{font-family:'Share Tech Mono',monospace;font-size:.42rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);opacity:.65;flex-shrink:0;min-width:80px;}
+.brief-rv{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone);opacity:.85;}
+.brief-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bone2);opacity:.65;line-height:1.7;border-left:1px solid rgba(200,56,120,.28);padding-left:1rem;margin-top:1.5rem;}
+.brief-list{list-style:none;margin-top:2rem;}
+.brief-list li{font-family:'Cormorant Garamond',serif;font-size:.97rem;color:var(--bone);opacity:.82;line-height:1.6;padding-left:1.3rem;position:relative;margin-bottom:.85rem;}
+.brief-list li::before{content:'—';position:absolute;left:0;color:var(--ac);opacity:.65;font-family:'Share Tech Mono',monospace;font-size:.65rem;}
+
+/* PHONE GRID */
+.pg{display:flex;gap:1.4rem;align-items:flex-start;flex-wrap:wrap;}
+.ph{display:flex;flex-direction:column;gap:.5rem;align-items:center;flex:0 0 auto;}
+.pf{padding:6px;border-radius:34px;border:1px solid var(--border2);background:linear-gradient(160deg,#2a1428,#0e0810);box-shadow:0 30px 70px -20px rgba(0,0,0,.9),0 0 60px -18px rgba(200,40,120,.35);}
+.pf img{display:block;border-radius:28px;cursor:zoom-in;}
+.pf img.w180{width:180px;}
+.pf img.w160{width:160px;}
+.pf img.w200{width:200px;}
+.pf img.w220{width:220px;}
+.pf img.w260{width:260px;}
+.pl{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);opacity:.5;text-align:center;}
+
+/* WIREFRAME GRID */
+.wg{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.2rem;}
+.wi{display:flex;flex-direction:column;gap:.4rem;}
+.wf{border:1px solid var(--border);overflow:hidden;background:rgba(18,8,30,.6);}
+.wf img{display:block;width:100%;cursor:zoom-in;filter:brightness(.9);}
+.wl{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone2);opacity:.4;}
+
+/* ITERATION GRID */
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;}
+.ii{display:flex;flex-direction:column;gap:.4rem;}
+.if{border:1px solid var(--border);overflow:hidden;}
+.if img{display:block;width:100%;cursor:zoom-in;}
+.il{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone2);opacity:.4;}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:.6rem;}
+.flow-step{display:flex;align-items:flex-start;gap:1.4rem;padding:1.4rem 1.6rem;border:1px solid var(--border);}
+.flow-step.hl{border-color:rgba(200,56,120,.35);background:rgba(100,10,55,.09);}
+.flow-n{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;color:var(--ac2);opacity:.4;flex-shrink:0;width:1.8rem;line-height:1;}
+.flow-body{}
+.flow-ttl{font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.3rem;}
+.flow-desc{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--bone2);line-height:1.6;}
+.flow-arr{text-align:center;color:rgba(220,140,190,.25);font-size:1.1rem;padding:.1rem 0;}
+
+/* CHALLENGE CARDS */
+.ch3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.cc{padding:2.4rem 2rem;border:1px solid var(--border);position:relative;overflow:hidden;}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac2),rgba(200,56,120,.2),transparent);}
+.cc.hl{border-color:rgba(200,56,120,.3);background:rgba(100,10,55,.07);}
+.cc-n{font-family:'Cinzel',serif;font-size:3rem;font-weight:900;color:var(--ac2);opacity:.18;line-height:1;margin-bottom:.8rem;}
+.cc-t{font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.05em;color:var(--bone);margin-bottom:.6rem;}
+.cc-b{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone2);line-height:1.75;}
+
+/* RESEARCH */
+.rc{display:flex;gap:1.8rem;align-items:flex-start;padding:1.8rem 2rem;border:1px solid var(--border);}
+.rc.hl{border-color:rgba(200,56,120,.28);background:rgba(100,10,55,.07);}
+.rc-n{font-family:'Cinzel',serif;font-size:2.6rem;font-weight:900;color:var(--ac2);opacity:.32;line-height:1;flex-shrink:0;width:1.8rem;}
+.rc-t{font-family:'Cinzel',serif;font-size:.86rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.35rem;}
+.rc-b{font-family:'Cormorant Garamond',serif;font-size:.93rem;color:var(--bone2);line-height:1.7;}
+
+/* DESIGN SYSTEM */
+.ds-pal{display:flex;gap:1rem;flex-wrap:wrap;}
+.sw{text-align:center;}
+.sw-c{width:70px;height:70px;border-radius:16px;margin-bottom:.5rem;}
+.sw-n{font-family:'Share Tech Mono',monospace;font-size:.36rem;letter-spacing:.1em;color:var(--bone2);opacity:.5;}
+.comp-row{display:flex;gap:3rem;align-items:flex-end;flex-wrap:wrap;padding:2.2rem 2.4rem;border:1px solid var(--border);background:rgba(14,6,22,.45);}
+.comp-g{display:flex;flex-direction:column;gap:.55rem;}
+.comp-l{font-family:'Share Tech Mono',monospace;font-size:.36rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone2);opacity:.4;margin-top:.3rem;}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;padding:12px 26px;border-radius:28px;background:linear-gradient(180deg,#f070c0,#c83060);color:#fff;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;font-weight:700;box-shadow:0 8px 24px -6px rgba(200,48,96,.6);}
+.btn-s{display:inline-flex;align-items:center;justify-content:center;padding:11px 26px;border-radius:28px;background:rgba(255,255,255,.05);border:1px solid rgba(220,140,190,.3);color:var(--bone);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;}
+.tab{display:flex;gap:5px;padding:8px 9px;border-radius:20px;background:linear-gradient(180deg,rgba(50,18,44,.9),rgba(28,10,26,.95));border:1px solid rgba(220,120,180,.18);}
+.ti{display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 10px;border-radius:13px;color:rgba(180,140,170,.5);font-family:'Share Tech Mono',monospace;font-size:.36rem;}
+.ti.a{background:radial-gradient(120% 130% at 50% 0%,rgba(240,112,192,.36),rgba(200,48,144,.1) 75%);color:#fff;box-shadow:0 0 14px rgba(220,80,160,.32);}
+.ti svg{width:19px;height:19px;}
+.tog-on{width:44px;height:25px;border-radius:13px;background:linear-gradient(90deg,#f070c0,#c83060);position:relative;box-shadow:0 0 12px rgba(200,48,96,.5);}
+.tog-on::after,.tog-off::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;}
+.tog-on::after{background:#fff;top:3px;right:3px;}
+.tog-off{width:44px;height:25px;border-radius:13px;background:rgba(255,255,255,.07);border:1px solid rgba(220,140,190,.2);position:relative;}
+.tog-off::after{background:#9c849a;top:2px;left:3px;}
+.bdg-n{font-family:'Share Tech Mono',monospace;font-size:.44rem;font-weight:700;color:#fff;padding:3px 9px;border-radius:16px;background:linear-gradient(180deg,#f070c0,#c83060);}
+.bdg-s{font-family:'Share Tech Mono',monospace;font-size:.44rem;font-weight:700;color:#1a0c10;padding:3px 9px;border-radius:16px;background:var(--gold2);}
+.sc{width:115px;border-radius:17px;padding:15px 11px;background:linear-gradient(180deg,rgba(240,112,192,.1),rgba(255,255,255,.02));border:1px solid rgba(240,112,192,.24);text-align:center;position:relative;}
+.sc-b{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-family:'Share Tech Mono',monospace;font-size:.36rem;font-weight:700;color:#1a0c10;padding:2px 8px;border-radius:16px;background:var(--gold2);white-space:nowrap;}
+.sc-v{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--bone);margin:8px 0 2px;}
+.sc-s{font-family:'Share Tech Mono',monospace;font-size:.36rem;color:var(--bone2);opacity:.5;margin-bottom:9px;}
+.sc-btn{font-family:'Share Tech Mono',monospace;font-size:.46rem;font-weight:700;color:#fff;padding:6px;border-radius:16px;background:linear-gradient(180deg,#f070c0,#c83060);}
+
+/* FEAT */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.feat.rev-c{direction:rtl;}
+.feat.rev-c>*{direction:ltr;}
+.fp{display:flex;justify-content:center;}
+.ff{padding:7px;border-radius:40px;border:1px solid rgba(220,140,190,.22);}
+.ff-a{background:linear-gradient(160deg,#321828,#100810);box-shadow:0 50px 110px -28px rgba(0,0,0,.98),0 0 100px -14px rgba(220,50,140,.62),0 0 200px -40px rgba(180,30,100,.35);}
+.ff-b{background:linear-gradient(160deg,#2e1628,#0e0810);box-shadow:0 40px 90px -28px rgba(0,0,0,.95),0 0 85px -14px rgba(200,40,120,.52),0 0 170px -40px rgba(160,20,90,.3);}
+.ff img{display:block;width:260px;border-radius:33px;cursor:zoom-in;}
+.fp-pts{display:flex;flex-direction:column;gap:.85rem;margin-top:1.5rem;}
+.fp-pt{display:flex;gap:.75rem;align-items:flex-start;}
+.fp-dot{width:5px;height:5px;background:var(--ac2);transform:rotate(45deg);margin-top:.6rem;flex-shrink:0;}
+.fp-t{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone2);line-height:1.65;}
+.fp-t strong{color:var(--bone);}
+
+/* CURRENCY */
+.cur3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.cur{padding:2.5rem 2rem;border:1px solid var(--border);text-align:center;position:relative;}
+.cur.hl{border-color:rgba(200,56,120,.3);background:rgba(100,10,55,.07);}
+.cur-icon{display:block;margin:0 auto 1.2rem;}
+.cur-n{font-family:'Cinzel',serif;font-size:1.1rem;letter-spacing:.1em;color:var(--bone);margin-bottom:.6rem;}
+.cur-b{font-family:'Cormorant Garamond',serif;font-size:.93rem;color:var(--bone2);line-height:1.7;}
+
+/* TAKEAWAYS */
+.tk2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2rem;}
+.tk{padding:2rem 2.2rem;border:1px solid var(--border);}
+.tk-t{font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.06em;color:var(--bone);margin-bottom:.6rem;}
+.tk-b{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone2);line-height:1.75;}
+
+/* FOOTER */
+.footer{padding:9rem 4.5rem;text-align:center;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 50% at 50% 50%,rgba(100,10,60,.42),transparent 70%),var(--ink);}
+.footer::after{content:'LOVE';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:30vw;font-weight:900;color:var(--ac);opacity:.022;pointer-events:none;user-select:none;}
+.footer-eye{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(220,120,170,.45);margin-bottom:1rem;position:relative;z-index:1;}
+.footer-ttl{font-family:'Cinzel',serif;font-size:clamp(2.5rem,5vw,5.5rem);font-weight:900;letter-spacing:.06em;color:var(--bone);position:relative;z-index:1;line-height:1;}
+.footer-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--bone2);margin-top:.8rem;position:relative;z-index:1;}
+
+.back-btn{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:300;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone2);background:rgba(8,4,14,.93);border:1px solid var(--border);padding:.6rem 1.6rem;cursor:none;text-decoration:none;display:inline-block;transition:all .25s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.back-btn:hover{border-color:var(--ac2);color:var(--ac2);}
+
+
+/* COMPETITOR TABLE */
+.comp-tbl{width:100%;border-collapse:collapse;}
+.comp-tbl th{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);opacity:.7;padding:.65rem 1rem;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap;}
+.comp-tbl td{font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--bone2);padding:.65rem 1rem;border-bottom:1px solid var(--border);line-height:1.45;vertical-align:top;}
+.comp-tbl tr:hover td{background:rgba(14,6,22,.4);}
+.ct-name{font-family:'Cinzel',serif;font-size:.76rem;letter-spacing:.04em;color:var(--bone)!important;white-space:nowrap;}
+.ct-tag{font-family:'Share Tech Mono',monospace;font-size:.34rem;letter-spacing:.08em;padding:2px 6px;border-radius:10px;background:rgba(220,140,190,.08);border:1px solid var(--border);color:var(--bone2);display:inline-block;margin-bottom:3px;white-space:nowrap;}
+.ct-tag-ac{background:rgba(200,56,120,.2);border-color:rgba(200,56,120,.4);color:var(--ac2);}
+.ct-pos{color:rgba(160,230,160,.72)!important;}
+.ct-neg{color:rgba(255,170,150,.62)!important;}
+.ct-ours td{background:rgba(100,10,55,.1);border-color:rgba(200,56,120,.18);}
+.ct-ours .ct-name{color:var(--ac2)!important;}
+/* AFFINITY MAP */
+.aff-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem;}
+.aff-cluster{padding:1.4rem 1.6rem;border:1px solid rgba(220,140,190,.14);background:var(--clr);}
+.aff-label{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.9rem;}
+.aff-notes{display:flex;flex-wrap:wrap;gap:.45rem;}
+.sticky{background:var(--sc);color:#1a0a14;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.78rem;padding:.45rem .65rem;transform:var(--sr);box-shadow:2px 3px 10px rgba(0,0,0,.4);line-height:1.4;cursor:default;max-width:175px;}
+/* PLAYTESTING */
+.pt-block{padding:2.2rem 2.4rem;border:1px solid rgba(200,56,120,.28);border-left:3px solid var(--ac2);background:rgba(100,10,55,.08);margin-bottom:2rem;}
+.pt-finds{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem;}
+.pt-find{padding:1.3rem 1.4rem;border:1px solid var(--border);background:rgba(8,4,14,.55);}
+.pt-num{font-family:'Cinzel',serif;font-size:1.7rem;font-weight:900;color:var(--ac2);opacity:.32;line-height:1;margin-bottom:.45rem;}
+.pt-t{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.04em;color:var(--bone);margin-bottom:.35rem;}
+.pt-b{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--bone2);line-height:1.65;}
+.wf-box{display:flex;align-items:center;justify-content:center;border:1px solid var(--border);background:rgba(12,5,22,.7);overflow:hidden;}
+.wf-box img{max-height:100%;max-width:100%;object-fit:contain;display:block;cursor:zoom-in;filter:brightness(.92);}
+
+
+
+@media(max-width:480px){
+  .s{padding:2.5rem 1rem;}
+  .h-ttl{font-size:1.8rem;}
+  .aff{grid-template-columns:1fr!important;}
+  .ds-comp{grid-template-columns:1fr!important;}
+  div[style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr 1fr!important;}
+  div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
+}
+
+/* ===== MOBILE ADAPTATION ===== */
+@media(max-width:768px){
+  #cursor-outer,#cursor-inner{display:none;}
+  body{cursor:auto;}
+  a,button{cursor:pointer;}
+
+  /* Nav */
+  .nav{padding:.75rem 1.2rem;}
+  .nb-logo{font-size:.68rem;letter-spacing:.12em;}
+  .nb-right{gap:.8rem;}
+  .nb-back span{display:none;}
+
+  /* Hero */
+  .hero{min-height:auto;}
+  .hero-phones{display:none;}
+  .hero-body{padding:5.5rem 1.4rem 3rem;max-width:100%;}
+  .h-ttl{font-size:clamp(2.8rem,12vw,5rem);}
+  .h-tag{font-size:1rem;}
+  .hero-scroll{display:none;}
+
+  /* Layout */
+  .s{padding:3.5rem 1.4rem;}
+  .ttl-lg{font-size:clamp(1.5rem,5vw,2rem);}
+  .ttl{font-size:clamp(1.2rem,4vw,1.6rem);}
+  .body{font-size:.96rem;}
+
+  /* OV strip */
+  .ov{grid-template-columns:1fr 1fr!important;}
+  .ov-c{padding:1.2rem 1.2rem;border-right:none!important;border-bottom:1px solid var(--border);}
+  .ov-c:nth-child(odd){border-right:1px solid var(--border)!important;}
+  .ov-c:last-child{border-bottom:none;}
+
+  /* Brief */
+  .brief{grid-template-columns:1fr!important;gap:1.8rem;padding:1.6rem 1.2rem!important;}
+
+  /* Wireframes grids */
+  div[style*="repeat(5,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
+  div[style*="1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;}
+
+  /* Features */
+  .feat,.feat.rev-c{grid-template-columns:1fr!important;gap:2rem;}
+  .feat-screens{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Screens inside features */
+  div[style*="repeat(3,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
+  div[style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Research affinity */
+  .ch3{grid-template-columns:1fr 1fr!important;}
+
+  /* Competitor table */
+  .comp-t-wrap,.ct-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{min-width:560px;}
+
+  /* Currencies row */
+  .cur3{grid-template-columns:1fr!important;}
+
+  /* Takeaways */
+  .tk2{grid-template-columns:1fr!important;}
+  .tk{padding:1.4rem 1.2rem;}
+
+  /* User testing */
+  .pt-grid{grid-template-columns:1fr!important;}
+
+  /* Flow steps */
+  .f4-flow{grid-template-columns:1fr!important;gap:1rem;}
+
+  /* Back btn */
+  .back-btn{font-size:.44rem;padding:.5rem 1.2rem;bottom:1.2rem;}
+
+  /* Phone mockups — responsive widths */
+  .pf img.w180,.pf img.w200,.pf img.w220,.pf img.w260,.pf img.w160{
+    width:24vw;
+    min-width:86px;
+    max-width:180px;
+  }
+  .pf{border-radius:22px;}
+  .pf img{border-radius:16px;}
+
+  /* Phone rows: hide scrollbar, allow overflow scroll as safety net */
+  div[style*="display:flex"][style*="align-items:flex-end"]{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:.5rem;
+    gap:.6rem !important;
+    scrollbar-width:none;
+  }
+  div[style*="display:flex"][style*="align-items:flex-end"]::-webkit-scrollbar{
+    display:none;
+  }
+
+  /* Modal phones wrap row — 2 per row */
+  .rev{
+    justify-content:center;
+    gap:1rem !important;
+  }
+  .rev .ph{
+    flex:0 0 calc(50% - .5rem);
+    max-width:180px;
+  }
+  .rev .ph .pf img{
+    width:100%;
+    max-width:none;
+  }
+
+  /* User flow / wireframe inline grids */
+  div[style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr !important;
+  }
+
+  /* Feature phone screens — 1 column on small */
+  .feat-screens{grid-template-columns:1fr 1fr !important;}
+
+  /* Competitor table scroll */
+  .comp-t-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* Wireframe grids */
+  .wg{grid-template-columns:repeat(2,1fr) !important;}
+}
+@media(max-width:480px){
+  .s{padding:2.5rem 1rem;}
+  .h-ttl{font-size:clamp(2.2rem,10vw,3.5rem);}
+  .ov{grid-template-columns:1fr!important;}
+  .ov-c{border-right:none!important;}
+  .ch3{grid-template-columns:1fr!important;}
+  .feat-screens{grid-template-columns:1fr 1fr!important;}
+  div[style*="repeat(5,1fr)"]{grid-template-columns:1fr 1fr!important;}
+
+  /* Phones on narrow screens */
+  .pf img.w180,.pf img.w200,.pf img.w220,.pf img.w260,.pf img.w160{
+    width:26vw;
+    min-width:88px;
+  }
+  .rev .ph{flex:0 0 calc(50% - .5rem);}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor-outer"></div><div id="cursor-inner"></div>
+<div class="noise"></div>
+<div id="prog"></div>
+<div id="zo"><img id="zi" src="" alt=""></div>
+
+<nav class="nav" id="nav">
+  <a href="../portfolio_arina.html" class="nb-logo"><div class="nb-gem"></div>ARINA KARPOVA</a>
+  <div class="nb-right">
+    <a href="../portfolio_arina.html?section=projects" class="nb-back">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M9 3L4 7l5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="nav_back">Projects</span>
+    </a>
+    <div class="lang-sw"><button id="btnEn" onclick="switchLang('en')">EN</button><span>|</span><button id="btnRu" onclick="switchLang('ru')">RU</button></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-num">03</div>
+  <div class="hero-phones">
+    <div class="hp hp-a"><img src="assets/Main.png" alt="EverLove home" style="width:210px;border-radius:33px;"></div>
+    <div class="hp hp-b"><img src="assets/Story_screen.png" alt="EverLove story" style="width:250px;border-radius:33px;"></div>
+  </div>
+  <div class="hero-body">
+    <div class="h-eye" id="hEye">Case Study · 03 &nbsp;—&nbsp; Romance Visual Novel · iOS</div>
+    <h1 class="h-ttl" id="hTtl">
+      <span class="ln"><span>EVER</span></span>
+      <span class="ln"><span>LOVE</span></span>
+    </h1>
+    <p class="h-tag" id="hTag" data-i18n="hero_tag">Designing a romance you can hold in your hands.</p>
+    <div class="h-chips" id="hChips">
+      <span class="chip ac">UI / UX</span>
+      <span class="chip ac">Design System</span>
+      <span class="chip">iOS · Mobile</span>
+      <span class="chip">Visual Novel</span>
+      <span class="chip">2024</span>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-lbl">scroll</span></div>
+</section>
+
+<!-- STRIP -->
+<section class="s" style="padding-top:3.5rem;padding-bottom:0;">
+  <div class="si">
+    <div class="ov rev" style="grid-template-columns:repeat(3,1fr);">
+      <div class="ov-c"><div class="ov-l">// Role</div><div class="ov-v" data-i18n="ov_role">Solo Designer</div><div class="ov-d" data-i18n="ov_role_d">Research · UX · UI · System · Handoff</div></div>
+      <div class="ov-c"><div class="ov-l">// Platform</div><div class="ov-v">iOS · Mobile</div><div class="ov-d">Portrait-first, single-handed</div></div>
+      <div class="ov-c"><div class="ov-l">// Status</div><div class="ov-v" data-i18n="ov_status">In Development</div><div class="ov-d" data-i18n="ov_status_d">Active iteration</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIEF -->
+<section class="s">
+  <div class="si">
+    <div class="brief rev">
+      <div>
+        <div class="brief-tag" data-i18n="brief_tag">// Project Brief</div>
+        <h2 class="brief-h" data-i18n="brief_h">New game. Blank canvas.<br>One designer — from first pixel.</h2>
+        <div>
+          <div class="brief-r"><span class="brief-rl" data-i18n="l_role">Role</span><span class="brief-rv" data-i18n="brief_role">Solo Designer</span></div>
+          <div class="brief-r"><span class="brief-rl" data-i18n="l_platform">Platform</span><span class="brief-rv">iOS · Mobile</span></div>
+          <div class="brief-r"><span class="brief-rl" data-i18n="l_client">Client</span><span class="brief-rv" data-i18n="brief_client">Indie developer</span></div>
+          <div class="brief-r"><span class="brief-rl" data-i18n="l_audience">Audience</span><span class="brief-rv" data-i18n="brief_audience">Girls 14+ · readers, not casual players</span></div>
+          <div class="brief-r"><span class="brief-rl" data-i18n="l_status">Status</span><span class="brief-rv" data-i18n="brief_status">In Development</span></div>
+        </div>
+        <p class="brief-note" data-i18n="brief_note">EverLove targets the gap in the interactive fiction market: Episode and Choices dominate with casual entertainment, but there's an underserved audience of girls 14+ who want psychological depth — moral complexity, characters with real flaws, stories that feel closer to fiction than to a dopamine loop. One indie developer. One designer.</p>
+      </div>
+      <div>
+        <div class="brief-tag" data-i18n="done_tag">// Deliverables</div>
+        <ul class="brief-list" data-i18n-html="brief_list">
+          <li>Visual identity from zero — palette, typography, style</li>
+          <li>Full design system — components, bespoke icons, interaction specs</li>
+          <li>UX flows, user journeys, edge cases and error states</li>
+          <li>Figma files structured for handoff — screens organised by flow, components named consistently, assets exported in required formats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIREFRAMES -->
+<div class="div"></div>
+<section class="s s-alt">
+  <div class="si">
+    <div class="eye rev">// Process — Wireframes</div>
+    <h2 class="ttl-lg rev" data-i18n="wf_ttl">Structure before style.</h2>
+    <p class="body rev" style="max-width:620px;margin:.6rem 0 2.5rem;" data-i18n="wf_body">Before any colour or typography, I mapped the full navigation logic, key screens and repeat states. Wireframes defined the skeleton that the visual system grew around.</p>
+    <!-- portrait wireframes: all 2160x3840 except store which is 2160x6020 -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.9rem;margin-bottom:.9rem;" class="rev">
+      <div class="wi"><div class="wf-box" style="height:280px;"><img src="assets/wf_Main.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf1">Home screen</div></div>
+      <div class="wi"><div class="wf-box" style="height:280px;"><img src="assets/wf_Story_screen.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf2">Story player</div></div>
+      <div class="wi"><div class="wf-box" style="height:280px;"><img src="assets/wf_No_tickets.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf6">No tickets</div></div>
+      <div class="wi"><div class="wf-box" style="height:280px;"><img src="assets/wf_Repeat.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf7">Repeat flow</div></div>
+      <div class="wi"><div class="wf-box" style="height:280px;"><img src="assets/wf_load.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf8">Loading</div></div>
+    </div>
+    <!-- landscape wireframes: tall portrait store -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem;" class="rev">
+      <div class="wi"><div class="wf-box" style="height:200px;"><img src="assets/wf_Premium_store.png" onclick="openZoom(this.src)"></div><div class="wl" data-i18n="wf5">Premium store</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<div class="div"></div>
+<section class="s">
+  <div class="si">
+    <div class="eye rev">// Research — Competitor Analysis & Synthesis</div>
+    <h2 class="ttl-lg rev" data-i18n="res_ttl">Listening to the players who read every chapter.</h2>
+    <p class="body rev" style="max-width:660px;margin:.6rem 0 2.5rem;" data-i18n="res_body">Competitor teardown across 4 apps, monetization audit, and App Store review synthesis. Four insights shaped every design decision.</p>
+
+    <div style="padding:1.2rem 1.6rem;border-left:2px solid rgba(200,56,120,.3);background:rgba(14,6,22,.5);margin-bottom:2rem;" class="rev">
+      <p class="body" style="font-size:.88rem;" data-i18n="res_method">Four competitor apps installed and played for 2+ weeks. App Store reviews filtered by 3–4 stars — where honest feedback lives — and grouped into recurring themes. Monetization flows screenshotted and mapped side by side.</p>
+    </div>
+    <div class="eye rev" style="margin-bottom:.9rem;">// Competitor Matrix</div>
+    <div style="overflow-x:auto;margin-bottom:3rem;" class="rev">
+      <table class="comp-tbl">
+        <thead>
+          <tr>
+            <th data-i18n="ct_h1">Product</th>
+            <th data-i18n="ct_h2">Currencies</th>
+            <th data-i18n="ct_h3">Monetization</th>
+            <th data-i18n="ct_h4">UI vibe</th>
+            <th data-i18n="ct_h5">Customization</th>
+            <th data-i18n="ct_h6">Reading UX</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ct-name">Choices</td>
+            <td><span class="ct-tag" data-i18n="ct_1cur">1 currency</span><br>Diamonds</td>
+            <td class="ct-neg" data-i18n="ct_ch_m">Hard gate per choice (16–30 💎)</td>
+            <td data-i18n="ct_ch_ui">Light, pastel, functional</td>
+            <td data-i18n="ct_ch_cu">Outfit unlocks per scene</td>
+            <td class="ct-neg" data-i18n="ct_ch_rx">Interrupted at every branch</td>
+          </tr>
+          <tr>
+            <td class="ct-name">Episode</td>
+            <td><span class="ct-tag" data-i18n="ct_2cur">2 currencies</span><br>Gems + Passes</td>
+            <td class="ct-neg" data-i18n="ct_ep_m">Time gate + hard gate combined</td>
+            <td data-i18n="ct_ep_ui">Light, YA-oriented, busy</td>
+            <td class="ct-pos" data-i18n="ct_ep_cu">Deep character creator</td>
+            <td data-i18n="ct_ep_rx">Passes consumed per episode</td>
+          </tr>
+          <tr>
+            <td class="ct-name">Chapters</td>
+            <td><span class="ct-tag" data-i18n="ct_2cur">2 currencies</span><br>Tickets + Diamonds</td>
+            <td data-i18n="ct_ch2_m">Time gate + purchase gate</td>
+            <td class="ct-pos" data-i18n="ct_ch2_ui">Dark, cinematic, strong art</td>
+            <td class="ct-neg" data-i18n="ct_ch2_cu">Minimal in-story choices</td>
+            <td class="ct-pos" data-i18n="ct_ch2_rx">Full-bleed, good immersion</td>
+          </tr>
+          <tr>
+            <td class="ct-name">Romance Club</td>
+            <td><span class="ct-tag" data-i18n="ct_2cur">2 currencies</span><br>Stars + Diamonds</td>
+            <td class="ct-pos" data-i18n="ct_rc_m">Soft earn + hard buy mix</td>
+            <td class="ct-pos" data-i18n="ct_rc_ui">Rich dark, editorial — closest</td>
+            <td class="ct-pos" data-i18n="ct_rc_cu">Wardrobe system per story</td>
+            <td class="ct-pos" data-i18n="ct_rc_rx">Immersive, best in class</td>
+          </tr>
+          <tr class="ct-ours">
+            <td class="ct-name">EverLove ✦</td>
+            <td><span class="ct-tag ct-tag-ac" data-i18n="ct_2cur">2 currencies</span><br>Roses · Tickets</td>
+            <td class="ct-pos" data-i18n="ct_el_m">Soft nudge — invitation, not gate</td>
+            <td class="ct-pos" data-i18n="ct_el_ui">Dark atmospheric, editorial</td>
+            <td class="ct-pos" data-i18n="ct_el_cu">Mid-story picker, live preview</td>
+            <td class="ct-pos" data-i18n="ct_el_rx">Full-bleed, quiet chrome</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="eye rev" style="margin-bottom:.9rem;">// Affinity Map — App Store review synthesis</div>
+    <div class="aff-grid rev">
+      <div class="aff-cluster" style="--clr:rgba(255,215,60,.06);">
+        <div class="aff-label" style="color:rgba(255,220,80,.7);" data-i18n="aff1_l">Reading experience</div>
+        <div class="aff-notes">
+          <div class="sticky" style="--sc:rgba(255,240,130,.92);--sr:rotate(-1.5deg);" data-i18n="aff1_1">"Story keeps stopping for paywalls"</div>
+          <div class="sticky" style="--sc:rgba(255,232,110,.92);--sr:rotate(1.2deg);" data-i18n="aff1_2">"I lose immersion when a choice is locked"</div>
+          <div class="sticky" style="--sc:rgba(255,244,140,.92);--sr:rotate(-0.6deg);" data-i18n="aff1_3">"Full-screen art feels like a real story"</div>
+          <div class="sticky" style="--sc:rgba(255,236,120,.92);--sr:rotate(2deg);" data-i18n="aff1_4">"Just let me read — I'll pay later"</div>
+        </div>
+      </div>
+      <div class="aff-cluster" style="--clr:rgba(240,80,170,.07);">
+        <div class="aff-label" style="color:rgba(240,120,190,.7);" data-i18n="aff2_l">Economy & currencies</div>
+        <div class="aff-notes">
+          <div class="sticky" style="--sc:rgba(255,195,225,.92);--sr:rotate(1.2deg);" data-i18n="aff2_1">"Multiple currencies — no idea what any does"</div>
+          <div class="sticky" style="--sc:rgba(255,205,230,.92);--sr:rotate(-2deg);" data-i18n="aff2_2">"Never know what I'm about to spend"</div>
+          <div class="sticky" style="--sc:rgba(255,188,218,.92);--sr:rotate(0.5deg);" data-i18n="aff2_3">"Want to see price BEFORE I choose"</div>
+          <div class="sticky" style="--sc:rgba(255,208,232,.92);--sr:rotate(-1deg);" data-i18n="aff2_4">"Roses feel meaningful. Gems feel fake."</div>
+        </div>
+      </div>
+      <div class="aff-cluster" style="--clr:rgba(170,110,255,.07);">
+        <div class="aff-label" style="color:rgba(190,140,255,.7);" data-i18n="aff3_l">Customization & identity</div>
+        <div class="aff-notes">
+          <div class="sticky" style="--sc:rgba(222,205,255,.92);--sr:rotate(-1deg);" data-i18n="aff3_1">"Choosing the outfit is my favourite part"</div>
+          <div class="sticky" style="--sc:rgba(212,192,255,.92);--sr:rotate(1.8deg);" data-i18n="aff3_2">"Want to see it on MY character"</div>
+          <div class="sticky" style="--sc:rgba(228,210,255,.92);--sr:rotate(-0.8deg);" data-i18n="aff3_3">"Dress-up is a reward, not a task"</div>
+          <div class="sticky" style="--sc:rgba(218,198,255,.92);--sr:rotate(1.2deg);" data-i18n="aff3_4">"Love when my outfit appears in scene"</div>
+        </div>
+      </div>
+      <div class="aff-cluster" style="--clr:rgba(60,200,220,.05);">
+        <div class="aff-label" style="color:rgba(80,205,225,.65);" data-i18n="aff4_l">Retention & return</div>
+        <div class="aff-notes">
+          <div class="sticky" style="--sc:rgba(180,242,250,.92);--sr:rotate(0.8deg);" data-i18n="aff4_1">"Daily reward is why I open the app"</div>
+          <div class="sticky" style="--sc:rgba(170,238,248,.92);--sr:rotate(-1.5deg);" data-i18n="aff4_2">"Streak bonuses keep me coming back"</div>
+          <div class="sticky" style="--sc:rgba(185,244,252,.92);--sr:rotate(2deg);" data-i18n="aff4_3">"Chapter notifications work on me"</div>
+          <div class="sticky" style="--sc:rgba(175,240,250,.92);--sr:rotate(-0.5deg);" data-i18n="aff4_4">"I quit when tickets run out"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eye rev" style="margin-top:2.5rem;margin-bottom:.9rem;">// Key Insights</div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="rc rev" data-d="1"><div class="rc-n">01</div><div><div class="rc-t" data-i18n="i1_t">Players replay for the choices</div><p class="rc-b" data-i18n="i1_b">Decision moments — not the art — were what people screenshotted and shared. Choices needed real visual weight.</p></div></div>
+      <div class="rc rev" data-d="2"><div class="rc-n">02</div><div><div class="rc-t" data-i18n="i2_t">Dressing up is a reward, not a chore</div><p class="rc-b" data-i18n="i2_b">Outfit customization drove emotional investment — it deserved a dedicated, tactile flow.</p></div></div>
+      <div class="rc rev" data-d="3"><div class="rc-n">03</div><div><div class="rc-t" data-i18n="i3_t">Currency confusion kills conversion</div><p class="rc-b" data-i18n="i3_b">Even two currencies can confuse — each needed a completely different visual shape and a single clear job so players never spend the wrong one by mistake.</p></div></div>
+      <div class="rc hl rev" data-d="4"><div class="rc-n">04</div><div><div class="rc-t" data-i18n="i4_t">Generosity earns trust</div><p class="rc-b" data-i18n="i4_b">Daily rewards and clear upsells outperformed hard gates. Soft nudges ("you're missing roses") felt fair, not punitive.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN SYSTEM -->
+<div class="div"></div>
+<section class="s s-alt">
+  <div class="si">
+    <div class="eye rev">// Design System</div>
+    <h2 class="ttl-lg rev" data-i18n="ds_ttl">One romantic language, built to scale.</h2>
+    <p class="body rev" style="max-width:600px;margin:.6rem 0 2.5rem;" data-i18n="ds_body">Typography, colour rules, and a component library — so new chapters and screens could ship without reinventing the look. Two currencies with distinct visual identities: roses for premium choices, tickets for chapter access.</p>
+    <div class="rev" style="border:1px solid var(--border);overflow:hidden;">
+      <img src="assets/UIKit1.png" alt="EverLove UI Kit" style="display:block;width:100%;cursor:zoom-in;" onclick="openZoom(this.src)">
+    </div>
+  </div>
+</section>
+
+<!-- STORY PLAYER -->
+<div class="div"></div>
+<section class="s s-alt">
+  <div class="si">
+    <div class="eye rev">// Feature 02 — Story Player</div>
+    <div class="feat rev-c rev">
+      <div>
+        <h2 class="ttl-lg" data-i18n="f2_ttl">Reading that feels like watching a film.</h2>
+        <p class="body" style="margin:.8rem 0 1.5rem;" data-i18n="f2_body">Full-bleed art sets each scene. The primary action — Play — glows magenta. Currency and navigation stay at the edges, invisible until needed. Dialogue choices have real visual weight so every decision feels meaningful.</p>
+        <div class="fp-pts">
+          <div class="fp-pt"><div class="fp-dot"></div><span class="fp-t" data-i18n="f2_p1"><strong>Quiet chrome.</strong> Top bar carries only currency & back — everything else fades during reading.</span></div>
+          <div class="fp-pt"><div class="fp-dot"></div><span class="fp-t" data-i18n="f2_p2"><strong>Choice UI.</strong> Branch buttons styled as character cards with rose-cost shown inline.</span></div>
+          <div class="fp-pt"><div class="fp-dot"></div><span class="fp-t" data-i18n="f2_p3"><strong>Social proof.</strong> Live read-count and share build momentum around popular chapters.</span></div>
+        </div>
+      </div>
+      <div class="fp">
+        <div style="display:flex;gap:1.4rem;align-items:flex-end;">
+          <div class="ph"><div class="pf ff-a"><img src="assets/Story_screen.png" class="w200" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f2_s1">Story screen</div></div>
+          <div class="ph"><div class="pf ff-b"><img src="assets/dlg1.png" class="w200" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f2_s2">Dialogue</div></div>
+          <div class="ph"><div class="pf ff-a"><img src="assets/dlg2.png" class="w200" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f2_s3">Choice moment</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOME -->
+<div class="div"></div>
+<section class="s">
+  <div class="si">
+    <div class="eye rev">// Feature 03 — Home & Discovery</div>
+    <div class="feat rev">
+      <div>
+        <h2 class="ttl-lg" data-i18n="f3_ttl">A home that knows where you left off.</h2>
+        <p class="body" style="margin:.8rem 0 1.5rem;" data-i18n="f3_body">The home surface leads with the player's current story and a one-tap resume, then unfolds into discovery: featured arcs, new chapters, and the daily reward that brings readers back. Currency lives top-right — always one tap from the shop.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem;">
+          <div style="padding:1.3rem 1.4rem;border:1px solid var(--border);border-top:2px solid var(--ac);"><div class="ov-l" data-i18n="f3_c1_t">Resume first</div><div class="ov-d" data-i18n="f3_c1">Continue reading is the hero action.</div></div>
+          <div style="padding:1.3rem 1.4rem;border:1px solid var(--border);border-top:2px solid var(--ac);"><div class="ov-l" data-i18n="f3_c2_t">Daily reward</div><div class="ov-d" data-i18n="f3_c2">A gentle reason to return each day.</div></div>
+        </div>
+      </div>
+      <div class="fp">
+        <div class="ph"><div class="pf ff-b" style="box-shadow:0 50px 110px -25px rgba(0,0,0,.98),0 0 110px -12px rgba(220,50,140,.65);"><img src="assets/Main.png" style="width:240px;border-radius:33px;display:block;cursor:zoom-in;" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f3_s1">Home screen</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTFIT FLOW — THE BIG ONE -->
+<div class="div"></div>
+<section class="s s-alt">
+  <div class="si">
+    <div class="eye rev">// Feature 04 — Outfit Customization</div>
+    <h2 class="ttl-lg rev" data-i18n="f4_ttl">Dress the heroine for the moment.</h2>
+    <p class="body rev" style="max-width:660px;margin:.6rem 0 2.5rem;" data-i18n="f4_body">The most complex flow in the product: triggered mid-story, it must feel immersive — not like leaving the game. A horizontal picker lets players browse looks against the live scene. Every decision point is handled: confirmation, insufficient roses, upsell, and return to story.</p>
+
+    <!-- Outfit picker screens -->
+    <div style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;" class="rev">
+      <div class="ph"><div class="pf ff-b"><img src="assets/Choose_your_outfit1.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f4_s2">Selection</div></div>
+      <div class="ph"><div class="pf ff-a"><img src="assets/Choose_your_outfit2.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f4_s3">Confirm — rose cost</div></div>
+    </div>
+
+    <!-- User flow -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;" class="rev">
+      <div>
+        <div class="eye" style="margin-bottom:1rem;" data-i18n="f4_flow_lbl">// Complete user flow: Story → Outfit → Back</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-n">1</div><div><div class="flow-ttl" data-i18n="fl1_t">Story moment triggers outfit prompt</div><p class="flow-desc" data-i18n="fl1_b">At a pivotal scene, the game prompts wardrobe selection. The overlay slides up without leaving the story screen.</p></div></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-step"><div class="flow-n">2</div><div><div class="flow-ttl" data-i18n="fl2_t">Horizontal picker — try against the live scene</div><p class="flow-desc" data-i18n="fl2_b">Looks preview on the actual illustration, not a doll. Scroll left/right to compare options.</p></div></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-step"><div class="flow-n">3</div><div><div class="flow-ttl" data-i18n="fl3_t">Confirm — rose price on the button</div><p class="flow-desc" data-i18n="fl3_b">Honest pricing: the cost is on the action itself, not buried in fine print.</p></div></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-step hl"><div class="flow-n" style="color:var(--ac2);">!</div><div><div class="flow-ttl" data-i18n="fl4_t">Not enough roses → soft upsell</div><p class="flow-desc" data-i18n="fl4_b">"You are missing roses" — not an error, an invitation. Routes to the shop with the exact deficit shown, then returns to the same moment in the story.</p></div></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-step"><div class="flow-n">4</div><div><div class="flow-ttl" data-i18n="fl5_t">Success — story continues seamlessly</div><p class="flow-desc" data-i18n="fl5_b">The outfit appears on the heroine, the chapter resumes. No friction, no dead ends.</p></div></div>
+        </div>
+      </div>
+      <!-- Missing roses screen -->
+      <div style="display:flex;flex-direction:column;gap:1.4rem;align-items:center;">
+        <div class="ph"><div class="pf ff-b"><img src="assets/You_are_missing_roses.png" class="w220" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f4_s4">You are missing roses</div></div>
+        <div style="padding:1.6rem 1.8rem;border:1px solid rgba(200,56,120,.3);background:rgba(100,10,55,.09);border-left:2px solid var(--ac2);max-width:300px;">
+          <div class="eye" style="margin-bottom:.5rem;">// Design decision</div>
+          <p class="body" style="font-size:.9rem;" data-i18n="f4_decision">The "missing roses" screen is an opportunity, not an error message. Copy is warm ("you're just a few roses away"), the CTA routes to the specific bundle the player needs — and returns them to the exact scene after purchase.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP & ECONOMY -->
+<div class="div"></div>
+<section class="s">
+  <div class="si">
+    <div class="eye rev">// Feature 05 — Shop & Economy</div>
+    <div class="feat rev-c rev">
+      <div>
+        <h2 class="ttl-lg" data-i18n="f5_ttl">A gift shop, not a toll booth.</h2>
+        <p class="body" style="margin:.8rem 0 2rem;" data-i18n="f5_body">Two currencies with clear roles. The shop surface is warm and personalized: "just for you" bundles, soft badge discounts, a purchase success state that celebrates and returns the player to the story immediately.</p>
+        <div class="cur3" style="grid-template-columns:1fr 1fr;">
+          <div class="cur hl"><div class="cur-n" style="color:var(--ac2);" data-i18n="cur2_n">Roses</div><p class="cur-b" data-i18n="cur2_b">The choice currency. Spent on premium story branches and outfits — the heart of every decision moment.</p></div>
+          <div class="cur"><div class="cur-n" style="color:var(--bone2);" data-i18n="cur3_n">Tickets</div><p class="cur-b" data-i18n="cur3_b">Chapter access. Earned through play or topped up — the steady pulse that keeps stories moving.</p></div>
+        </div>
+      </div>
+      <div class="fp">
+        <div style="display:flex;gap:1.4rem;align-items:flex-end;justify-content:center;">
+          <div class="ph"><div class="pf ff-b"><img src="assets/Shop.png" class="w200" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f5_s1">Shop</div></div>
+          <div class="ph"><div class="pf ff-a"><img src="assets/Shop_Purchase_Success.png" class="w200" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="f5_s2">Purchase success</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODALS -->
+<div class="div"></div>
+<section class="s s-alt">
+  <div class="si">
+    <div class="eye rev">// Feature 06 — Modals & System States</div>
+    <h2 class="ttl-lg rev" style="margin-bottom:.6rem;" data-i18n="f6_ttl">Even the boring stuff has to look good.</h2>
+    <p class="body rev" style="max-width:620px;margin-bottom:2.5rem;" data-i18n="f6_body">Back confirmations, restart prompts, the no-tickets warning — I spent as much time on these as on the hero moments. When a modal looks like part of the game, the player barely notices it. That was the goal.</p>
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center;" class="rev">
+      <div class="ph"><div class="pf ff-a"><img src="assets/Modal_collect.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="m1">Daily collect</div></div>
+      <div class="ph"><div class="pf ff-b"><img src="assets/Modal_back.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="m2">Back confirm</div></div>
+      <div class="ph"><div class="pf ff-a"><img src="assets/Modal_missing_tickets.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="m3">Missing tickets</div></div>
+      <div class="ph"><div class="pf ff-b"><img src="assets/Modal_about.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="m4">About</div></div>
+      <div class="ph"><div class="pf ff-a"><img src="assets/Modal_restart.png" class="w180" onclick="openZoom(this.src)"></div><div class="pl" data-i18n="m5">Restart</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<div class="div"></div>
+<section class="s">
+  <div class="si">
+    <div class="eye rev">// Reflection</div>
+    <h2 class="ttl-lg rev" data-i18n="out_ttl">What this project taught me.</h2>
+
+    <div class="tk2">
+      <div class="tk rev" data-d="1"><div class="tk-t" data-i18n="tk1_t">Designing alone sharpens every decision</div><p class="tk-b" data-i18n="tk1_b">When there's no one to validate design choices, all responsibility sits with you. Learned to trust my own solutions and articulate the reasoning behind each one — which made handoff conversations with developers much sharper.</p></div>
+      <div class="tk rev" data-d="2"><div class="tk-t" data-i18n="tk2_t">Economy as narrative — not an add-on</div><p class="tk-b" data-i18n="tk2_b">The biggest unlock: designing soft upsells as part of the story language, not as interrupts. When "you're missing roses" reads like a romantic invitation rather than an error, players engage rather than bounce.</p></div>
+      <div class="tk rev" data-d="3"><div class="tk-t" data-i18n="tk3_t">Building the system first paid off</div><p class="tk-b" data-i18n="tk3_b">Building the component library — buttons, modals, tab bar, cards — before designing individual screens felt slow at first. But when the outfit picker needed a new state we hadn't planned, it took a morning, not a week. The pieces were already there.</p></div>
+      <div class="tk rev" data-d="4"><div class="tk-t" data-i18n="tk4_t">What I'd explore next</div><p class="tk-b" data-i18n="tk4_b">Animated scene transitions between chapters, a chapter recap screen for players returning after a break, and a clearer currency introduction for first-time players — shown through context, not a tutorial.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section class="footer">
+  <div class="footer-eye" data-i18n="cta_eye">// UI/UX Case Study · EverLove · 2024</div>
+  <div class="footer-ttl rev">EVERLOVE</div>
+  <p class="footer-sub rev" data-i18n="cta_sub">Romance · Choices · Eternal Stories</p>
+</section>
+
+<a href="../portfolio_arina.html?section=projects" class="back-btn" data-i18n="back_btn">← Return to Projects</a>
+
+<script>
+const T={
+en:{
+  nav_back:'Projects',back_btn:'← Return to Projects',
+  hero_tag:'Designing a romance you can hold in your hands.',
+  ov_role:'Solo Designer',ov_role_d:'Research · UX · UI · System · Handoff',ov_status:'In Development',ov_status_d:'Active iteration',
+  brief_tag:'// Project Brief',done_tag:'// Deliverables',l_role:'Role',l_platform:'Platform',l_status:'Status',
+  brief_h:'New game. Blank canvas.<br>One designer, from day one.',
+  brief_role:'Solo Designer',brief_status:'In Development',
+  l_client:'Client',brief_client:'Indie developer',l_audience:'Audience',brief_audience:'Girls 14+ · readers, not casual players',brief_note:'EverLove is a narrative mobile game for an audience that wants real stories, not a dopamine loop. Episode and Choices own the casual end. This targets the gap: girls 14+ who want moral complexity and characters with genuine flaws. One indie developer. Me.',
+  brief_list:'<li>Visual identity from zero — palette, typography, style</li><li>Full design system — components, bespoke icons, interaction specs</li><li>UX flows, user journeys, edge cases and error states</li><li>Figma files structured for handoff — screens organised by flow, components named consistently, assets exported in required formats</li>',
+  wf_ttl:'Structure before style.',wf_body:'Before any colour or typeface, I mapped the navigation logic, key screens and recurring states. Wireframes defined the architecture that everything visual grew from.',
+  wf1:'Home screen',wf2:'Story player',wf3:'Outfit picker',wf4:'Outfit picker v2',wf5:'Premium store',wf6:'No tickets state',wf7:'Repeat flow',wf8:'Loading screen',
+  it_ttl:'Two style directions. One winner.',it_body:'I explored two directions before locking the visual language — lighter and darker palettes, different approaches to typography and glow.',
+  it1:'Style direction 1',it2:'Style direction 2',it3:'Main screen v1',it4:'Main screen v2 → final',it5:'Modal explorations',it6:'Dialogue explorations',it7:'Early sketch',it8:'Sketch v2',
+  it_decision:'Direction 2 won: darker ink background, stronger glow, Cormorant for an editorial romantic feel. Direction 1 felt too soft — closer to YA than to the tension the stories needed.',
+  ch_ttl:'Three problems. One romantic universe.',ch1_t:'Reading without friction',ch1_b:'Text is the core experience. Controls, currencies and chrome had to recede so the story stays centre-stage, scene after scene.',ch2_t:'Monetize without breaking the spell',ch2_b:'Paywalls feel cynical when loud. Make premium choices feel like part of the fantasy — not a toll booth.',ch3_t:'One world, many surfaces',ch3_b:'Story, wardrobe, shop and settings all had to feel like the same romantic universe — held together by a single deliberate system.',
+  res_ttl:'Listening to the players who read every chapter.',res_body:'Competitor teardown, monetisation audit, player review synthesis. Four patterns shaped every major decision.',
+  i1_t:'Players replay for the choices',i1_b:'Decision moments — not the art — were what people screenshotted and shared. Choices needed real visual weight.',
+  i2_t:'Dressing up is a reward, not a chore',i2_b:'Outfit customization drove emotional investment — it deserved a dedicated, tactile flow.',
+  i3_t:'Currency confusion kills conversion',i3_b:'Even two currencies can confuse. Each needed a completely different visual shape and a single clear job — so players never spend the wrong one by mistake.',
+  i4_t:'Generosity earns trust',i4_b:'Daily rewards and clear upsells outperformed hard gates. Soft nudges ("you\'re missing roses") felt fair, not punitive.',
+  ds_ttl:'One romantic language, built to scale.',ds_body:'Typography, colour rules, and a component library — so new chapters and screens could ship without reinventing the look each time.',
+  ds_mono:'SHARE TECH MONO — UI · labels',ds_icon_sub:'unified 1.5px stroke',
+  c_btn:'Buttons',c_nav:'Tab bar',c_tog:'Toggles & badges',c_shop:'Shop card',c_best:'BEST VALUE',
+  f1_ttl:'First impression.<br>Before the first word.',f1_body:'The loading screen sets the atmosphere before a single word of story. Sign-up is pared down to the minimum — no onboarding quiz, no 7-step setup.',
+  f1_p1:'<strong>Atmosphere first.</strong> Full-screen art with brand palette on load — no onboarding quiz, no 7-step setup.',f1_p2:'<strong>Minimal friction.</strong> Sign-up asks for the least possible. Account details can be completed later.',f1_p3:'<strong>Brand voice from frame one.</strong> Every screen shares the same ink background and glow — visual continuity begins before the game does.',f1_s1:'Loading screen',f1_s2:'Sign up',
+  f2_ttl:'Reading that feels like watching a film.',f2_body:'Full-bleed art sets each scene. The primary action — Play — glows magenta. Currency and navigation stay at the edges, out of the way of the story.',
+  f2_p1:'<strong>Quiet chrome.</strong> Top bar carries only currency & back — everything fades during reading.',f2_p2:'<strong>Choice UI.</strong> Branch buttons styled with rose-cost shown inline.',f2_p3:'<strong>Social proof.</strong> Live read-count and share build momentum around popular chapters.',f2_s1:'Story screen',f2_s2:'Dialogue',f2_s3:'Choice moment',
+  f3_ttl:'A home that knows where you left off.',f3_body:'The home screen leads with the player\'s current story and a one-tap resume, then opens into discovery: featured arcs, daily reward, catalogue.',
+  f3_c1_t:'Resume first',f3_c1:'Continue reading is the hero action.',f3_c2_t:'Daily reward',f3_c2:'A gentle reason to return each day.',f3_s1:'Home screen',
+  f4_ttl:'Dress the heroine for the moment.',f4_body:'The most complex flow in the product: triggered mid-story, it has to feel immersive — not like leaving the game. Every decision in this flow has a specific UX reason.',
+  f4_flow_lbl:'// Complete user flow: Story → Outfit → Back',
+  fl1_t:'Story moment triggers outfit prompt',fl1_b:'At a pivotal scene, the game prompts wardrobe selection. The overlay slides up without leaving the story screen.',
+  fl2_t:'Horizontal picker — try against the live scene',fl2_b:'Looks preview on the actual illustration, not a doll. Scroll left/right to compare options.',
+  fl3_t:'Confirm — rose price on the button',fl3_b:'Honest pricing: the cost is on the action itself, not buried in fine print.',
+  fl4_t:'Not enough roses → soft upsell',fl4_b:'"You are missing roses" — not an error, an invitation. Routes to the shop with the exact deficit shown, then returns to the same moment in the story.',
+  fl5_t:'Success — story continues seamlessly',fl5_b:'The outfit appears on the heroine, the chapter resumes. No friction, no dead ends.',
+  f4_s1:'Outfit picker',f4_s2:'Selection',f4_s3:'Confirm — rose cost inline',f4_s4:'You are missing roses',
+  f4_decision:'The "missing roses" screen is an opportunity, not an error. The copy is warm, the CTA routes to the exact bundle the player needs, then returns them to the story.',
+  f5_ttl:'A gift shop, not a toll booth.',f5_body:'Two currencies with clear distinct roles. The shop feels like a gift shop, not a paywall — bundles sized for the exact chapter or outfit the player is looking at.',
+  cur2_n:'Roses',cur2_b:'The choice currency. Spent on premium story branches and outfits — the heart of every decision moment.',cur3_n:'Tickets',cur3_b:'Chapter access. Earned through play or topped up — the steady pulse that keeps stories moving.',
+  f5_s1:'Shop',f5_s2:'Purchase success',
+  f6_ttl:'Even the boring stuff has to look good.',f6_body:'Back confirmations, restart prompts, no-tickets warnings — I spent as much time on these as on the hero moments. They\'re where trust is lost, or kept.',
+  m1:'Daily collect',m2:'Back confirm',m3:'Missing tickets',m4:'About',m5:'Restart',
+  out_ttl:'What this built in me.',tk1_t:'Designing alone sharpens every decision',tk1_b:'No one to validate to — every decision is yours. Learned to trust my own solutions more, and to explain them better when it matters.',
+  tk2_t:'Economy as narrative',tk2_b:'The biggest shift: designing soft upsells as part of the story, not as interrupts. When "you\'re missing roses" feels like a moment instead of a gate, conversion follows.',
+  tk3_t:'Building the system first paid off',tk3_b:'Doing the component library before individual screens felt slow. But when new chapters needed new screens, the system handled it — I wasn\'t rebuilding from scratch each time.',
+  tk4_t:'What I\'d explore next',tk4_b:'Animated scene transitions, a chapter recap for returning players, and a clearer onboarding into the currency system earlier in the flow.',
+  ct_h1:'Product',ct_h2:'Currencies',ct_h3:'Monetization',ct_h4:'UI vibe',ct_h5:'Customization',ct_h6:'Reading UX',
+  ct_1cur:'1 currency',ct_2cur:'2 currencies',ct_3cur:'2 currencies',
+  ct_ch_m:'Hard gate per choice (16–30 💎)',ct_ch_ui:'Light, pastel, functional',ct_ch_cu:'Outfit unlocks per scene',ct_ch_rx:'Interrupted at every branch',
+  ct_ep_m:'Time gate + hard gate combined',ct_ep_ui:'Light, YA-oriented, busy',ct_ep_cu:'Deep character creator',ct_ep_rx:'Passes consumed per episode',
+  ct_ch2_m:'Time gate + purchase gate',ct_ch2_ui:'Dark, cinematic, strong art',ct_ch2_cu:'Minimal in-story choices',ct_ch2_rx:'Full-bleed, good immersion',
+  ct_rc_m:'Soft earn + hard buy mix',ct_rc_ui:'Rich dark, editorial — closest',ct_rc_cu:'Wardrobe system per story',ct_rc_rx:'Immersive, best in class',
+  ct_el_m:'Soft nudge — invitation, not gate',ct_el_ui:'Dark atmospheric, editorial',ct_el_cu:'Mid-story picker, live preview',ct_el_rx:'Full-bleed, quiet chrome',
+  aff1_l:'Reading experience',aff1_1:'"Story keeps stopping for paywalls"',aff1_2:'"I lose immersion when a choice is locked"',aff1_3:'"Full-screen art feels like a real story"',aff1_4:'"Just let me read — I\'ll pay later"',
+  aff2_l:'Economy & currencies',aff2_1:'"Multiple currencies — no idea what any does"',aff2_2:'"Never know what I\'m about to spend"',aff2_3:'"Want to see price BEFORE I choose"',aff2_4:'"Roses feel meaningful. Gems feel fake."',
+  aff3_l:'Customization & identity',aff3_1:'"Choosing the outfit is my favourite part"',aff3_2:'"Want to see it on MY character"',aff3_3:'"Dress-up is a reward, not a task"',aff3_4:'"Love when my outfit appears in scene"',
+  aff4_l:'Retention & return',aff4_1:'"Daily reward is why I open the app"',aff4_2:'"Streak bonuses keep me coming back"',aff4_3:'"Chapter notifications work on me"',aff4_4:'"I quit when tickets run out"',
+  pt_intro:'I ran 6 play sessions with people unfamiliar with the game — watching where they hesitated, what they re-read, where they tapped wrong. Three findings changed the design.',
+  pt1_t:'Price visible too late',pt1_b:'Players expected rose cost on the outfit card — before selecting. Not just on the confirm button. → Moved price to the picker card itself.',
+  pt2_t:'Currency icons too similar',pt2_b:'Rose, diamond and ticket were too close in silhouette. Players spent wrong currency twice. → Redesigned to distinct shapes: organic curve, hard geometric, angular cut.',
+  pt3_t:'"Leave?" modal felt punishing',pt3_b:'"Are you sure you want to leave?" created anxiety — players thought they\'d lose progress. → Rewrote to a warm "See you soon" tone.',
+  cta_eye:'// UI/UX Case Study · EverLove · 2024',cta_sub:'Romance · Choices · Eternal Stories'
+},
+ru:{
+  nav_back:'Проекты',back_btn:'← К проектам',
+  hero_tag:'Дизайн романса, который можно держать в руках.',
+  ov_role:'Единственный дизайнер',ov_role_d:'Исследование · UX · UI · Система · Хэндофф',ov_status:'В разработке',ov_status_d:'Активные итерации',
+  brief_tag:'// Бриф',done_tag:'// Сделала',l_role:'Роль',l_platform:'Платформа',l_status:'Статус',
+  brief_h:'Новая игра. Чистый холст.<br>Один дизайнер, с первого дня.',
+  brief_role:'Единственный дизайнер',brief_status:'В разработке',
+  l_client:'Клиент',brief_client:'Инди-разработчик',l_audience:'Аудитория',brief_audience:'Девушки 14+ · читатели, а не казуальные игроки',brief_note:'EverLove — нарративная мобильная игра для аудитории, которой нужны настоящие истории. Episode и Choices держат казуальный сегмент. Эта игра метит в зазор: девушки 14+, которым нужна моральная сложность и живые персонажи.',
+  brief_list:'<li>Визуальная идентичность с нуля — палитра, типографика, стиль</li><li>Полная дизайн-система — компоненты, иконки, спеки для разработчика</li><li>UX-флоу, пользовательские пути, граничные случаи и состояния ошибок</li><li>Figma-файлы структурированы для хэндоффа — экраны организованы по флоу, компоненты именованы, ассеты экспортированы</li>',
+  wf_ttl:'Сначала структура — потом стиль.',wf_body:'До цветов и шрифтов — логика навигации, ключевые экраны и повторяющиеся состояния. Вайрфреймы задали архитектуру, из которой вырос весь визуал.',
+  wf1:'Главный экран',wf2:'Плеер историй',wf3:'Пикер образов',wf4:'Пикер образов v2',wf5:'Премиум-магазин',wf6:'Нет билетов',wf7:'Повтор флоу',wf8:'Загрузочный экран',
+  it_ttl:'Два направления. Одно победило.',it_body:'Прежде чем зафиксировать визуальный язык, исследовала два направления — более светлые и более тёмные палитры, разные подходы к типографике и свечению.',
+  it1:'Стиль 1',it2:'Стиль 2',it3:'Главный экран v1',it4:'Главный экран v2 → финал',it5:'Исследование модалок',it6:'Исследование диалогов',it7:'Ранний скетч',it8:'Скетч v2',
+  it_decision:'Победило второе: тёмный чернильный фон, выраженное свечение, Cormorant для редакционного романтичного ощущения. Первое казалось слишком мягким — ближе к young adult, чем к напряжению историй.',
+  ch_ttl:'Три задачи. Одна романтическая вселенная.',ch1_t:'Чтение без трения',ch1_b:'Текст — главный опыт. Элементы управления, валюты и хром должны отступить, чтобы история оставалась в центре.',ch2_t:'Монетизация без разрушения иллюзии',ch2_b:'Пейволлы ощущаются цинично, когда они навязчивы. Сделать премиум-выборы частью фантазии — не кассой.',ch3_t:'Одна вселенная, разные поверхности',ch3_b:'История, гардероб, магазин и настройки должны ощущаться как одна романтическая вселенная — скреплённая единой системой.',
+  res_ttl:'Слушать игроков, которые читают каждую главу.',res_method:'Четыре конкурирующих приложения установлены и изучены. Отзывы в App Store отфильтрованы по 3–4 звёздам — там честная обратная связь — и сгруппированы по повторяющимся темам. Монетизационные флоу сняты скриншотами и разложены рядом.',res_body:'Разбор конкурентов, аудит монетизации, синтез отзывов игроков. Четыре паттерна легли в основу каждого ключевого решения.',
+  i1_t:'Игроки переигрывают ради выборов',i1_b:'Именно моменты решений — а не арт — скриншотили и делились. Выборам нужен реальный визуальный вес.',
+  i2_t:'Одевалка — это награда, не рутина',i2_b:'Кастомизация образов создаёт эмоциональную привязанность — она заслуживает отдельного тактильного флоу.',
+  i3_t:'Непонимание валют убивает конверсию',i3_b:'Даже две валюты могут запутать. У каждой должна быть своя форма и одна чёткая роль — чтобы игрок никогда не тратил не ту по ошибке.',
+  i4_t:'Щедрость завоёвывает доверие',i4_b:'Ежедневные награды и честные апселлы работали лучше жёстких гейтов. Мягкие подсказки ощущались справедливо.',
+  ds_ttl:'Один романтический язык, рассчитанный на масштаб.',ds_body:'Типографика, правила цвета и компонентная библиотека — чтобы новые главы и экраны выходили без изобретения стиля заново.',
+  ds_mono:'SHARE TECH MONO — UI · лейблы',ds_icon_sub:'единый штрих 1.5px',
+  c_btn:'Кнопки',c_nav:'Таббар',c_tog:'Тоглы и бейджи',c_shop:'Карточка магазина',c_best:'ЛУЧШЕЕ',
+  f1_ttl:'Первое впечатление.<br>До первого слова.',f1_body:'Загрузочный экран задаёт атмосферу до первого слова истории. Регистрация сведена к минимуму — никакого опроса при онбординге, никаких семи шагов.',
+  f1_p1:'<strong>Атмосфера прежде всего.</strong> Полноэкранный арт с брендовой палитрой — без квиза при онбординге, без 7-шаговой настройки.',f1_p2:'<strong>Минимум трений.</strong> Регистрация запрашивает как можно меньше. Детали аккаунта можно заполнить позже.',f1_p3:'<strong>Голос бренда с первого кадра.</strong> Каждый экран разделяет один тёмный фон и glow — визуальная преемственность начинается до игры.',f1_s1:'Загрузочный экран',f1_s2:'Регистрация',
+  f2_ttl:'Чтение как просмотр фильма.',f2_body:'Полноэкранный арт задаёт каждую сцену. Главное действие — Play — светится магентой. Валюта и навигация остаются на краях, не мешая истории.',
+  f2_p1:'<strong>Тихий хром.</strong> Верхняя панель несёт только валюту и «назад» — всё остальное исчезает при чтении.',f2_p2:'<strong>UI выборов.</strong> Кнопки веток с ценой в розах прямо на них.',f2_p3:'<strong>Социальное доказательство.</strong> Счётчик прочтений создаёт импульс вокруг популярных глав.',f2_s1:'Экран истории',f2_s2:'Диалог',f2_s3:'Момент выбора',
+  f3_ttl:'Главная, которая знает, где ты остановился.',f3_body:'Главный экран начинается с текущей истории игрока и кнопки продолжить в один тап, затем открывается для поиска нового: рекомендации, ежедневная награда, каталог.',
+  f3_c1_t:'Сначала продолжение',f3_c1:'Продолжить чтение — главное действие.',f3_c2_t:'Ежедневная награда',f3_c2:'Мягкий повод возвращаться каждый день.',f3_s1:'Главный экран',
+  f4_ttl:'Одень героиню для момента.',f4_body:'Самый сложный флоу в продукте: запускается в середине истории и должен ощущаться как часть игры, а не выход из неё. У каждого шага здесь есть конкретная UX-причина.',
+  f4_flow_lbl:'// Полный пользовательский флоу: История → Образ → Назад',
+  fl1_t:'Момент истории запускает выбор образа',fl1_b:'В ключевой сцене игра предлагает выбрать гардероб. Оверлей поднимается не уводя с экрана истории.',
+  fl2_t:'Горизонтальный пикер — примерить на живой сцене',fl2_b:'Образы превьюируются на реальной иллюстрации, а не кукле. Скролл влево/вправо для сравнения.',
+  fl3_t:'Подтверждение — цена роз на кнопке',fl3_b:'Честная цена: стоимость прямо на действии, а не мелким шрифтом.',
+  fl4_t:'Не хватает роз → мягкий апселл',fl4_b:'«Тебе не хватает роз» — не ошибка, а приглашение. Ведёт в магазин с точным дефицитом, затем возвращает в тот же момент истории.',
+  fl5_t:'Успех — история продолжается без шва',fl5_b:'Образ появляется на героине, глава возобновляется. Без трений, без тупиков.',
+  f4_s1:'Пикер образов',f4_s2:'Выбор',f4_s3:'Подтверждение — цена inline',f4_s4:'Не хватает роз',
+  f4_decision:'«Не хватает роз» — это возможность, а не ошибка. Копирайт тёплый, кнопка ведёт на конкретный бандл, потом возвращает в историю.',
+  f5_ttl:'Покупки без раздражения.',f5_body:'Две валюты с чёткими разными функциями. Магазин ощущается как подарок, а не как платный проход — бандлы размером под конкретную главу или образ.',
+  cur2_n:'Розы',cur2_b:'Валюта выборов. Тратится на премиум-ветки и образы — сердце каждого решения.',cur3_n:'Билеты',cur3_b:'Доступ к главам. Зарабатываются в игре или пополняются — ритм, двигающий истории.',
+  f5_s1:'Магазин',f5_s2:'Успешная покупка',
+  f6_ttl:'Даже скучное должно выглядеть хорошо.',f6_body:'Подтверждения выхода, перезапуск, предупреждение о нехватке билетов — на эти экраны я потратила столько же времени, сколько на главные. Именно здесь доверие теряется или сохраняется.',
+  m1:'Ежедневный сбор',m2:'Подтверждение выхода',m3:'Нет билетов',m4:'О приложении',m5:'Перезапуск',
+  out_ttl:'Что этот проект выстроил во мне.',tk1_t:'Дизайн в одиночку оттачивает каждое решение',tk1_b:'Некому валидировать — каждое решение твоё. Научилась больше доверять собственным решениям и лучше объяснять их, когда это важно.',
+  tk2_t:'Монетизация как нарратив',tk2_b:'Главный сдвиг: мягкие апселлы как часть истории, а не как прерывания. Когда «не хватает роз» ощущается как момент, а не шлагбаум — конверсия идёт следом.',
+  tk3_t:'Система в начале окупилась',tk3_b:'Строить компонентную библиотеку до отдельных экранов казалось медленным. Но когда новые главы потребовали новых экранов — система справилась. Не пришлось строить заново.',
+  tk4_t:'Что исследовала бы дальше',tk4_b:'Анимированные переходы между сценами, экран резюме главы для возвращающихся игроков и более ранний онбординг в систему валют.',
+  ct_h1:'Продукт',ct_h2:'Валюты',ct_h3:'Монетизация',ct_h4:'Стиль UI',ct_h5:'Кастомизация',ct_h6:'UX чтения',
+  ct_1cur:'1 валюта',ct_2cur:'2 валюты',ct_3cur:'2 валюты',
+  ct_ch_m:'Жёсткий гейт за выбор (16–30 💎)',ct_ch_ui:'Светлый, пастельный, функциональный',ct_ch_cu:'Образы за алмазы на каждой сцене',ct_ch_rx:'Прерывание на каждом ответвлении',
+  ct_ep_m:'Временной гейт + жёсткий гейт',ct_ep_ui:'Светлый, молодёжный, перегруженный',ct_ep_cu:'Глубокий конструктор персонажа',ct_ep_rx:'Пропуски тратятся за эпизод',
+  ct_ch2_m:'Временной гейт + покупной гейт',ct_ch2_ui:'Тёмный, кинематографичный',ct_ch2_cu:'Минимальная кастомизация',ct_ch2_rx:'Полный экран, сильный арт',
+  ct_rc_m:'Мягкий заработок + жёсткая покупка',ct_rc_ui:'Тёмный, редакционный — ближайший',ct_rc_cu:'Система гардероба за историю',ct_rc_rx:'Иммерсивный, лучший в классе',
+  ct_el_m:'Мягкий апселл — приглашение, не гейт',ct_el_ui:'Тёмный атмосферный, редакционный',ct_el_cu:'Пикер образов на живой сцене',ct_el_rx:'Полный экран, тихий хром',
+  aff1_l:'Опыт чтения',aff1_1:'«История постоянно прерывается пейволлами»',aff1_2:'«Теряю атмосферу когда выбор заблокирован»',aff1_3:'«Полноэкранный арт ощущается как кино»',aff1_4:'«Дайте читать — заплачу потом»',
+  aff2_l:'Экономика и валюты',aff2_1:'«Много валют — и что каждая делает?»',aff2_2:'«Никогда не знаю что трачу»',aff2_3:'«Хочу видеть цену ДО выбора»',aff2_4:'«Розы значимы. Камни — нет.»',
+  aff3_l:'Кастомизация и идентичность',aff3_1:'«Выбор образа — мой любимый момент»',aff3_2:'«Хочу видеть на СВОЁМ персонаже»',aff3_3:'«Одевалка — награда, а не задача»',aff3_4:'«Обожаю когда образ появляется в сцене»',
+  aff4_l:'Удержание',aff4_1:'«Ежедневная награда — повод открыть приложение»',aff4_2:'«Бонусы за серию возвращают»',aff4_3:'«Уведомления о главах работают»',aff4_4:'«Бросаю когда заканчиваются билеты»',
+  pt_intro:'Я провела 6 игровых сессий с людьми, незнакомыми с игрой — наблюдала где колеблются, что перечитывают, куда тыкают не туда. Три находки изменили дизайн.',
+  pt1_t:'Цена видна слишком поздно',pt1_b:'Игроки ожидали цену роз на карточке образа — до выбора. Не только на кнопке подтверждения. → Перенесла цену на карточку в пикере.',
+  pt2_t:'Иконки валют слишком похожи',pt2_b:'Роза, алмаз и билет были слишком близки по силуэту. Дважды тратили не ту валюту. → Переработала до чётко разных форм: органическая, геометрическая, угловая.',
+  pt3_t:'Модал «уйти?» ощущался как наказание',pt3_b:'«Вы уверены?» вызывал тревогу — казалось, потеряешь прогресс. → Переписала в тёплый тон «Увидимся скоро».',
+  cta_eye:'// UI/UX Кейс · EverLove · 2024',cta_sub:'Романтика · Выборы · Вечные истории'
+}
+};
+
+let lang='ru';
+function switchLang(l){
+  if(l!=='en'&&l!=='ru')l='ru';
+  lang=l;
+  try{localStorage.setItem('lang',l);}catch(e){}
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(T[l][k]!==undefined)el.innerHTML=T[l][k];});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.dataset.i18nHtml;if(T[l][k]!==undefined)el.innerHTML=T[l][k];});
+  document.getElementById('btnEn').classList.toggle('active',l==='en');
+  document.getElementById('btnRu').classList.toggle('active',l==='ru');
+  document.documentElement.lang=l;
+}
+const co=document.getElementById('cursor-outer'),ci=document.getElementById('cursor-inner');
+document.addEventListener('mousemove',e=>{co.style.left=e.clientX+'px';co.style.top=e.clientY+'px';ci.style.left=e.clientX+'px';ci.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>co.classList.add('h'));el.addEventListener('mouseleave',()=>co.classList.remove('h'));});
+const nav=document.getElementById('nav'),prog=document.getElementById('prog');
+function onScroll(){nav.classList.toggle('dark',scrollY>60);const h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';revCheck();}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>document.getElementById('hEye').classList.add('up'),200);
+  setTimeout(()=>document.getElementById('hTtl').classList.add('up'),400);
+  setTimeout(()=>document.getElementById('hTag').classList.add('up'),720);
+  setTimeout(()=>document.getElementById('hChips').classList.add('up'),940);
+  (function(){var s='ru';try{s=localStorage.getItem('lang')||'ru';}catch(e){}switchLang(s==='en'?'en':'ru');})();
+});
+function revCheck(){document.querySelectorAll('.rev').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight-60)el.classList.add('in');});}
+window.addEventListener('load',()=>{revCheck();setTimeout(revCheck,300);});
+const zo=document.getElementById('zo'),zi=document.getElementById('zi');
+function openZoom(s){zi.src=s;zo.classList.add('on');}
+zo.addEventListener('click',()=>{zo.classList.remove('on');zi.src='';});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){zo.classList.remove('on');zi.src='';}});
+</script>
+</body>
+</html>
