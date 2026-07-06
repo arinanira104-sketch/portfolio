@@ -164,6 +164,41 @@ footer{border-top:1px solid var(--border);padding:1.4rem 3.5rem;display:flex;jus
   footer{padding:1.4rem 1.5rem;}
   .gf-gallery{grid-template-columns:1fr;}
   .gf-gallery img:first-child{grid-column:1;}
+
+  /* Overview strip */
+  .ov-strip{margin:0 1rem 2rem;}
+  .ov-grid{grid-template-columns:1fr 1fr;}
+  .ov-cell{padding:1.2rem 1.1rem;}
+
+  /* Hero text */
+  .hero-title{font-size:clamp(2rem,9vw,3rem);line-height:1;}
+  .hero-desc{font-size:.97rem;line-height:1.75;}
+  .page-hero{padding-top:6rem;padding-bottom:2.5rem;}
+
+  /* Section headings */
+  .sec-title{font-size:clamp(1.3rem,5.5vw,1.9rem);gap:10px;}
+  .gf-name{font-size:clamp(1.3rem,6vw,2rem);}
+
+  /* Brief block */
+  .brief-block{padding:2rem 1.5rem;gap:2rem;}
+  .brief-heading{font-size:clamp(1.2rem,5.5vw,1.8rem);margin-bottom:1.2rem;}
+  .brief-meta-label{min-width:70px;}
+  .brief-meta-row{gap:1rem;}
+  .outcome-block{padding:2rem 1.5rem;}
+
+  /* Nails section */
+  .nails-grid{grid-template-columns:1fr;}
+  .nails-card-body{padding:1.1rem 1.2rem;}
+
+  /* Nails ticker — bleed to edges */
+  .nails-ticker{margin-left:-1.5rem;margin-right:-1.5rem;}
+
+  /* Game feature text */
+  .gf-desc{font-size:.96rem;}
+  .gf-gallery{gap:.6rem;}
+
+  /* Back button */
+  .back-btn{font-size:.54rem;padding:.5rem 1.2rem;}
 }
 
 /* NAILS SCREENS TICKER */
@@ -270,7 +305,7 @@ footer{border-top:1px solid var(--border);padding:1.4rem 3.5rem;display:flex;jus
 
   
 <!-- ─── OPENING ─── -->
-<section style="padding:0 4.5rem 6rem;max-width:1400px;margin:0 auto;">
+<section style="padding:0 clamp(1.5rem,5vw,4.5rem) 5rem;max-width:1400px;margin:0 auto;">
   <div class="brief-block rev" style="margin-top:0;">
     <div class="brief-intro">
       <p class="brief-tag" data-i18n="brief_tag">// Описание проекта</p>
@@ -405,11 +440,11 @@ footer{border-top:1px solid var(--border);padding:1.4rem 3.5rem;display:flex;jus
 
 
   <!-- NAILS DESIGN NOTE + TICKER LABEL -->
-  <div class="design-note rev" style="margin:2.5rem 3.5rem 0;">
+  <div class="design-note rev" style="margin:2.5rem clamp(-1.5rem,-3.5vw,-1px) 0;">
     <div class="design-note-label" data-i18n="nails_note_label">// Design Note</div>
     <p class="design-note-text" data-i18n="nails_note">"Four games, four visual worlds — but one production standard. The challenge was switching aesthetic modes completely between projects while keeping UI logic consistent: the same interaction patterns, the same handoff discipline, different skins every time."</p>
   </div>
-  <div style="margin:1.8rem 3.5rem .6rem;font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);opacity:.5;" data-i18n="nails_screens_label">// Gameplay screens — Kawaii Nails · Magic Princess · Unicorns · Pretty Kitty</div>
+  <div style="margin:1.8rem clamp(1.5rem,3.5vw,3.5rem) .6rem;font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone2);opacity:.5;" data-i18n="nails_screens_label">// Gameplay screens — Kawaii Nails · Magic Princess · Unicorns · Pretty Kitty</div>
 
   <!-- NAILS SCREENS TICKER -->
   <div class="nails-ticker">
@@ -487,7 +522,7 @@ footer{border-top:1px solid var(--border);padding:1.4rem 3.5rem;display:flex;jus
   </div>
 
 <!-- ─── ИТОГ ─── -->
-<section style="padding:2rem 4.5rem 5rem;max-width:1400px;margin:0 auto;">
+<section style="padding:2rem clamp(1.5rem,5vw,4.5rem) 4rem;max-width:1400px;margin:0 auto;">
   <div class="outcome-block rev">
     <p class="brief-tag" data-i18n="itog_tag">// Итог</p>
     <p class="ch-desc" style="margin-top:1.2rem;" data-i18n="itog_text">Six games in a row — not just a large volume of work. Each time: a new visual language, a new audience, a new style. Fairy Kingdom and Candy Land — fantasy match-3 with illustrations; Beauty Simulators — different aesthetics, different interaction patterns, characters built around different themes. Learned to step into a new visual world quickly and keep it coherent from the first screen to the store icon. All 6 games published on Amazon, iOS and Android.</p>
