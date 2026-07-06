@@ -35,7 +35,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 .back-btn:hover{border-color:var(--gold);color:var(--gold);}
 
 /* HERO */
-.case-hero{position:relative;z-index:2;padding:8rem 4rem 3rem;max-width:1400px;margin:0 auto;}
+.case-hero{position:relative;z-index:2;padding:8rem clamp(1.2rem,5vw,4rem) 3rem;max-width:1400px;margin:0 auto;}
 .hero-breadcrumb{font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
 .hero-breadcrumb span{opacity:.4;}
 .hero-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:1rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -47,7 +47,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 .hero-tag.gold{border-color:rgba(180,140,80,.45);color:var(--gold2);}
 
 /* BODY */
-.case-body{position:relative;z-index:2;max-width:1600px;margin:0 auto;padding:0 4rem 8rem;}
+.case-body{position:relative;z-index:2;max-width:1600px;margin:0 auto;padding:0 clamp(1.2rem,5vw,4rem) 8rem;}
 .case-section{margin-bottom:6rem;opacity:0;transition:opacity .65s ease;position:relative;}
 .case-section.in{opacity:1;animation:sectionIn .65s ease forwards;}
 @keyframes sectionIn{from{transform:translateY(20px)}to{transform:translateY(0)}}
@@ -125,7 +125,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--border);padding:1.
 @media(max-width:900px){.gallery-grid.cols3,.gallery-grid.cols4{grid-template-columns:repeat(2,1fr);}.gallery-item.wide{grid-column:span 2;}}
 @media(max-width:600px){.case-hero,.case-body{padding-left:1.5rem;padding-right:1.5rem;}.navbar{padding:.9rem 1.5rem;}.meta-grid{grid-template-columns:1fr 1fr;}.gallery-grid,.gallery-grid.cols3,.gallery-grid.cols4{grid-template-columns:1fr;}.gallery-item.wide{grid-column:span 1;}}
 
-.case-cover{width:100%;max-width:1200px;margin:0 auto 0;padding:0 4rem 3rem;}
+.case-cover{width:100%;max-width:1200px;margin:0 auto 0;padding:0 clamp(1.2rem,5vw,4rem) 3rem;}
 .case-cover img{width:100%;border-radius:20px;display:block;object-fit:cover;max-height:600px;}
 /* STATUS BADGES */
 .status-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;padding:.18rem .65rem;border:1px solid;margin-left:.9rem;vertical-align:middle;position:relative;top:-2px;}

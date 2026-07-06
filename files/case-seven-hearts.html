@@ -78,7 +78,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 /* ─── SECTIONS ─── */
 .cs{padding:8rem 4.5rem;position:relative;}
 .cs-inner{max-width:1400px;margin:0 auto;}
-.cs-divider{max-width:1400px;margin:0 auto;height:1px;padding:0 4.5rem;}
+.cs-divider{max-width:1400px;margin:0 auto;height:1px;padding:0 clamp(1.2rem,5vw,4.5rem);}
 .cs-divider::after{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);}
 
 /* WATERMARK */
@@ -172,7 +172,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 .solo-item{flex:0 0 220px;}
 
 /* CTA */
-.cta-sec{padding:14rem 4.5rem;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 90% 60% at 50% 50%,rgba(100,20,55,.35) 0%,var(--ink) 70%);}
+.cta-sec{padding:clamp(4rem,10vw,14rem) clamp(1.2rem,5vw,4.5rem);text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 90% 60% at 50% 50%,rgba(100,20,55,.35) 0%,var(--ink) 70%);}
 .cta-sec::before{content:'PLAY';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:28vw;font-weight:900;color:var(--rose);opacity:.025;pointer-events:none;user-select:none;letter-spacing:.1em;}
 .cta-eye{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(200,100,130,.5);margin-bottom:1.2rem;position:relative;z-index:1;}
 .cta-ttl{font-family:'Cinzel',serif;font-size:clamp(2.2rem,4vw,4.2rem);font-weight:700;letter-spacing:.06em;color:var(--bone);margin-bottom:.6rem;position:relative;z-index:1;}
@@ -233,7 +233,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 3.5rem;display:flex;jus
 .process-list li{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone);opacity:.85;line-height:1.65;padding-left:2.1rem;position:relative;counter-increment:steps;}
 .process-list li::before{content:counter(steps,'decimal-leading-zero');position:absolute;left:0;color:var(--gold2);font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.08em;top:.38rem;}
 /* OUTCOME */
-.outcome-block{padding:3rem 4rem;border:1px solid var(--border);border-left:2px solid var(--rose);background:rgba(14,8,22,.55);}
+.outcome-block{padding:3rem clamp(1.2rem,5vw,4rem);border:1px solid var(--border);border-left:2px solid var(--rose);background:rgba(14,8,22,.55);}
 .outcome-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3.5rem;}
 @media(max-width:900px){.challenge-block{grid-template-columns:1fr;gap:2.5rem;padding:2.5rem 2rem;}.outcome-block{padding:2.5rem 2rem;}.outcome-stats{grid-template-columns:1fr;}}
 </style>

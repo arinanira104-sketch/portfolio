@@ -42,7 +42,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 .nb-back:hover{color:var(--gold2);}
 
 /* HERO */
-.case-hero{position:relative;z-index:2;padding:8rem 4rem 3rem;max-width:1400px;margin:0 auto;}
+.case-hero{position:relative;z-index:2;padding:8rem clamp(1.2rem,5vw,4rem) 3rem;max-width:1400px;margin:0 auto;}
 .hero-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:1rem;display:flex;align-items:center;gap:14px;}
 .hero-meta-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
 .hero-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;line-height:.95;letter-spacing:.04em;color:var(--bone);margin-bottom:.6rem;}
@@ -53,7 +53,7 @@ body{background:var(--ink);color:var(--bone);font-family:'Cormorant Garamond',se
 .hero-tag.gold{border-color:rgba(180,140,80,.45);color:var(--gold2);}
 
 /* CONTENT */
-.case-body{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 4rem 6rem;}
+.case-body{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 clamp(1.2rem,5vw,4rem) 6rem;}
 
 /* SECTIONS */
 .case-section{margin-bottom:5rem;opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
